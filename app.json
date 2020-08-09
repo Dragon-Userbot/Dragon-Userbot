@@ -1,27 +1,11 @@
 {
-    "name": "Userbot - Telegram Userbot",
+  "name": "Userbot - Telegram Userbot",
     "keywords": [
         "telegram",
-        "userbot",
-        "plugin",
-        "modular",
-        "pyrogram",
-        "productivity",
-        "testing"
-    ],
-    "repository": "https://github.com/JoHn-111/Userbot/",
-    "env": {
-        "API_ID": {
-            "description": "Get from https://my.telegram.org",
-            "value": "Yes"
-        },
-        "API_HASH": {
-            "description": "Get from https://my.telegram.org",
-            "value": "Yes"
-        },
-        "USERBOT_SESSION": {
-            "description"
-            "value
-        }
-    }
+        "userbot"
+  ],
+  "website": "https://small-sharp-tool.com/",
+  "repository": "https://github.com/JoHn-111/Userbot/",
+  "logo": "https://small-sharp-tool.com/logo.svg",
+  "success_url": "/welcome",
 }
