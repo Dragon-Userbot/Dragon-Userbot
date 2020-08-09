@@ -33,7 +33,6 @@ def text_to_img(client, message):
             message.delete()
             text = message.reply_to_message.text
             drawtext(text, text_color, background_color)
-            #client.send_photo(message.chat.id, tg_img)
             client.send_photo(message.chat.id, tg_img, reply_to_message_id=message.reply_to_message.message_id)
     else:
         message.delete()
