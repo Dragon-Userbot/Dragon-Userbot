@@ -13,8 +13,11 @@
 ```bash
 git clone https://github.com/JoHn-111/Userbot.git
 cd Userbot
-pip install -r requirements.txt
-python3 -m main.py
+pip3 install -r requirements.txt
+cd login
+python3 login.py
+cd ../
+python3 main.py
 ```
 <h2>Custom modules</h2>
 
@@ -32,6 +35,6 @@ def module_name(client, message):
 ```
 <h2>Thanks to</h2>
 <nav>
-<li>Dan for his <a href='https://github.com/pyrogram/pyrogram'>library</a></li>
 <li><a href='https://github.com/Legenda24'>Legenda24</a> for the module code <a href=https://github.com/JoHn-111/Userbot/blob/master/modules/text_to_img.py>text_to_img.py</a></li>
 </nav>
+<h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a></h4>
