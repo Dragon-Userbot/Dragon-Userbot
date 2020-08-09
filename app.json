@@ -1,0 +1,27 @@
+{
+    "name": "Userbot - Telegram Userbot",
+    "keywords": [
+        "telegram",
+        "userbot",
+        "plugin",
+        "modular",
+        "pyrogram",
+        "productivity",
+        "testing"
+    ],
+    "repository": "https://github.com/JoHn-111/Userbot/",
+    "env": {
+        "API_ID": {
+            "description": "Get from https://my.telegram.org",
+            "value": "Yes"
+        },
+        "API_HASH": {
+            "description": "Get from https://my.telegram.org",
+            "value": "Yes"
+        },
+        "USERBOT_SESSION": {
+            "description"
+            "value
+        }
+    }
+}
