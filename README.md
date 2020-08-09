@@ -1,9 +1,9 @@
 <h1>Userbot</h1>
 
 <nav>
-<li><a href='https://github.com/JoHn-111/Userbot/new/master?readme=1#deploy'>Installation</a></li>
-<li><a href='https://github.com/JoHn-111/Userbot/new/master?readme=1#custom-modules'>Custom modules</a></li>
-<li><a href='https://github.com/JoHn-111/Userbot/new/master?readme=1#thanks-to'>Thanks</a></li>
+<li><a href='https://github.com/JoHn-111/Userbot/tree/master#installation'>Installation</a></li>
+<li><a href='https://github.com/JoHn-111/Userbot/tree/master#custom-modules'>Custom modules</a></li>
+<li><a href='https://github.com/JoHn-111/Userbot/tree/master#thanks-to'>Thanks</a></li>
 </nav>
 
 
