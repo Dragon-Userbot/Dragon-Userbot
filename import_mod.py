@@ -11,7 +11,6 @@ for item in listdir(path_mods):
     if temp_tuple[1] == ".py":
         modules_list.append(temp_tuple)
 
-print(modules_list)
 
 for module in modules_list:
     if "".join(module) != __file__:
