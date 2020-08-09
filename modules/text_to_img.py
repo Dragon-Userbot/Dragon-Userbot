@@ -5,26 +5,40 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import time
 
+def drawtext(text, text_color, background_color):
+    global tg_img
+    font_size = 20
+    font = ImageFont.truetype("modules/arial.ttf", font_size)
+    width = font.getsize(max(text.split('\n'), key=len))[0] + 35
+    height = font.getsize(text.split('\n')[0])[1] * text.count('\n') + 40
+    img = Image.new('RGB', (width, height), color=f'{background_color}')
+    draw = ImageDraw.Draw(img)
+    draw.text((10, 10), text, font=font, fill=f'{text_color}')
+
+    tg_img = BytesIO()
+    tg_img.name = 'tg.png'
+    img.save(tg_img, 'PNG')
+    tg_img.seek(0)
+    return tg_img
 
 @app.on_message(Filters.command('tti', ['.']) & Filters.me)
-def text_2_img(client, message):
-	text_color = message.command[1]
-	background_color = message.command[2]
-	text = ' '.join(message.command[3:])
-	font_size = 20
-	message.delete()
-	print(text)
-	font = ImageFont.truetype("modules/arial.ttf", 20)
-	width = font.getsize(max(text.split('\n'), key=len))[0] + 35
-	height = font.getsize(text.split('\n')[0])[1] * text.count('\n') + 40
-	font = ImageFont.truetype("modules/arial.ttf", font_size)
-	img = Image.new('RGB', (width, height), color=f'{background_color}')
-	draw = ImageDraw.Draw(img)
-	draw.text((10, 10), text, font=font, fill=f'{text_color}')
+def text_to_img(client, message):
+    global tg_img
+    text_color = message.command[1]
+    background_color = message.command[2]
+    text = ' '.join(message.command[3:])
 
-	tg_img = BytesIO()
-	tg_img.name = 'tg.png'
-	img.save(tg_img, 'PNG')
-	tg_img.seek(0)
-
-	client.send_photo(message.chat.id, tg_img)
+    if text == '':
+        if message.reply_to_message:
+            message.delete()
+            text = message.reply_to_message.text
+            drawtext(text, text_color, background_color)
+            #client.send_photo(message.chat.id, tg_img)
+            client.send_photo(message.chat.id, tg_img, reply_to_message_id=message.reply_to_message.message_id)
+    else:
+        message.delete()
+        drawtext(text, text_color, background_color)
+        if message.reply_to_message == None:
+            client.send_photo(message.chat.id, tg_img)
+        else:
+            client.send_photo(message.chat.id, tg_img, reply_to_message_id=message.reply_to_message.message_id)
