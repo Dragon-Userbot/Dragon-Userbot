@@ -8,7 +8,7 @@
 
 
 <h2>Installation</h2>
-<h3>(installation instructions not completed yet!)</h3>
+
 
 ```bash
 git clone https://github.com/JoHn-111/Userbot.git
