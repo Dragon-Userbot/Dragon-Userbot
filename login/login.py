@@ -1,8 +1,8 @@
 import configparser
 
 
-api_id = input('> ')
-api_hash = input('> ')
+api_id = input('Enter api id: ')
+api_hash = input('Enter api hash: ')
 
 def createConfig(path):
     config = configparser.ConfigParser()
