@@ -1,6 +1,6 @@
 
 <h1>Userbot</h1>
-<p><b>This repository contains the userbot code as well as instructions for self-deploying the bot</b></p><br>
+<h3><b>This repository contains the custom bot code, instructions on how to deploy the bot yourself, and an example of required code in custom modules</b></h3><br>
   
 
 
