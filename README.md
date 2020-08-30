@@ -1,4 +1,4 @@
-<img src="logo.png" align="right" width="250" title="hover text">
+
 <h1>Userbot</h1>
 
   
