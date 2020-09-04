@@ -1,9 +1,10 @@
-from pyrogram import Message, Filters
+from pyrogram.types import Message
+from pyrogram import filters
 from utils import app
 import time
 
 
-@app.on_message(Filters.command('manul', ['.']))
+@app.on_message(filters.command('manul', ['.']))
 def manul(client, message):
 	quantity = message.command[1]
 	quantity = int(quantity) + 1
