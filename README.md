@@ -29,11 +29,12 @@ python3 main.py
 
 To add your modules just put a .py file in  <a href='https://github.com/JoHn-111/Userbot/tree/master/modules'>/modules.</a>This file should have the following code:
 ```python3
-from pyrogram import Message, Filters
+from pyrogram.types import Message
+from pyrogram import filters
 from utils import app
 
 
-@app.on_message(Filters.command('example', ['.']) & Filters.me)
+@app.on_message(filters.command('example', ['.']) & filters.me)
 def module_name(client, message):
     message.edit('This is an example module')
     
