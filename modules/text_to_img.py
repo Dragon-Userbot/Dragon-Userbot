@@ -1,4 +1,5 @@
-from pyrogram import Message, Filters
+from pyrogram.types import Message
+from pyrogram import filters
 from utils import app
 
 from PIL import Image, ImageDraw, ImageFont
@@ -21,7 +22,7 @@ def drawtext(text, text_color, background_color):
     tg_img.seek(0)
     return tg_img
 
-@app.on_message(Filters.command('tti', ['.']) & Filters.me)
+@app.on_message(filters.command('tti', ['.']) & filters.me)
 def text_to_img(client, message):
     global tg_img
     text_color = message.command[1]
