@@ -1,8 +1,9 @@
-from pyrogram import Message, Filters
+from pyrogram.types import Message
+from pyrogram import filters
 from utils import app
 
 
-@app.on_message(Filters.command('ws', ['.']) & Filters.me)
+@app.on_message(filters.command('ws', ['.']) & filters.me)
 def switch(client, message):
     text = ' '.join(message.command[1:])
     ru_keys = """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"""
