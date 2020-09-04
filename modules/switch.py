@@ -1,9 +1,10 @@
-from pyrogram import Message, Filters
+from pyrogram.types import Message
+from pyrogram import filters
 from utils import app
 import time
 
 
-@app.on_message(Filters.command('sw', ['.']) & Filters.me)
+@app.on_message(filters.command('sw', ['.']) & filters.me)
 def switch(client, message):
     text = ' '.join(message.command[1:])
     ru_keys = """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,"""
