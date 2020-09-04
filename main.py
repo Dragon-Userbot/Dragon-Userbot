@@ -4,4 +4,4 @@ import import_mod
 
 
 if __name__ == '__main__':
-    app.start()
+    app.run()
