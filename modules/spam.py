@@ -1,9 +1,10 @@
-from pyrogram import Message, Filters
+from pyrogram.types import Message
+from pyrogram import filters
 from utils import app
 import time
 
 
-@app.on_message(Filters.command('spam', ['.']))
+@app.on_message(filters.command('spam', ['.']) & filters.me)
 def spam(client, message):
 	quantity = message.command[1]
 	spam_text = ' '.join(message.command[2:])
