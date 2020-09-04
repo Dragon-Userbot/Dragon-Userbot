@@ -4,7 +4,7 @@ from utils import app
 import time
 
 
-@app.on_message(filters.command('manul', ['.']))
+@app.on_message(filters.command('manul', ['.']) & filters.me)
 def manul(client, message):
 	quantity = message.command[1]
 	quantity = int(quantity) + 1
