@@ -1,18 +1,19 @@
-from pyrogram import Message, Filters
+from pyrogram.types import Message
+from pyrogram import filters
 from utils import app
 
 import datetime
 import time
 
 
-@app.on_message(Filters.command('afk', ['.']) & Filters.me)
+@app.on_message(filters.command('afk', ['.']) & filters.me)
 def afk(client, message):
     global start, end
     start = datetime.datetime.now().replace(microsecond=0)
     message.edit("<b>I'm going afk</b>")
 
 
-@app.on_message(Filters.command('unafk', ['.']) & Filters.me)
+@app.on_message(filters.command('unafk', ['.']) & filters.me)
 def unafk(client, message):
     try:
         global start, end
