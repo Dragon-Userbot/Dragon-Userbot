@@ -37,6 +37,6 @@ def module_name(client, message):
 ```
 <h2>Thanks to</h2>
 <nav>
-<li><a href='https://github.com/Legenda24'>Legenda24</a> for the module code <a href=https://github.com/JoHn-111/Userbot/blob/master/modules/text_to_img.py>text_to_img.py</a></li>
+<li><a href='https://github.com/Legenda24'>Legenda24</a> for the module code <a href='https://github.com/JoHn-111/Userbot/blob/master/plugins/text_to_img.py'>text_to_img.py</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a></h4>
