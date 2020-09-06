@@ -24,7 +24,7 @@ python3 main.py
 <h2>Custom modules</h2>
 
 
-To add your modules just put a .py file in  <a href='https://github.com/JoHn-111/Userbot/tree/master/modules'>/plugins.</a>This file should have the following code:
+To add your modules just put a .py file in  <a href='https://github.com/JoHn-111/Userbot/tree/master/plugins'>/plugins.</a>This file should have the following code:
 ```python3
 from pyrogram.types import Message
 from pyrogram import Client, filters
