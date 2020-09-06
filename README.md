@@ -19,9 +19,6 @@
 git clone https://github.com/JoHn-111/Userbot.git
 cd Userbot
 pip3 install -r requirements.txt
-cd login
-python3 login.py
-cd ../
 python3 main.py
 ```
 <h2>Custom modules</h2>
@@ -30,11 +27,10 @@ python3 main.py
 To add your modules just put a .py file in  <a href='https://github.com/JoHn-111/Userbot/tree/master/modules'>/modules.</a>This file should have the following code:
 ```python3
 from pyrogram.types import Message
-from pyrogram import filters
-from utils import app
+from pyrogram import Client, filters
 
 
-@app.on_message(filters.command('example', ['.']) & filters.me)
+@Client.on_message(filters.command('example', ['.']) & filters.me)
 def module_name(client, message):
     message.edit('This is an example module')
     
