@@ -8,7 +8,7 @@ import time
 def drawtext(text, text_color, background_color):
     global tg_img
     font_size = 20
-    font = ImageFont.truetype("modules/arial.ttf", font_size)
+    font = ImageFont.truetype("plugins/utils/CascadiaCodePL.ttf", font_size)
     width = font.getsize(max(text.split('\n'), key=len))[0] + 35
     height = font.getsize(text.split('\n')[0])[1] * text.count('\n') + 40
     img = Image.new('RGB', (width, height), color=f'{background_color}')
