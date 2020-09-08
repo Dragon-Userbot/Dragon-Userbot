@@ -1,4 +1,3 @@
-from pyrogram.types import Message
 from pyrogram import Client, filters
 
 from PIL import Image, ImageDraw, ImageFont
