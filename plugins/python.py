@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from .utils.utils import modules_help
 import time
 
 from io import StringIO
@@ -48,3 +49,8 @@ def user_exec(client, message):
 <b>Result</b>:
 <code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>
 ''')
+
+
+modules_help.update({'python': '''<b>Help for |python|\nUsage:</b>
+<code>.ex [python code]</code>
+<b>[Python code execution]</b>''', 'python module': '<b>• Python</b>:<code> ex</code>\n'})
