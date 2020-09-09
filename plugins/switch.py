@@ -1,4 +1,6 @@
 from pyrogram import Client, filters
+from .utils.utils import modules_help
+
 import time
 
 
@@ -21,3 +23,8 @@ def switch(client, message):
         change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
         text = str.translate(text, change)
         message.edit(text)
+
+
+modules_help.update({'switch': '''<b>Help for |switch|\nUsage:</b>
+<code>.sw [text for switch]</code>
+<b>[This is useful if you forgot to change the keyboard layout]</b>''', 'switch module': '<b>• Switch</b>:<code> sw</code>\n'})
