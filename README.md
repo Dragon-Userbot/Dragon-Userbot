@@ -33,8 +33,9 @@ from .utils.utils import modules_help
 @Client.on_message(filters.command('example', ['.']) & filters.me)
 def module_name(client, message):
     message.edit('This is an example module')
-    
-#This adds instructions for your module   
+
+
+#This adds instructions for your module
 modules_help.update({'example': '''<b>Help for |example|\nUsage:</b>
 <code>.example</code>
 <b>[To get example]</b>''', 'example module': '<b>• Example</b>:<code> example</code>\n'})
