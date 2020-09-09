@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from .utils.utils import modules_help
 import datetime
 
 
@@ -9,3 +10,8 @@ def ping(client, message):
     end = datetime.datetime.now()
     ping = (end - start).microseconds / 1000
     message.edit('Ping\n<code>{}</code>'.format(ping))
+
+
+modules_help.update({'ping': '''<b>Help for |ping|\nUsage:</b>
+<code>.ping</code>
+<b>[To find out the ping]</b>''', 'ping module': '<b>• Ping</b>:<code> ping</code>\n'})
