@@ -1,7 +1,8 @@
 from pyrogram import Client, filters
+from .utils.utils import modules_help
 
 
-@Client.on_message(filters.command('ws', ['.']) & filters.me)
+@Client.on_message(filters.command('tr', ['.']) & filters.me)
 def switch(client, message):
     text = ' '.join(message.command[1:])
     ru_keys = """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"""
@@ -20,3 +21,10 @@ def switch(client, message):
         change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
         text = str.translate(text, change)
         message.edit(text)
+
+
+modules_help.update({'translate': '''<b>Help for |translate|\nUsage:</b>
+<code>.tr [text for translate]</code>
+<b>[message translator]</b>
+<code>.tr </code>
+<b>[Reply to the message for translation]</b>''', 'translate module': '<b>• Translate</b>:<code> tr</code>\n'})
