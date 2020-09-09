@@ -4,8 +4,7 @@ from .utils.utils import modules_help
 
 @Client.on_message(filters.command('repo', ['.']) & filters.me)
 def repo(client, message):
-    message.edit(
-        'My userbot code is <a href=https://github.com/JoHn-111/Userbot>here</a>')
+    message.edit('My userbot code is <a href=https://github.com/JoHn-111/Userbot>here</a>')
 
 
 modules_help.update({'repo': '''<b>Help for |repo|\nUsage:</b>
