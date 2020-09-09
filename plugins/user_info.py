@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from .utils.utils import modules_help
 
 
 @Client.on_message(filters.command('inf', ['.']) & filters.me)
@@ -18,3 +19,10 @@ def get_user_inf(client, message):
 |-Deleted: {user_info.is_deleted}
 </b>''')
     message.edit(user_info)
+
+
+
+modules_help.update({'user_info': '''<b>Help for |User info|\nUsage:</b>
+<code>.inf </code>
+<b>[Reply to any message from a user to find out information about him]</b>''', 'user_info module': '<b>• User_info</b>:<code> inf</code>\n'})
+
