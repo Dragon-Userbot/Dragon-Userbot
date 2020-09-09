@@ -41,8 +41,8 @@ modules_help.update({'example': '''<b>Help for |example|\nUsage:</b>
 <b>[To get example]</b>''', 'example module': '<b>• Example</b>:<code> example</code>\n'})
     
 ```
-<h2>Thanks to</h2>
+<h2>Credits</h2>
 <nav>
-<li><a href='https://github.com/Legenda24'>Legenda24</a> for the module code <a href='https://github.com/JoHn-111/Userbot/blob/master/plugins/text_to_img.py'>text_to_img.py</a></li>
+<li><a href='https://github.com/Legenda24'>Legenda24</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a></h4>
