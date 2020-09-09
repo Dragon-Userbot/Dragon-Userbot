@@ -27,4 +27,7 @@ def switch(client, message):
 
 modules_help.update({'switch': '''<b>Help for |switch|\nUsage:</b>
 <code>.sw [text for switch]</code>
-<b>[This is useful if you forgot to change the keyboard layout]</b>''', 'switch module': '<b>• Switch</b>:<code> sw</code>\n'})
+<b>[This is useful if you forgot to change the keyboard layout]</b>
+<code>.sw </code>
+<b>[Reply to the message to switch keyboard layout]</b>''', 'switch module': '<b>• Switch</b>:<code> sw</code>\n'})
+
