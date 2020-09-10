@@ -8,7 +8,7 @@
 <nav>
 <li><a href='https://github.com/JoHn-111/Userbot/tree/master#installation'>Installation</a></li>
 <li><a href='https://github.com/JoHn-111/Userbot/tree/master#custom-modules'>Custom modules</a></li>
-<li><a href='https://github.com/JoHn-111/Userbot/tree/master#thanks-to'>Thanks</a></li>
+<li><a href='https://github.com/JoHn-111/Userbot#credits'>Credits</a></li>
   
 </nav>
 
