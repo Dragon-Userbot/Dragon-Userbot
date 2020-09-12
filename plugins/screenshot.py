@@ -18,4 +18,5 @@ def screenshot(client, message):
 
 modules_help.update({'screenshot': '''<b>Help for |screenshot|\nUsage:</b>
 <code>.scr [amount of screenshot]</code>
-<b>[Take a screenshot]</b>''', 'screenshot module': '<b>• Screenshot</b>:<code> scr</code>\n'})
+<b>[Take a screenshot]
+[This only works in private messages!]</b>''', 'screenshot module': '<b>• Screenshot</b>:<code> scr</code>\n'})
