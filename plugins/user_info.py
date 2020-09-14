@@ -22,7 +22,7 @@ def get_user_inf(client, message):
 
 
 
-modules_help.update({'user_info': '''<b>Help for |User info|\nUsage:</b>
+modules_help.update({'user_info': '''<b>Help for |User_info|\nUsage:</b>
 <code>.inf </code>
 <b>[Reply to any message from a user to find out information about him]</b>''', 'user_info module': '<b>• User_info</b>:<code> inf</code>\n'})
 
