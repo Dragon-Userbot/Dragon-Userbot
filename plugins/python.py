@@ -10,10 +10,10 @@ import sys
 def user_exec(client, message):
     code = ''
     try:
-        code = message.text.split(".ex\n")[1]
+        code = message.text.split(".ex ")[1]
     except IndexError:
         try:
-            code = message.text.split(".ex ")[1]
+           code = message.text.split(".ex\n")[1]
         except IndexError:
             pass
 
