@@ -1,12 +1,18 @@
 from pyrogram import Client, filters
+from .utils import utils
 from .utils.utils import modules_help
 
 
 @Client.on_message(filters.command('repo', ['.']) & filters.me)
 def repo(client, message):
-    message.edit('My userbot code is <a href=https://github.com/JoHn-111/Userbot>here</a>')
+    message.edit(f'''<b>• Userbot on{utils.github}
+• Userbot version: {utils.version}
+• License: {utils.license}
+• Copyright: {utils.copyright}
+• Python version: {utils.python_version}
+• Number of modules: {len(modules_help)/2}</b>''')
 
 
-modules_help.update({'repo': '''<b>Help for |repo|\nUsage:</b>
+utils.modules_help.update({'repo': '''<b>Help for |repo|\nUsage:</b>
 <code>.repo</code>
-<b>[Userbot code]</b>''', 'repo module': '<b>• Repo</b>:<code> repo</code>\n'})
+<b>[Userbot information]</b>''', 'repo module': '<b>• Repo</b>:<code> repo</code>\n'})
