@@ -11,20 +11,7 @@ def afk(client, message):
     start = datetime.datetime.now().replace(microsecond=0)
     message.edit("<b>I'm going afk</b>")
 
-    @Client.on_message(filters.text)
-    def my_handler(client, message):
-        try:
-            if f'@{client.get_me().username}' in message.text:
-                end = datetime.datetime.now().replace(microsecond=0)
-                afk_time = (end - start)
-                client.send_message(
-                    message.chat.id, f"<b>I'm afk now.\n[ {afk_time} ]</b>")
-                print(afk_time)
-
-        except NameError:
-            pass
-
-
+    
 @Client.on_message(filters.command('unafk', ['.']) & filters.me)
 def unafk(client, message):
     try:
