@@ -14,14 +14,8 @@
 
 
 <h2>Installation</h2>
-<h3>(this instruction is not working!)</h3>
+<h3>in developing...</h3>
 
-```bash
-git clone https://github.com/JoHn-111/Userbot.git
-cd Userbot
-pip3 install -r requirements.txt
-python3 main.py
-```
 <h2>Custom modules</h2>
 
 
