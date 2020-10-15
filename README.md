@@ -1,9 +1,8 @@
 
 <h1>Userbot</h1>
-<h2>This is not the final version!</h2>
+
 <h3>This repository contains the custom bot code, instructions on how to deploy the bot yourself, and an example of required code in custom modules</h3><br>
   
-
 
 <nav>
 <li><a href='https://github.com/JoHn-111/Userbot/tree/master#installation'>Installation</a></li>
