@@ -36,6 +36,6 @@ modules_help.update({'example': '''<b>Help for |example|\nUsage:</b>
 ```
 <h2>Credits</h2>
 <nav>
-<li><a href='https://github.com/Legenda24'>Legendax24</a></li>
+<li><a href='https://github.com/Legenda24'>Legenda×24</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a></h4>
