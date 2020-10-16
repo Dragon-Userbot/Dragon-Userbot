@@ -32,7 +32,6 @@ def update(client, message):
     for lib in range(len(requirements_list)):
         process = subprocess.Popen(["pip", "install", f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
         output = process.communicate()[0]
-        print(f"pip install {requirements_list[lib]}")
     message.edit('<code>Restarting...</code>')
     Thread(target=update_restart, args=(client, message)).start()
     
