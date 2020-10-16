@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
+from .utils.utils import requirements_list
 
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
