@@ -47,3 +47,5 @@ modules_help.update({'text2img': '''<b>Help for |text2img|\nUsage:</b>
 <code>.tti [text color] [background color] [text]</code>
 <b>[Simple color names or hex!]</b>
 <b>[Turning text into a picture]</b>''', 'text2img module': '<b>• Text2img</b>:<code> tti</code>\n'})
+
+requirements_list.append('pillow')
