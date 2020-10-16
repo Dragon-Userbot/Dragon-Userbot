@@ -16,7 +16,6 @@ def wiki(client, message):
 			wikipedia.set_lang("ru")
 
 		result = wikipedia.summary(user_request)
-		print(result)
 		message.edit(f'''<b>Request:</b>
 <code>{user_request}</code>
 <b>Result:</b>
