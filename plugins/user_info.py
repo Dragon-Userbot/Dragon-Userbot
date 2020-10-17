@@ -1,6 +1,8 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 from pyrogram.raw import functions
+from .utils.utils import date_dict
+import time
 
 
 @Client.on_message(filters.command('inf', ['.']) & filters.me)
@@ -29,19 +31,27 @@ def get_user_inf(client, message):
 
 @Client.on_message(filters.command('inffull', ['.']) & filters.me)
 def get_full_user_inf(client, message):
-    user = message.reply_to_message.from_user.id
-    user_info = client.send(
-        functions.users.GetFullUser(id=client.resolve_peer(user)))
-    if user_info.user.username == None:
-        username = 'None'
-    else:
-        username = f'@{user_info.user.username}'
-    if user_info.about == None:
-        about = 'None'
-    else:
-        about = user_info.about
-    user_info = (f'''|=<b>Username: {username}
+    try:
+        user = message.reply_to_message.from_user.id
+        client.send_message("@creationdatebot", f"/start")
+        time.sleep(1)
+        date_dict.clear()
+        client.send_message("@creationdatebot", f"/id {user}")
+        time.sleep(1)
+        user_info = client.send(
+            functions.users.GetFullUser(id=client.resolve_peer(user)))
+        print('2')
+        if user_info.user.username == None:
+            username = 'None'
+        else:
+            username = f'@{user_info.user.username}'
+        if user_info.about == None:
+            about = 'None'
+        else:
+            about = user_info.about
+        user_info = (f'''|=<b>Username: {username}
 |-Id: {user_info.user.id}
+|-Account creation date: {date_dict['date']}
 |-Bot: {user_info.user.bot}
 |-Scam: {user_info.user.scam}
 |-Name: {user_info.user.first_name}
@@ -56,8 +66,10 @@ def get_full_user_inf(client, message):
 |-Phone calls available: {user_info.phone_calls_available}
 |-Phone calls private: {user_info.phone_calls_private}
 |-Blocked: {user_info.blocked}</b>''')
-    message.edit(user_info)
-
+        date_dict.clear()
+        message.edit(user_info)
+    except Exception:
+        message.edit('<code>An error has occurred...</code>')
 
 modules_help.update({'user_info': '''<b>Help for |User info|\nUsage:</b>
 <code>.inf </code>
