@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 from pyrogram.raw import functions
-from .utils.utils import date_dict
+from .utils.scripts import date_dict
 import time
 
 
@@ -40,7 +40,6 @@ def get_full_user_inf(client, message):
         time.sleep(1)
         user_info = client.send(
             functions.users.GetFullUser(id=client.resolve_peer(user)))
-        print('2')
         if user_info.user.username == None:
             username = 'None'
         else:
