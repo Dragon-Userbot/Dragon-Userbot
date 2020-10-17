@@ -22,6 +22,8 @@ To add your modules just put a .py file in  <a href='https://github.com/JoHn-111
 ```python3
 from pyrogram import Client, filters
 from .utils.utils import modules_help
+from .utils.utils import requirements_list
+
 
 @Client.on_message(filters.command('example', ['.']) & filters.me)
 def module_name(client, message):
@@ -32,7 +34,11 @@ def module_name(client, message):
 modules_help.update({'example': '''<b>Help for |example|\nUsage:</b>
 <code>.example</code>
 <b>[To get example]</b>''', 'example module': '<b>• Example</b>:<code> example</code>\n'})
-    
+
+#If your custom module requires packages from PyPi, write the names of the packages in these functions
+requirements_list.append('example_1')
+requirements_list.append('example_2')
+#etc
 ```
 <h2>Credits</h2>
 <nav>
