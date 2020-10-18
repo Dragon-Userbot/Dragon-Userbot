@@ -24,6 +24,10 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 from .utils.utils import requirements_list
 
+#packages from PyPi
+import example_1
+import example_2
+
 
 @Client.on_message(filters.command('example', ['.']) & filters.me)
 def module_name(client, message):
