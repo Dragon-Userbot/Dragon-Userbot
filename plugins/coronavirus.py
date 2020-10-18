@@ -42,6 +42,8 @@ modules_help.update({'covid': '''<b>Help for |Covid|\nUsage:</b>
 <code>.covid [region]</code>
 <b>[Status by region]</b>
 <code>.regions</code>
-<b>[Available regions]</b>''', 'covid module': '<b>• Covid</b>:<code> covid, regions</code>\n'})
+<b>[Available regions]
+=======================
+Worldometer.info statistics are used</b>''', 'covid module': '<b>• Covid</b>:<code> covid, regions</code>\n'})
 
 requirements_list.append('covid')
