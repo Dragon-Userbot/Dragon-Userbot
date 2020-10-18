@@ -7,6 +7,7 @@ from covid import Covid
 @Client.on_message(filters.command('covid', ['.']) & filters.me)
 def covid_local(client, message):
 	region = ' '.join(message.command[1:])
+	message.edit('<code>Data retrieval...</code>')
 	covid = Covid(source="worldometers")
 	try:
 		local_status = covid.get_status_by_country_name(region)
@@ -28,6 +29,7 @@ def covid_local(client, message):
 @Client.on_message(filters.command('regions', ['.']) & filters.me)
 def regions(client, message):
 	countr = ''
+	message.edit('<code>Data retrieval...</code>')
 	covid = Covid(source="worldometers")
 	regions = covid.list_countries()
 	for region in regions:
