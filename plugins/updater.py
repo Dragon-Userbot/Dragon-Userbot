@@ -1,8 +1,8 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 import subprocess
-from .utils.utils import requirements_list
 from threading import Thread
+from .utils.utils import requirements_list
 import time
 
 
@@ -27,6 +27,7 @@ def restart_comand(client, message):
 @Client.on_message(filters.command('update', ["."]) & filters.me)
 def update(client, message):
     message.edit('<code>Updating...</code>')
+    pip_update = subprocess.Popen(["python", "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE)
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
     output = process.communicate()[0]
     for lib in range(len(requirements_list)):
