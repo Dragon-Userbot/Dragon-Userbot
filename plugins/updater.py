@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 import subprocess
+from .utils.utils import requirements_list
 from threading import Thread
 import time
 
