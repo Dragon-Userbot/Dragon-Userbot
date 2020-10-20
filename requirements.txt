@@ -1,3 +1,5 @@
 pillow
 pyrogram
 tgcrypto
+wikipedia
+covid
