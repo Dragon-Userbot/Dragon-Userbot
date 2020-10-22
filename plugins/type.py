@@ -2,8 +2,6 @@ from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 
 from .utils.utils import modules_help
-from .utils.utils import requirements_list
-
 import time
 
 
