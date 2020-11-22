@@ -27,11 +27,11 @@ def restart_comand(client, message):
 @Client.on_message(filters.command('update', ["."]) & filters.me)
 def update(client, message):
     message.edit('<code>Updating...</code>')
-    pip_update = subprocess.Popen(["python", "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE)
+    pip_update = subprocess.Popen(["python3", "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE)
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
     output = process.communicate()[0]
     for lib in range(len(requirements_list)):
-        process = subprocess.Popen(["pip", "install", f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
+        process = subprocess.Popen(["pip3", "install", f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
         output = process.communicate()[0]
     message.edit('<code>Restarting...</code>')
     Thread(target=update_restart, args=(client, message)).start()
