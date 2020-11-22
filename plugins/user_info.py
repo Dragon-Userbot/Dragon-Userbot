@@ -73,5 +73,5 @@ def get_full_user_inf(client, message):
 modules_help.update({'user_info': '''<b>Help for |User info|\nUsage:</b>
 <code>.inf </code>
 <b>[Reply to any user message to find out brief information about him]</b>
-<code>.infull </code>
-<b>[Reply to any user message to find out full information about him]</b>''', 'user_info module': '<b>• User_info</b>:<code> inf, infull</code>\n'})
+<code>.inffull </code>
+<b>[Reply to any user message to find out full information about him]</b>''', 'user_info module': '<b>• User_info</b>:<code> inf, inffull</code>\n'})
