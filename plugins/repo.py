@@ -6,7 +6,6 @@ from .utils.utils import modules_help
 @Client.on_message(filters.command('repo', ['.']) & filters.me)
 def repo(client, message):
     message.edit(f'''<b>• Userbot on{utils.github}
-• Userbot version: {utils.version}
 • License: {utils.license}
 • Copyright: {utils.copyright}
 • Python version: {utils.python_version}
