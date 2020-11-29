@@ -2,3 +2,4 @@ pyrogram
 tgcrypto
 wikipedia
 covid
+gTTS
