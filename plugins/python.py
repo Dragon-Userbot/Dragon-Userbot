@@ -17,34 +17,17 @@ def user_exec(client, message):
         except IndexError:
             pass
 
-    if message.reply_to_message:
-        code = message.reply_to_message.text
-        result = sys.stdout = StringIO()
-        try:
-            exec(code)
-            message.edit(f'''<b>Code:</b>
+    result = sys.stdout = StringIO()
+    try:
+        exec(code)
+        
+        message.edit(f'''<b>Code:</b>
 <code>{code}</code>
 <b>Result</b>:
 <code>{result.getvalue()}</code>
 ''')
-        except:
-            message.edit(f'''<b>Code:</b>
-<code>{code}</code>
-<b>Result</b>:
-<code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>
-''')
-
-    else:
-        result = sys.stdout = StringIO()
-        try:
-            exec(code)
-            message.edit(f'''<b>Code:</b>
-<code>{code}</code>
-<b>Result</b>:
-<code>{result.getvalue()}</code>
-''')
-        except:
-            message.edit(f'''<b>Code:</b>
+    except:
+        message.edit(f'''<b>Code:</b>
 <code>{code}</code>
 <b>Result</b>:
 <code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>
