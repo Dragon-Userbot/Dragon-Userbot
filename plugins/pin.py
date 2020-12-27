@@ -15,5 +15,4 @@ def pin(client, message):
 modules_help.update({'pin': '''<b>Help for |pin|\nUsage:</b>
 <code>.pin</code>
 <b>[Pin any message]
-[Reply to the message you want to pin]
-[Does not work in private messages!]</b>''', 'pin module': '<b>• Pin</b>:<code> pin</code>\n'})
+[Reply to the message you want to pin]</b>''', 'pin module': '<b>• Pin</b>:<code> pin</code>\n'})
