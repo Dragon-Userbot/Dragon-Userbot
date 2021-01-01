@@ -13,6 +13,27 @@
 
 
 <h2>Installation</h2>
+<code>  git clone https://github.com/JoHn-111/Userbot.git</code>
+
+<code>  cd Userbot /</code>
+
+<code>  pip3 install -r requirements.txt</code>
+
+<code>  vim config.ini</code> (or other editor)
+
+<p>Insert api_id and api_hash (my.telegram.org)</p>
+
+<code>  python3 main.py</code>
+
+Subsequent launch:
+
+<code>  cd Userbot /</code>
+
+<code>  python3 main.py</code>
+
+
+<h2>Custom modules</h2>
+
 
 
 To add your modules just put a .py file in  <a href='https://github.com/JoHn-111/Userbot/tree/master/plugins'>/plugins.</a>This file should have the following code:
