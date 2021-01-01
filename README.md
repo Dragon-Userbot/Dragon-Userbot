@@ -13,7 +13,25 @@
 
 
 <h2>Installation</h2>
-<h3>in developing...</h3>
+```
+git clone https://github.com/JoHn-111/Userbot.git
+
+cd Userbot /
+
+pip3 install -r requirements.txt
+
+vim config.ini (or other editor)
+````
+Insert api_id and api_hash (my.telegram.org)
+```
+python3 main.py
+```
+Subsequent launch:
+```
+cd Userbot /
+
+python3 main.py
+```
 
 <h2>Custom modules</h2>
 
