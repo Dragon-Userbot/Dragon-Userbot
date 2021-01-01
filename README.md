@@ -12,7 +12,7 @@
 </nav>
 
 
-<h2>Installation</h2>
+<h2>Installation (not the final version)</h2>
 <code>  git clone https://github.com/JoHn-111/Userbot.git</code>
 
 <code>  cd Userbot /</code>
