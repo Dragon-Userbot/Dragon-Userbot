@@ -15,8 +15,10 @@ def tts(client, message):
     tts.write_to_fp(voice)
     voice.name = 'voice.ogg'
     message.delete()
-    client.send_audio(message.chat.id, voice)
-
+    if message.reply_to_message:
+        client.send_audio(message.chat.id, voice, reply_to_message_id=message.reply_to_message.message_id)
+    else:
+        client.send_audio(message.chat.id, voice)
 
 modules_help.update({'tts': '''<b>Help for |Covid|\nUsage:</b>
 <code>.tts [lang] [text]</code>
