@@ -5,7 +5,7 @@ from .utils.utils import modules_help
 @Client.on_message(filters.command('help', ['.']) & filters.me)
 def help(client, message):
     module_name = ' '.join(message.command[1:])
-    help_message = '''<b>Help for Userbot\nFor more help on how to use a command, type <code>.help |module|</code>\n\nAvailable Modules:\n</b>'''
+    help_message = '''<b>Help for Userbot</b>\n<b>For more help on how to use a command, type </b><code>.help |module|</code>\n\n<b>Available Modules:</b>\n'''
     if module_name == '':
         for modules, module_help in sorted(modules_help.items()):
             if modules.endswith(' module'):
