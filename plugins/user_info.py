@@ -7,18 +7,21 @@ import time
 
 @Client.on_message(filters.command('inf', ['.']) & filters.me)
 def get_user_inf(client, message):
-    user = message.reply_to_message.from_user.id
-    user_info = client.send(
-        functions.users.GetFullUser(id=client.resolve_peer(user)))
-    if user_info.user.username == None:
-        username = 'None'
-    else:
-        username = f'@{user_info.user.username}'
-    if user_info.about == None:
-        about = 'None'
-    else:
-        about = user_info.about
-    user_info = (f'''|=<b>Username: {username}
+    try:
+        user = message.reply_to_message.from_user.id
+    except:
+        user = message.from_user.id
+        user_info = client.send(
+            functions.users.GetFullUser(id=client.resolve_peer(user)))
+        if user_info.user.username == None:
+            username = 'None'
+        else:
+            username = f'@{user_info.user.username}'
+        if user_info.about == None:
+            about = 'None'
+        else:
+            about = user_info.about
+        user_info = (f'''|=<b>Username: {username}
 |-Id: {user_info.user.id}
 |-Bot: {user_info.user.bot}
 |-Scam: {user_info.user.scam}
@@ -26,18 +29,23 @@ def get_user_inf(client, message):
 |-Deleted: {user_info.user.deleted}
 |-BIO: {about}
 </b>''')
-    message.edit(user_info)
+        message.edit(user_info)
 
 
 @Client.on_message(filters.command('inffull', ['.']) & filters.me)
 def get_full_user_inf(client, message):
+    message.edit('<code>Receiving the information...</code>')
     try:
         user = message.reply_to_message.from_user.id
+    except:
+        user = message.from_user.id
+    try:
         client.send_message("@creationdatebot", f"/start")
         time.sleep(1)
         date_dict.clear()
-        client.send_message("@creationdatebot", f"/id {user}")
+        msg = client.send_message("@creationdatebot", f"/id {user}")
         time.sleep(1)
+        client.send(functions.messages.DeleteHistory(peer=client.resolve_peer(747653812), max_id=msg.chat.id))
         user_info = client.send(
             functions.users.GetFullUser(id=client.resolve_peer(user)))
         if user_info.user.username == None:
