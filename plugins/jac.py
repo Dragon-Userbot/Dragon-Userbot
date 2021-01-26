@@ -11,8 +11,11 @@ from textwrap import wrap
 
 @Client.on_message(filters.command(['j', 'jac'], ["."]) & filters.me)
 def jac(client, message):
+    if message.reply_to_message:
+        text = message.reply_to_message.text
+    else:
+        text = ' '.join(message.command[1:])
     message.delete()
-    text = ' '.join(message.command[1:])
     ufr = requests.get("https://github.com/LaciaMemeFrame/FTG-Modules/blob/master/open-sans.ttf?raw=true")
     f = ufr.content
     pic = requests.get("https://raw.githubusercontent.com/LaciaMemeFrame/FTG-Modules/master/jac.jpg")
