@@ -78,7 +78,7 @@ def get_full_user_inf(client, message):
     except Exception:
         message.edit('<code>An error has occurred...</code>')
 
-modules_help.update({'user_info': '''<b>Help for |User info|\nUsage:</b>
+modules_help.update({'user_info': '''<b>Help for |User_info|\nUsage:</b>
 <code>.inf </code>
 <b>[Reply to any user message to find out brief information about him]</b>
 <code>.inffull </code>
