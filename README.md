@@ -57,7 +57,7 @@ def module_name(client, message):
 #This adds instructions for your module
 modules_help.update({'example': '''<b>Help for |example|\nUsage:</b>
 <code>.example</code>
-<b>[To get example]</b>''', 'example module': '<b>• Example</b>:<code> example</code>\n'})
+<b>[Example module help]</b>''', 'example module': '<b>• Example</b>:<code> example</code>\n'})
 
 #If your custom module requires packages from PyPi, write the names of the packages in these functions
 requirements_list.append('example_1')
