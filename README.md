@@ -67,5 +67,6 @@ requirements_list.append('example_2')
 <h2>Credits</h2>
 <nav>
 <li><a href='https://github.com/Legenda24'>Legenda×24</a></li>
+<li><a href='https://github.com/LaciaMemeFrame'>LaciaMemeFrame</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a></h4>
