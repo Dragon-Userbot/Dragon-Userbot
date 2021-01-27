@@ -1,6 +1,8 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 
+import time
+
 
 @Client.on_message(filters.command('del', ["."]) & filters.me)
 def del_msg(client, message):
@@ -29,6 +31,8 @@ def purge(client, message):
             client.delete_messages(chat_id=message.chat.id,message_ids=messages_list)
 
         message.edit('<b>Сleaning was successful!</b>')
+        time.sleep(3)
+        message.delete()
     else:
         message.edit('<b>Reply to a message after which you want to delete messages</b>')
 
