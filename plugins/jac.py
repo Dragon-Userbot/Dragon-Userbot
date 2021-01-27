@@ -1,4 +1,3 @@
-#converted module from LaciaMemeFrame
 from pyrogram import Client, filters
 from pyrogram.raw import types, functions
 from .utils.utils import modules_help
@@ -11,10 +10,12 @@ from textwrap import wrap
 
 @Client.on_message(filters.command(['j', 'jac'], ["."]) & filters.me)
 def jac(client, message):
-    if message.reply_to_message:
+    if message.command[1:]:
+        text = ' '.join(message.command[1:])
+    elif message.reply_to_message:
         text = message.reply_to_message.text
     else:
-        text = ' '.join(message.command[1:])
+        text = ' '                      
     message.delete()
     ufr = requests.get("https://github.com/LaciaMemeFrame/FTG-Modules/blob/master/open-sans.ttf?raw=true")
     f = ufr.content
