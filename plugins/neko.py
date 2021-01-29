@@ -34,4 +34,4 @@ modules_help.update({'neko': '''<b>Help for |Neko|\nUsage:</b>
 <code>.neko_types</code>
 <b>[Available neko types]</b>
 <code>.nekospam [amount of spam] [type]</code>
-<b>[Spam]</b>''', 'neko module': '<b>• Neko</b>:<code> neko, neko_types, nekospam</code>\n'})
+<b>[Spam neko]</b>''', 'neko module': '<b>• Neko</b>:<code> neko, neko_types, nekospam</code>\n'})
