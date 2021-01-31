@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 
 
-@Client.on_message(filters.command('google', ["."]) & filters.me)
+@Client.on_message(filters.command(['google', 'g'], ["."]) & filters.me)
 def webshot(client, message):
     user_request = ' '.join(message.command[1:])
 
