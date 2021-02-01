@@ -5,7 +5,7 @@ from .utils.utils import requirements_list
 from covid import Covid
 
 
-@Client.on_message(filters.command('covid', ['.']) & filters.me)
+@Client.on_message(filters.command(['covid', 'cov'], ['.']) & filters.me)
 def covid_local(client, message):
 	region = ' '.join(message.command[1:])
 	message.edit('<code>Data retrieval...</code>')
