@@ -27,7 +27,7 @@ def covid_local(client, message):
 		message.edit(f'<code>There is no region called "{region}"</code>')
 
 
-@Client.on_message(filters.command('regions', ['.']) & filters.me)
+@Client.on_message(filters.command(['regions', 'rg'], ['.']) & filters.me)
 def regions(client, message):
 	countr = ''
 	message.edit('<code>Data retrieval...</code>')
