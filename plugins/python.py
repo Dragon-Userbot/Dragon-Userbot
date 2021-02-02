@@ -6,7 +6,7 @@ from io import StringIO
 import sys
 
 
-@Client.on_message(filters.command('ex', ['.']) & filters.me)
+@Client.on_message(filters.command(['ex', 'py'], ['.']) & filters.me)
 def user_exec(client, message):
     code = ''
     try:
