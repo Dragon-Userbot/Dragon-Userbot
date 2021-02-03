@@ -15,7 +15,7 @@
 <h2>Installation (not the final version)</h2>
 <code>  git clone https://github.com/JoHn-111/Userbot.git</code>
 
-<code>  cd Userbot /</code>
+<code>  cd Userbot/</code>
 
 <code>  pip3 install -r requirements.txt</code>
 
