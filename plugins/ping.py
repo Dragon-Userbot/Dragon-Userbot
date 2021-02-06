@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 import datetime
+from time import perf_counter
 
 
 @Client.on_message(filters.command('ping', ['.']) & filters.me)
