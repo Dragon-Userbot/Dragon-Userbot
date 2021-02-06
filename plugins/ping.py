@@ -5,7 +5,7 @@ from time import perf_counter
 
 @Client.on_message(filters.command('ping', ['.']) & filters.me)
 def ping(client, message):
-    start = datetime.datetime.now()
+    start = perf_counter()
     message.edit('Pong')
     end = datetime.datetime.now()
     ping = (end - start).microseconds / 1000
