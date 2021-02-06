@@ -7,9 +7,9 @@ from time import perf_counter
 def ping(client, message):
     start = perf_counter()
     message.edit('Pong')
-    end = datetime.datetime.now()
-    ping = (end - start).microseconds / 1000
-    message.edit('Ping\n<code>{}</code>'.format(ping))
+    end = perf_counter()
+    ping = end - start
+    message.edit(f'<b>Ping</b><code> {round(ping, 3)}s</code>')
 
 
 modules_help.update({'ping': '''<b>Help for |ping|\nUsage:</b>
