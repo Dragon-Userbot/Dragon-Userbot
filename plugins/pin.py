@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 
 
-@Client.on_message(filters.command(['pin', 'pin'], ['.']) & filters.me)
+@Client.on_message(filters.command(['pin', 'p'], ['.']) & filters.me)
 def pin(client, message):
     try:
         message_id = message.reply_to_message.message_id
