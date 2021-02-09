@@ -13,7 +13,9 @@
 
 
 <h2>Installation (not the final version)</h2>
+
 <code>  pip install wheel</code>
+
 <code>  pkg install libjpeg-turbo</code>
 
 
