@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 
 
-@Client.on_message(filters.command('webshot', ["."]) & filters.me)
+@Client.on_message(filters.command(['webshot', 'wbs'], ["."]) & filters.me)
 def webshot(client, message):
     try:
         user_link = message.command[1]
