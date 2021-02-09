@@ -4,3 +4,4 @@ wikipedia
 covid
 gTTS
 pygments
+pillow
