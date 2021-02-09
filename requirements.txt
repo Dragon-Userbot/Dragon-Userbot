@@ -2,6 +2,7 @@ pyrogram
 tgcrypto
 wikipedia
 covid
+wheel
 gTTS
 pygments
 pillow
