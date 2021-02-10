@@ -11,7 +11,6 @@ async def afk(client, message):
     start = datetime.datetime.now().replace(microsecond=0)
     await message.edit("<b>I'm going afk</b>")
 
-    
 @Client.on_message(filters.command('unafk', ['.']) & filters.me)
 async def unafk(client, message):
     try:
