@@ -9,7 +9,7 @@ def pin(client, message):
         client.pin_chat_message(message.chat.id, message_id)
         message.edit('<code>Pinned successfully! </code>')
     except:
-        message.edit('<b>[Reply to the message you want to pin]\n[Does not work in private messages!]</b>')
+        message.edit('<b>[Reply to the message you want to pin]</b>')
 
 
 modules_help.update({'pin': '''<b>Help for |pin|\nUsage:</b>
