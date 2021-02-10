@@ -20,7 +20,7 @@
 <code>  pkg install libjpeg-turbo</code>
 
 
-<code>  git clone https://github.com/JoHn-111/Dragon-Userbot</code>
+<code>  git clone https://github.com/JoHn-111/Dragon-Userbot.git</code>
 
 <code>  cd Userbot/</code>
 
