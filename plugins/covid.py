@@ -26,7 +26,6 @@ async def covid_local(client, message):
 	except ValueError:
 		await message.edit(f'<code>There is no region called "{region}"</code>')
 
-
 @Client.on_message(filters.command('regions', ['.']) & filters.me)
 async def regions(client, message):
 	countr = ''
