@@ -2,8 +2,8 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 
 
-@Client.on_message(filters.command(['google', 'g'], ["."]) & filters.me)
-def webshot(client, message):
+@Client.on_message(filters.command('google', ["."]) & filters.me)
+async def webshot(client, message):
     user_request = ' '.join(message.command[1:])
 
     if user_request == '':
@@ -11,12 +11,12 @@ def webshot(client, message):
             reply_user_request = message.reply_to_message.text
             request = reply_user_request.replace(' ', '+')
             full_request = f'https://lmgtfy.app/?s=g&iie=1&q={request}'
-            message.edit(f'<a href={full_request}>{reply_user_request}</a>')
+            await message.edit(f'<a href={full_request}>{reply_user_request}</a>')
 
     else:
         request = user_request.replace(' ', '+')
         full_request = f'https://lmgtfy.app/?s=g&iie=1&q={request}'  
-        message.edit(f'<a href={full_request}>{user_request}</a>')
+        await message.edit(f'<a href={full_request}>{user_request}</a>')
 
 
 modules_help.update({'google': '''<b>Help for |Google|\nUsage:</b>
