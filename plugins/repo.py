@@ -5,7 +5,8 @@ from .utils.utils import modules_help
 
 @Client.on_message(filters.command('repo', ['.']) & filters.me)
 async def repo(client, message):
-    await message.edit(f'''<b>• Userbot on{utils.github}
+    await message.edit(f'''<b>---Dragon-Userbot---
+• Userbot on{utils.github}
 • License: {utils.license}
 • Copyright: {utils.copyright}
 • Python version: {utils.python_version}
