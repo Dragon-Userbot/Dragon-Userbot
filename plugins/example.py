@@ -8,8 +8,8 @@ from .utils.utils import requirements_list
 
 
 @Client.on_message(filters.command('example', ['.']) & filters.me)
-def module_name(client, message):
-    message.edit('This is an example module')
+async def module_name(client, message):
+    await message.edit('This is an example module')
 
 
 #This adds instructions for your module
