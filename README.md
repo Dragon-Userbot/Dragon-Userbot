@@ -34,7 +34,7 @@
 
 Subsequent launch:
 
-<code>  cd Userbot /</code>
+<code>  cd Dragon-Userbot /</code>
 
 <code>  python3 main.py</code>
 
