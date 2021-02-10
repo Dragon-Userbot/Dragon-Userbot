@@ -22,7 +22,7 @@
 
 <code>  git clone https://github.com/JoHn-111/Dragon-Userbot.git</code>
 
-<code>  cd Userbot/</code>
+<code>  cd Dragon-Userbot/</code>
 
 <code>  pip3 install -r requirements.txt</code>
 
