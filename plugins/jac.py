@@ -9,14 +9,14 @@ from textwrap import wrap
 
 
 @Client.on_message(filters.command(['j', 'jac'], ["."]) & filters.me)
-def jac(client, message):
+async def jac(client, message):
     if message.command[1:]:
         text = ' '.join(message.command[1:])
     elif message.reply_to_message:
         text = message.reply_to_message.text
     else:
         text = ' '                      
-    message.delete()
+    await message.delete()
     ufr = requests.get("https://github.com/LaciaMemeFrame/FTG-Modules/blob/master/open-sans.ttf?raw=true")
     f = ufr.content
     pic = requests.get("https://raw.githubusercontent.com/LaciaMemeFrame/FTG-Modules/master/jac.jpg")
@@ -39,9 +39,9 @@ def jac(client, message):
     img.save(out)
     out.seek(0)
     if message.reply_to_message:
-        client.send_photo(message.chat.id, out, reply_to_message_id=message.reply_to_message.message_id)
+        await client.send_photo(message.chat.id, out, reply_to_message_id=message.reply_to_message.message_id)
     else:
-        client.send_photo(message.chat.id, out)
+        await client.send_photo(message.chat.id, out)
 
 
 modules_help.update({'jac': '''<b>Help for |jac|\nUsage:</b>
