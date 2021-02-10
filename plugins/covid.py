@@ -5,14 +5,14 @@ from .utils.utils import requirements_list
 from covid import Covid
 
 
-@Client.on_message(filters.command(['covid', 'cov'], ['.']) & filters.me)
-def covid_local(client, message):
+@Client.on_message(filters.command('covid', ['.']) & filters.me)
+async def covid_local(client, message):
 	region = ' '.join(message.command[1:])
-	message.edit('<code>Data retrieval...</code>')
+	await message.edit('<code>Data retrieval...</code>')
 	covid = Covid(source="worldometers")
 	try:
 		local_status = covid.get_status_by_country_name(region)
-		message.edit("<b>=======🦠 COVID-19 STATUS 🦠=======</b>\n" +
+		await message.edit("<b>=======🦠 COVID-19 STATUS 🦠=======</b>\n" +
 			f"<b>Region</b>: <code>{local_status['country']}</code>\n" +
 			"<b>====================================</b>\n" +
 			f"<b>🤧 New cases</b>: <code>{local_status['new_cases']}</code>\n" +
@@ -24,19 +24,19 @@ def covid_local(client, message):
 			f"<b>💀 Deaths</b>: <code>{local_status['deaths']}</code>\n" +
 			f"<b>🚑 Recovered</b>: <code>{local_status['recovered']}</code>\n")
 	except ValueError:
-		message.edit(f'<code>There is no region called "{region}"</code>')
+		await message.edit(f'<code>There is no region called "{region}"</code>')
 
 
-@Client.on_message(filters.command(['regions', 'rg'], ['.']) & filters.me)
-def regions(client, message):
+@Client.on_message(filters.command('regions', ['.']) & filters.me)
+async def regions(client, message):
 	countr = ''
-	message.edit('<code>Data retrieval...</code>')
+	await message.edit('<code>Data retrieval...</code>')
 	covid = Covid(source="worldometers")
 	regions = covid.list_countries()
 	for region in regions:
 		region = f'{region}\n'
 		countr += region
-	message.edit(f'<code>{countr}</code>')
+	await message.edit(f'<code>{countr}</code>')
 
 
 modules_help.update({'covid': '''<b>Help for |Covid|\nUsage:</b>
