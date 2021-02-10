@@ -11,26 +11,26 @@ headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleW
 
 
 @Client.on_message(filters.command('usd', ['.']) & filters.me)
-def usd(client, message):
+async def usd(client, message):
 	try:
-		message.edit('<code>Data retrieval...</code>')
+		await message.edit('<code>Data retrieval...</code>')
 		full_page = requests.get(DOLLAR, headers=headers, timeout=0.5)
 		soup = BeautifulSoup(full_page.content, 'html.parser')
 		rub = soup.findAll("span", {"class": "DFlfde", "class": "SwHCTb", "data-precision": 2})
-		message.edit(f'<b>One dollar now is </b><code>{rub}</code><b> rub</b>')
+		await message.edit(f'<b>One dollar now is </b><code>{rub}</code><b> rub</b>')
 	except:
-		message.edit('<code>Too many requests please try again later</code>')
+		await message.edit('<code>Too many requests please try again later</code>')
 
 @Client.on_message(filters.command('eur', ['.']) & filters.me)
-def eur(client, message):
+async def eur(client, message):
 	try:
-		message.edit('<code>Data retrieval...</code>')
+		await message.edit('<code>Data retrieval...</code>')
 		full_page = requests.get(EUR, headers=headers, timeout=0.5)
 		soup = BeautifulSoup(full_page.content, 'html.parser')
 		rub = soup.findAll("span", {"class": "DFlfde", "class": "SwHCTb", "data-precision": 2})
-		message.edit(f'<b>One euro now is </b><code>{rub}</code><b> rub</b>')
+		await message.edit(f'<b>One euro now is </b><code>{rub}</code><b> rub</b>')
 	except:
-		message.edit('<code>Too many requests please try again later</code>')
+		await message.edit('<code>Too many requests please try again later</code>')
 
 
 modules_help.update({'course': '''<b>Help for |course|\nUsage:</b>
