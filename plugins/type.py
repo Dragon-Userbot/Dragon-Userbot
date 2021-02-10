@@ -6,7 +6,7 @@ import time
 
 
 @Client.on_message(filters.command('type', ['.']) & filters.me)
-def type(client, message):
+async def type(client, message):
     orig_text =  ' '.join(message.command[1:])
     text = orig_text
     tbp = "" 
@@ -14,13 +14,13 @@ def type(client, message):
  
     while(tbp != orig_text):
         try:
-            message.edit(tbp + typing_symbol)
+            await message.edit(tbp + typing_symbol)
             time.sleep(0.1)
  
             tbp = tbp + text[0]
             text = text[1:]
  
-            message.edit(tbp)
+            await message.edit(tbp)
             time.sleep(0.1)
 
         except FloodWait as e:

@@ -4,12 +4,12 @@ from time import perf_counter
 
 
 @Client.on_message(filters.command('ping', ['.']) & filters.me)
-def ping(client, message):
+async def ping(client, message):
     start = perf_counter()
-    message.edit('Pong')
+    await message.edit('Pong')
     end = perf_counter()
     ping = end - start
-    message.edit(f'<b>Ping</b><code> {round(ping, 3)}s</code>')
+    await message.edit(f'<b>Ping</b><code> {round(ping, 3)}s</code>')
 
 
 modules_help.update({'ping': '''<b>Help for |ping|\nUsage:</b>

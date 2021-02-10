@@ -6,8 +6,8 @@ from io import StringIO
 import sys
 
 
-@Client.on_message(filters.command(['ex', 'py'], ['.']) & filters.me)
-def user_exec(client, message):
+@Client.on_message(filters.command('ex', ['.']) & filters.me)
+async def user_exec(client, message):
     code = ''
     try:
         code = message.text.split(".ex ")[1]
@@ -21,13 +21,13 @@ def user_exec(client, message):
     try:
         exec(code)
         
-        message.edit(f'''<b>Code:</b>
+        await message.edit(f'''<b>Code:</b>
 <code>{code}</code>
 <b>Result</b>:
 <code>{result.getvalue()}</code>
 ''')
     except:
-        message.edit(f'''<b>Code:</b>
+        await message.edit(f'''<b>Code:</b>
 <code>{code}</code>
 <b>Result</b>:
 <code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>

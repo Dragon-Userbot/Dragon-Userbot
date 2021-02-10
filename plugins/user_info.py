@@ -3,16 +3,17 @@ from .utils.utils import modules_help
 from pyrogram.raw import functions
 from .utils.scripts import date_dict
 import time
+import asyncio
 
 
 @Client.on_message(filters.command('inf', ['.']) & filters.me)
-def get_user_inf(client, message):
+async def get_user_inf(client, message):
     try:
         user = message.reply_to_message.from_user.id
     except:
         user = message.from_user.id
-    user_info = client.send(
-        functions.users.GetFullUser(id=client.resolve_peer(user)))
+    user_info = await client.send(
+        functions.users.GetFullUser(id=await client.resolve_peer(user)))
     if user_info.user.username == None:
         username = 'None'
     else:
@@ -29,25 +30,25 @@ def get_user_inf(client, message):
 |-Deleted: {user_info.user.deleted}
 |-BIO: {about}
 </b>''')
-    message.edit(user_info)
+    await message.edit(user_info)
 
 
 @Client.on_message(filters.command('inffull', ['.']) & filters.me)
-def get_full_user_inf(client, message):
-    message.edit('<code>Receiving the information...</code>')
+async def get_full_user_inf(client, message):
+    await message.edit('<code>Receiving the information...</code>')
     try:
         user = message.reply_to_message.from_user.id
     except:
         user = message.from_user.id
     try:
-        client.send_message("@creationdatebot", f"/start")
-        time.sleep(1)
+        await client.send_message("@creationdatebot", f"/start")
+        await asyncio.sleep(1)
         date_dict.clear()
-        msg = client.send_message("@creationdatebot", f"/id {user}")
-        time.sleep(1)
-        client.send(functions.messages.DeleteHistory(peer=client.resolve_peer(747653812), max_id=msg.chat.id))
-        user_info = client.send(
-            functions.users.GetFullUser(id=client.resolve_peer(user)))
+        msg = await client.send_message("@creationdatebot", f"/id {user}")
+        await asyncio.sleep(1)
+        await client.send(functions.messages.DeleteHistory(peer=await client.resolve_peer(747653812), max_id=msg.chat.id))
+        user_info = await client.send(
+            functions.users.GetFullUser(id=await client.resolve_peer(user)))
         if user_info.user.username == None:
             username = 'None'
         else:
@@ -74,9 +75,9 @@ def get_full_user_inf(client, message):
 |-Phone calls private: {user_info.phone_calls_private}
 |-Blocked: {user_info.blocked}</b>''')
         date_dict.clear()
-        message.edit(user_info)
-    except Exception:
-        message.edit('<code>An error has occurred...</code>')
+        await message.edit(user_info)
+    except:
+        await message.edit('<code>An error has occurred...</code>')
 
 modules_help.update({'user_info': '''<b>Help for |User info|\nUsage:</b>
 <code>.inf </code>

@@ -6,19 +6,19 @@ from io import BytesIO
 
 
 @Client.on_message(filters.command('tts', ['.']) & filters.me)
-def tts(client, message):
+async def tts(client, message):
     lang = message.command[1]
     text =  ' '.join(message.command[2:])
-    message.edit('<code>Speech synthesis...</code>')
+    await message.edit('<code>Speech synthesis...</code>')
     tts = gTTS(text, lang=lang)
     voice = BytesIO()
     tts.write_to_fp(voice)
     voice.name = 'voice.ogg'
-    message.delete()
+    await message.delete()
     if message.reply_to_message:
-        client.send_audio(message.chat.id, voice, reply_to_message_id=message.reply_to_message.message_id)
+        await client.send_audio(message.chat.id, voice, reply_to_message_id=message.reply_to_message.message_id)
     else:
-        client.send_audio(message.chat.id, voice)
+        await client.send_audio(message.chat.id, voice)
 
 modules_help.update({'tts': '''<b>Help for |Covid|\nUsage:</b>
 <code>.tts [lang] [text]</code>

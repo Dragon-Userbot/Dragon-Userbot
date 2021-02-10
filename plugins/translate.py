@@ -3,7 +3,7 @@ from .utils.utils import modules_help
 
 
 @Client.on_message(filters.command('tr', ['.']) & filters.me)
-def switch(client, message):
+async def switch(client, message):
     text = ' '.join(message.command[1:])
     ru_keys = """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"""
     en_keys = """eicykengшщzh_fiwaproldgeiчsmit_bu.E"№;%:?ICYKENGШЩZH_FIWAPROLDGEIЧSMIT_BU,"""
@@ -12,15 +12,15 @@ def switch(client, message):
             reply_text = message.reply_to_message.text
             change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
             reply_text = str.translate(reply_text, change)
-            message.edit(reply_text)
+            await message.edit(reply_text)
         else:
-            message.edit('No text for switch')
+            await message.edit('No text for switch')
             time.sleep(3)
-            message.delete()
+            await message.delete()
     else:
         change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
         text = str.translate(text, change)
-        message.edit(text)
+        await message.edit(text)
 
 
 modules_help.update({'translate': '''<b>Help for |translate|\nUsage:</b>

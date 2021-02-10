@@ -17,23 +17,21 @@ def update_restart(client, message):
     time.sleep(3)
     message.edit('<code>Update process completed!</code>')
     
-    
 @Client.on_message(filters.command('restart', ['.']) & filters.me)
-def restart_comand(client, message):
-    message.edit('<code>Restarting...</code>')
+async def restart_comand(client, message):
+    await message.edit('<code>Restarting...</code>')
     Thread(target=restart, args=(client, message)).start()
     
-    
 @Client.on_message(filters.command('update', ["."]) & filters.me)
-def update(client, message):
-    message.edit('<code>Updating...</code>')
+async def update(client, message):
+    await message.edit('<code>Updating...</code>')
     pip_update = subprocess.Popen(["python3", "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE)
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
     output = process.communicate()[0]
     for lib in range(len(requirements_list)):
-        process = subprocess.Popen(["pip3", "install", f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
+        process = subprocess.Popen(["pip3", "install", "-U" f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
         output = process.communicate()[0]
-    message.edit('<code>Restarting...</code>')
+    await message.edit('<code>Restarting...</code>')
     Thread(target=update_restart, args=(client, message)).start()
     
     

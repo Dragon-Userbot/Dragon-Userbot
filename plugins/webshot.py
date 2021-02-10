@@ -2,15 +2,16 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 
 
-@Client.on_message(filters.command(['webshot', 'wbs'], ["."]) & filters.me)
-def webshot(client, message):
+@Client.on_message(filters.command('webshot', ["."]) & filters.me)
+async def webshot(client, message):
     try:
         user_link = message.command[1]
-        message.delete()
+        await message.delete()
         full_link = f'https://webshot.deam.io/{user_link}/?delay=2000'
-        client.send_document(message.chat.id, full_link, caption=f'{user_link}')
+        await client.send_document(message.chat.id, full_link, caption=f'{user_link}')
     except:
-        client.send_message(message.chat.id, '<code>Something went wrong...</code>')
+        await message.delete()
+        await client.send_message(message.chat.id, '<code>Something went wrong...</code>')
 
 
 modules_help.update({'webshot': '''<b>Help for |Webshot|\nUsage:</b>

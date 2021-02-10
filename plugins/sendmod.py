@@ -4,17 +4,17 @@ from .utils.utils import modules_help
 
 import time
 
-@Client.on_message(filters.command(['sendmod', 'sm'], ["."]) & filters.me)
-def sendmod(client, message):
+@Client.on_message(filters.command('sendmod', ["."]) & filters.me)
+async def sendmod(client, message):
     mod_name = message.command[1]
     try:
-        message.edit('<code>Dispatch...</code>')
-        client.send_document(message.chat.id, f"plugins/{mod_name.lower()}.py", caption=modules_help[mod_name.lower()])
-        message.delete()
+        await message.edit('<code>Dispatch...</code>')
+        await client.send_document(message.chat.id, f"plugins/{mod_name.lower()}.py", caption=modules_help[mod_name.lower()])
+        await message.delete()
     except:
-        message.edit('<b>Invalid module name!</b>')
+        await message.edit('<b>Invalid module name!</b>')
         time.sleep(5)
-        message.delete()
+        await message.delete()
 
 
 modules_help.update({'sendmod': '''<b>Help for |sendmod|\nUsage:</b>

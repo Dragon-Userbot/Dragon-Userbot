@@ -5,14 +5,14 @@ from .utils.utils import modules_help
 import time
 
 
-@Client.on_message(filters.command(['scr', 'screenshot'], ["."]) & filters.private & filters.me)
-def screenshot(client, message):
+@Client.on_message(filters.command('scr', ["."]) & filters.private & filters.me)
+async def screenshot(client, message):
     quantity = int(message.command[1])
-    message.delete()
+    await message.delete()
     for scr in range(quantity):
         time.sleep(0.1)
-        client.send(functions.messages.SendScreenshotNotification(
-            peer=client.resolve_peer(message.chat.id),
+        await client.send(functions.messages.SendScreenshotNotification(
+            peer= await client.resolve_peer(message.chat.id),
             reply_to_msg_id=0, random_id=client.rnd_id()))
 
 
