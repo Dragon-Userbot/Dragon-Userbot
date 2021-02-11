@@ -21,7 +21,7 @@ async def wiki(client, message):
 <b>Result:</b>
 <code>{result}</code>''')
 
-	except:
+	except Exception as exc:
 		await message.edit(f'''<b>Request:</b>
 <code>{user_request}</code>
 <b>Result:</b>
