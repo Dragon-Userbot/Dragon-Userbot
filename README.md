@@ -26,10 +26,6 @@
 
 <code>  pip3 install -r requirements.txt</code>
 
-<code>  vim config.ini</code> (or other editor)
-
-<p>Insert api_id and api_hash (my.telegram.org)</p>
-
 <code>  python3 main.py</code>
 
 Subsequent launch:
