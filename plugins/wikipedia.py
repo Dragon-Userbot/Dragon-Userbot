@@ -30,8 +30,8 @@ async def wiki(client, message):
 
 modules_help.update({'wikipedia': '''<b>Help for |Wikipedia|\nUsage:</b>
 <code>.wiki [request]</code>
-<b>[Search on the English Wikipedia]</b>
+<b>[Search in Russian Wikipedia]</b>
 <code>.wiki ru [request]</code>
-<b>[Search in Russian Wikipedia]</b>''', 'wikipedia module': '<b>• Wikipedia</b>:<code> wiki</code>\n'})
+<b>[Search on the English Wikipedia]</b>''', 'wikipedia module': '<b>• Wikipedia</b>:<code> wiki</code>\n'})
 
 requirements_list.append('wikipedia')
