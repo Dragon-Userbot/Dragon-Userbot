@@ -29,7 +29,7 @@ async def update(client, message):
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
     output = process.communicate()[0]
     for lib in range(len(requirements_list)):
-        process = subprocess.Popen(["pip3", "install", "-U" f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
+        process = subprocess.Popen(["pip3", "install", "-U", f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
         output = process.communicate()[0]
     await message.edit('<code>Restarting...</code>')
     Thread(target=update_restart, args=(client, message)).start()
