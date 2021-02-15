@@ -3,7 +3,7 @@ from .utils.utils import modules_help
 from time import perf_counter
 
 
-@Client.on_message(filters.command('ping', ['.']) & filters.me)
+@Client.on_message(filters.command(['ping', 'p'], ['.']) & filters.me)
 async def ping(client, message):
     start = perf_counter()
     await message.edit('Pong')
