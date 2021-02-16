@@ -20,6 +20,6 @@ async def tts(client, message):
     else:
         await client.send_audio(message.chat.id, voice)
 
-modules_help.update({'tts': '''<b>Help for |Covid|\nUsage:</b>
+modules_help.update({'tts': '''<b>Help for |Tts|\nUsage:</b>
 <code>.tts [lang] [text]</code>
 <b>[Say text]</b>''', 'tts module': '<b>• Tts</b>:<code> tts</code>\n'})
