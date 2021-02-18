@@ -1,0 +1,4 @@
+*.session
+*.session-journal
+plugins/__pycache__/
+__pycache__/
