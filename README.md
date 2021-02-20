@@ -8,6 +8,7 @@
 <nav>
 <li><a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#installation-not-the-final-version'>Installation</a></li>
 <li><a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#custom-modules'>Custom modules</a></li>
+<li><a href='https://github.com/JoHn-111/Dragon-Userbot#groups-and-support'>Channel and chat in telegram</a></li>
 <li><a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#credits'>Credits</a></li>
   
 </nav>
