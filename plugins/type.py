@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 
 from .utils.utils import modules_help
-import time
+import asyncio
 
 
 @Client.on_message(filters.command('type', ['.']) & filters.me)
@@ -15,13 +15,13 @@ async def type(client, message):
     while(tbp != orig_text):
         try:
             await message.edit(tbp + typing_symbol)
-            time.sleep(0.1)
+            await asyncio.sleep(0.1)
  
             tbp = tbp + text[0]
             text = text[1:]
  
             await message.edit(tbp)
-            time.sleep(0.1)
+            await asyncio.sleep(0.1)
 
         except FloodWait as e:
             time.sleep(e.x)

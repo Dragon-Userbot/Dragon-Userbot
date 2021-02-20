@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 
-import time
+import asyncio
 
 
 @Client.on_message(filters.command('sw', ['.']) & filters.me)
@@ -17,7 +17,7 @@ async def switch(client, message):
             await message.edit(reply_text)
         else:
             message.edit('No text for switch')
-            time.sleep(3)
+            await asyncio.sleep(3)
             await message.delete()
     else:
         change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)

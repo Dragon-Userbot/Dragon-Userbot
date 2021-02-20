@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.raw import types, functions
 from .utils.utils import modules_help
 
-import time
+import asyncio
 
 
 @Client.on_message(filters.command('scr', ["."]) & filters.private & filters.me)
@@ -10,7 +10,7 @@ async def screenshot(client, message):
     quantity = int(message.command[1])
     await message.delete()
     for scr in range(quantity):
-        time.sleep(0.1)
+        await asyncio.sleep(0.1)
         await client.send(functions.messages.SendScreenshotNotification(
             peer= await client.resolve_peer(message.chat.id),
             reply_to_msg_id=0, random_id=client.rnd_id()))

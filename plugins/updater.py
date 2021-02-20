@@ -3,7 +3,7 @@ from .utils.utils import modules_help
 import subprocess
 from threading import Thread
 from .utils.utils import requirements_list
-import time
+import asyncio
 
 
 def restart(client, message):
@@ -11,10 +11,10 @@ def restart(client, message):
     message.edit('<code>Restart was successful!</code>')
     
     
-def update_restart(client, message):
+async def update_restart(client, message):
     client.restart()
     message.edit('<code>Restart was successful!</code>')
-    time.sleep(3)
+    await asyncio.sleep(3)
     message.edit('<code>Update process completed!</code>')
     
 @Client.on_message(filters.command('restart', ['.']) & filters.me)

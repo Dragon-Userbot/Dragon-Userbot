@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 
-import time
+import asyncio
 
 
 @Client.on_message(filters.command('del', ["."]) & filters.me)
@@ -31,7 +31,7 @@ async def purge(client, message):
             await client.delete_messages(chat_id=message.chat.id,message_ids=messages_list)
 
         await message.edit('<b>Сleaning was successful!</b>')
-        time.sleep(3)
+        await asyncio.sleep(3)
         await message.delete()
     else:
         await message.edit('<b>Reply to a message after which you want to delete messages</b>')

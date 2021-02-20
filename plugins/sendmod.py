@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.raw import types, functions
 from .utils.utils import modules_help
 
-import time
+import asyncio
 
 @Client.on_message(filters.command('sendmod', ["."]) & filters.me)
 async def sendmod(client, message):
@@ -13,7 +13,7 @@ async def sendmod(client, message):
         await message.delete()
     except:
         await message.edit('<b>Invalid module name!</b>')
-        time.sleep(5)
+        await asyncio.sleep(5)
         await message.delete()
 
 

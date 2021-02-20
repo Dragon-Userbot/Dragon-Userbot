@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 
 import datetime
-import time
+import asyncio
 
 
 @Client.on_message(filters.command('afk', ['.']) & filters.me)
@@ -21,7 +21,7 @@ async def unafk(client, message):
         print(afk_time)
     except NameError:
         await message.edit("<b>You weren't afk</b>")
-        time.sleep(3)
+        await asyncio.sleep(3)
         await message.delete()
 
 

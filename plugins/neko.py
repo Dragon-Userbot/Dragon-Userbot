@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 import requests
-import time
+import asyncio
 
 
 def getpic(query):
@@ -25,7 +25,7 @@ async def neko_spam(client, message):
     quantity = int(message.command[1])
     for _ in range(quantity):
         await client.send_message(message.chat.id, getpic(query), disable_web_page_preview=False)
-        time.sleep(0.2)
+        await asyncio.sleep(0.2)
 
 
 modules_help.update({'neko': '''<b>Help for |Neko|\nUsage:</b>

@@ -15,7 +15,7 @@ async def switch(client, message):
             await message.edit(reply_text)
         else:
             await message.edit('No text for switch')
-            time.sleep(3)
+            await asyncio.sleep(3)
             await message.delete()
     else:
         change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)

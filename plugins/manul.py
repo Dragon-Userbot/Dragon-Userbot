@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
-import time
+import asyncio
 
 
 @Client.on_message(filters.command('manul', ['.']) & filters.me)
@@ -11,7 +11,7 @@ async def manul(client, message):
     await message.delete()
     for i in range(1, quantity):
         await client.send_message(message.chat.id, f"{i} манула(ов)")
-        time.sleep(0.2)
+        await asyncio.sleep(0.2)
 
 
 modules_help.update({'manul': '''<b>Help for |manul|\nUsage:</b>

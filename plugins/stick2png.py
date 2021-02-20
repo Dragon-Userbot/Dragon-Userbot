@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 import os
-import time
+import asyncio
 
 
 @Client.on_message(filters.command(['stick2png', 'stp'], ['.']) & filters.me)
@@ -17,11 +17,11 @@ async def stick2png(client, message):
                 os.remove('downloads/out.png')
             else:
                 msg = await message.edit('<b>Stiker is animated!</b>')
-                time.sleep(3)
+                await asyncio.sleep(3)
                 await msg.delete()    
         else:
             msg = await message.edit('<b>Reply to stiker!</b>')
-            time.sleep(3)
+            await asyncio.sleep(3)
             await msg.delete()
 
 

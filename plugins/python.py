@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
-import time
+import asyncio
 
 from io import StringIO
 import sys
