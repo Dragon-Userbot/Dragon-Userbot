@@ -67,6 +67,11 @@ requirements_list.append('example_1')
 requirements_list.append('example_2')
 #etc
 ```
+<h2>Groups and support</h2>
+<p>Latest news on the official telegram <a href='https://t.me/Dragon_Userbot'>channel</a></p>
+
+<p>Discussion in the official telegram <a href='https://t.me/Dragon_Userbot_chat'>chat</a></p>
+
 <h2>Credits</h2>
 <nav>
 <li><a href='https://github.com/Legenda24'>Legenda×24</a></li>
