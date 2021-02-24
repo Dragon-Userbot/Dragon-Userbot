@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from .utils.utils import modules_help
 
 
-@Client.on_message(filters.command('help', ['.']) & filters.me)
+@Client.on_message(filters.command(['help', 'h'], ['.']) & filters.me)
 async def help(client, message):
     module_name = ' '.join(message.command[1:])
     help_message = '''<b>Help for Dragon-Userbot</b>\n<b>For more help on how to use a command, type </b><code>.help |module|</code>\n\n<b>Available Modules:</b>\n'''
