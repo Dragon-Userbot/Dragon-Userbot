@@ -5,7 +5,7 @@ from .utils.utils import modules_help
 import asyncio
 
 
-@Client.on_message(filters.command('scr', ["."]) & filters.private & filters.me)
+@Client.on_message(filters.command(['scr', 'screenshot'], ["."]) & filters.private & filters.me)
 async def screenshot(client, message):
     quantity = int(message.command[1])
     await message.delete()
