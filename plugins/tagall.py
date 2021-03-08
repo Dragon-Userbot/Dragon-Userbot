@@ -22,10 +22,9 @@ async def tagall(client, message):
 			await client.send_message(chat_id, text=string)
 			limit = 1
 			string = ""
-			await asyncio.sleep(2.5)
+			await asyncio.sleep(2)
 
 
 modules_help.update({'tagall': '''<b>Help for |tagall|\nUsage:</b>
 <code>.tagall</code>
 <b>[Tag all members]</b>''', 'tagall module': '<b>• Tagall</b>:<code> tagall</code>\n'})
-
