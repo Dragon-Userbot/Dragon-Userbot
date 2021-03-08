@@ -14,7 +14,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleW
 async def usd(client, message):
 	try:
 		await message.edit('<code>Data retrieval...</code>')
-		full_page = requests.get(DOLLAR, headers=headers, timeout=0.5)
+		full_page = requests.get(DOLLAR, headers=headers, timeout=1)
 		soup = BeautifulSoup(full_page.content, 'html.parser')
 		rub = soup.findAll("span", {"class": "DFlfde", "class": "SwHCTb", "data-precision": 2})
 		await message.edit(f'<b>One dollar now is </b><code>{rub}</code><b> rub</b>')
@@ -25,7 +25,7 @@ async def usd(client, message):
 async def eur(client, message):
 	try:
 		await message.edit('<code>Data retrieval...</code>')
-		full_page = requests.get(EUR, headers=headers, timeout=0.5)
+		full_page = requests.get(EUR, headers=headers, timeout=1)
 		soup = BeautifulSoup(full_page.content, 'html.parser')
 		rub = soup.findAll("span", {"class": "DFlfde", "class": "SwHCTb", "data-precision": 2})
 		await message.edit(f'<b>One euro now is </b><code>{rub}</code><b> rub</b>')
