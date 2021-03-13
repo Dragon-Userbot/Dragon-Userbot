@@ -4,7 +4,7 @@ from .utils.utils import modules_help
 
 import asyncio
 
-@Client.on_message(filters.command('sendmod', ["."]) & filters.me)
+@Client.on_message(filters.command(['sendmod', 'sm'], ["."]) & filters.me)
 async def sendmod(client, message):
     mod_name = message.command[1]
     try:
