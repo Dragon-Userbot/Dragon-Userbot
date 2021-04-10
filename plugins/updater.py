@@ -13,9 +13,9 @@ def restart(client, message):
     
 async def update_restart(client, message):
     client.restart()
-    message.edit('<code>Restart was successful!</code>')
+    await message.edit('<code>Restart was successful!</code>')
     await asyncio.sleep(3)
-    message.edit('<code>Update process completed!</code>')
+    await message.edit('<code>Update process completed!</code>')
     
 @Client.on_message(filters.command('restart', ['.']) & filters.me)
 async def restart_comand(client, message):
