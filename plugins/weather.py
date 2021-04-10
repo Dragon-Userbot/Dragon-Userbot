@@ -11,7 +11,7 @@ async def weather(client, message):
     city = message.command[1]
     await message.edit("<code>Processing the request...</code>")
     r = requests.get(f"https://wttr.in/{city}?0?q?T&lang=en")
-    await message.edit(f"<code>City: {r.text}</code>")
+    await message.edit(f"```City: {r.text}```")
 
     
 modules_help.update({'weather': '''<b>Help for |weather|\nUsage:</b>
