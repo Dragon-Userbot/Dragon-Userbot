@@ -6,7 +6,7 @@ from .utils.utils import requirements_list
 import asyncio
 
 
-def restart(client, message):
+async def restart(client, message):
     await client.restart()
     await message.edit('<code>Restart was successful!</code>')
     
