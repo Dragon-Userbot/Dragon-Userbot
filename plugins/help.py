@@ -11,8 +11,9 @@ async def help(client, message):
             if modules.endswith(' module'):
                 help_message += module_help
 
-        help_message += f'\n<b>The number of modules in the userbot: {len(modules_help)/2}</b>'        
-        await message.edit(help_message, parse_mode='html')
+        help_message += f'\n<b>The number of modules in the userbot: {len(modules_help)/2}</b>'
+        help_message += f'\n<b><a href="https://github.com/JoHn-111/Dragon-Userbot#groups-and-support">Channel and chat in telegram</a></b>' 
+        await message.edit(help_message, parse_mode='html', disable_web_page_preview=True)
     else:
         try:
             await message.edit(modules_help[module_name.lower()])
