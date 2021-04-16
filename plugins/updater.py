@@ -7,12 +7,12 @@ import asyncio
 
 
 def restart(client, message):
-    client.restart()
-    message.edit('<code>Restart was successful!</code>')
+    await client.restart()
+    await message.edit('<code>Restart was successful!</code>')
     
     
 async def update_restart(client, message):
-    client.restart()
+    await client.restart()
     await message.edit('<code>Restart was successful!</code>')
     await asyncio.sleep(3)
     await message.edit('<code>Update process completed!</code>')
