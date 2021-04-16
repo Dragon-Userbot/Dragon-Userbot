@@ -1,9 +1,7 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 import subprocess
-from threading import Thread
 from .utils.utils import requirements_list
-import asyncio
 
 
 async def restart(client, message):
@@ -20,7 +18,8 @@ async def update_restart(client, message):
 @Client.on_message(filters.command('restart', ['.']) & filters.me)
 async def restart_comand(client, message):
     await message.edit('<code>Restarting...</code>')
-    await asyncio.get_event_loop().create_task(restart(client, message))
+    import asyncio
+    asyncio.get_event_loop().create_task(restart(client, message))
     
 @Client.on_message(filters.command('update', ["."]) & filters.me)
 async def update(client, message):
@@ -32,8 +31,8 @@ async def update(client, message):
         process = subprocess.Popen(["pip3", "install", "-U", f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
         output = process.communicate()[0]
     await message.edit('<code>Restarting...</code>')
-    await asyncio.get_event_loop().create_task(restart(client, message))
-    
+    import asyncio
+    asyncio.get_event_loop().create_task(update_restart(client, message)) 
     
 modules_help.update({'updater': '''<b>Help for |Updater|\nUsage:</b>
 <code>.update</code>
