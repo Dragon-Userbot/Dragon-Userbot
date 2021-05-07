@@ -6,3 +6,5 @@ wheel
 gTTS
 pygments
 pillow
+ffmpeg-python
+pytgcalls
