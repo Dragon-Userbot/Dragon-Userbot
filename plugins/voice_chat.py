@@ -112,4 +112,4 @@ modules_help.update({'voice_chat': '''<b>Help for |voice_chat|\nUsage:</b>
 <code>.pause</code>
 [Pause]
 <code>.resume</code>
-[Resume]</b>''','voice_chat module': '<b>• Voice_chat</b>:<code> , </code>\n'})
+[Resume]</b>''','voice_chat module': '<b>• Voice_chat</b>:<code> play, volume, join, leave_voice, stop, mute, unmute, pause, resume</code>\n'})
