@@ -10,7 +10,8 @@ async def repo(client, message):
 • License: {utils.license}
 • Copyright: {utils.copyright}
 • Python version: {utils.python_version}
-• Number of modules: {len(modules_help)/2}</b>''')
+• Number of modules: {len(modules_help)/2}
+• <a href="https://t.me/Dragon_Userbot">Channel</a> and <a href="https://t.me/Dragon_Userbot_chat">chat</a> in telegram</b>' ''')
 
 
 utils.modules_help.update({'repo': '''<b>Help for |repo|\nUsage:</b>
