@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/pyrogram/pyrogram">
-        <img src="https://live.staticflickr.com/65535/51165122716_a1396d90c1_m.jpg" alt="Dragon-Userbot">
+        <img src="https://telegra.ph/file/97ba4adfdf5ac59a213d9.png" width="500" alt="Dragon-Userbot">
     </a>
     <br>
     <b>Dragon-Userbot</b>
