@@ -41,6 +41,8 @@
 
 <code>  python3 main.py</code>
 
+<code>  .help</code> (in telegram chat)
+
 Subsequent launch:
 
 <code>  cd Dragon-Userbot/</code>
