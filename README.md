@@ -1,17 +1,29 @@
+<p align="center">
+    <a href="https://github.com/pyrogram/pyrogram">
+        <img src="https://live.staticflickr.com/65535/51165122716_a1396d90c1_m.jpg" alt="Dragon-Userbot">
+    </a>
+    <br>
+    <b>Dragon-Userbot</b>
+    <br>
+    <b>Telegram userbot with the easiest installation</b>
+    <br>
+    <a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#installation-not-the-final-version'>
+        Installation
+    </a>
+    •
+    <a href="https://github.com/JoHn-111/Dragon-Userbot/releases">
+        Releases
+    </a>
+    •
+    <a href="https://t.me/Dragon_Userbot_chat">
+        Community
+    </a>
+    •
+    <a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#custom-modules'>
+        Custom modules
+    </a>
+</p>
 
-
-<h1>Dragon-Userbot</h1>
-
-<h3>This repository contains the custom bot code, instructions on how to deploy the bot yourself, and an example of required code in custom modules</h3><br>
-  
-
-<nav>
-<li><a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#installation-not-the-final-version'>Installation</a></li>
-<li><a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#custom-modules'>Custom modules</a></li>
-<li><a href='https://github.com/JoHn-111/Dragon-Userbot#groups-and-support'>Channel and chat in telegram</a></li>
-<li><a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#credits'>Credits</a></li>
-  
-</nav>
 
 
 <h2>Installation (not the final version)</h2>
