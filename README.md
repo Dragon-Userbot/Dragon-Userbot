@@ -32,6 +32,9 @@
 
 <code>  pkg install libjpeg-turbo</code>
 
+<code> sudo apt update</code>
+
+<code>  sudo apt install ffmpeg</code>
 
 <code>  git clone https://github.com/JoHn-111/Dragon-Userbot.git</code>
 
