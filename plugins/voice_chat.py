@@ -16,7 +16,7 @@ def init_client(func):
         return await func(client, message)
     return wrapper
 
-@Client.on_message(filters.command('play', ["."]))
+@Client.on_message(filters.command('play', ["."]) & filters.me)
 async def start_playout(client, message: Message):
     group_call.client = client
     if not message.reply_to_message or not message.reply_to_message.audio:
@@ -37,7 +37,7 @@ async def start_playout(client, message: Message):
     await message.edit_text(f'<code>Playing</code> <b>{message.reply_to_message.audio.title}</b>...')
     group_call.input_filename = input_filename
 
-@Client.on_message(filters.command('volume', ["."]))
+@Client.on_message(filters.command('volume', ["."]) & filters.me)
 @init_client
 async def volume(_, message):
     if len(message.command) < 2:
@@ -45,7 +45,7 @@ async def volume(_, message):
     await group_call.set_my_volume(message.command[1])
     await message.edit_text(f'<b>Your volume is set to</b><code> {message.command[1]}</code>')
 
-@Client.on_message(filters.command('join', ["."]))
+@Client.on_message(filters.command('join', ["."]) & filters.me)
 @init_client
 async def start(_, message: Message):
     if await group_call.check_group_call():
@@ -54,7 +54,7 @@ async def start(_, message: Message):
         await group_call.start(message.chat.id)
         await message.edit_text('<code>Joining successfully!</code>')
 
-@Client.on_message(filters.command('leave_voice', ["."]))
+@Client.on_message(filters.command('leave_voice', ["."]) & filters.me)
 @init_client
 async def stop(_, message: Message):
     if await group_call.check_group_call():
@@ -63,31 +63,31 @@ async def stop(_, message: Message):
     else:
         await message.edit_text("<b>You're not in voice chat!</b>")
 
-@Client.on_message(filters.command('stop', ["."]))
+@Client.on_message(filters.command('stop', ["."]) & filters.me)
 @init_client
 async def stop_playout(_, message: Message):
     group_call.stop_playout()
     await message.edit_text('<code>Stoping successfully!</code>')
 
-@Client.on_message(filters.command('mute', ["."]))
+@Client.on_message(filters.command('mute', ["."]) & filters.me)
 @init_client
 async def mute(_, message: Message):
     group_call.set_is_mute(True)
     await message.edit_text('<code>Sound off!</code>')
 
-@Client.on_message(filters.command('unmute', ["."]))
+@Client.on_message(filters.command('unmute', ["."]) & filters.me)
 @init_client
 async def unmute(_, message: Message):
     group_call.set_is_mute(False)
     await message.edit_text('<code>Sound on!</code>')
 
-@Client.on_message(filters.command('pause', ["."]))
+@Client.on_message(filters.command('pause', ["."]) & filters.me)
 @init_client
 async def pause(_, message: Message):
     group_call.pause_playout()
     await message.edit_text('<code>Paused!</code>')
 
-@Client.on_message(filters.command('resume', ["."]))
+@Client.on_message(filters.command('resume', ["."]) & filters.me)
 @init_client
 async def resume(_, message: Message):
     group_call.resume_playout()
