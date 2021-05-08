@@ -92,4 +92,4 @@ requirements_list.append('example_2')
 <li><a href='https://github.com/Legenda24'>Legenda×24</a></li>
 <li><a href='https://github.com/LaciaMemeFrame'>LaciaMemeFrame</a></li>
 </nav>
-<h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a>and <h4>Written on <a href='https://github.com/MarshalX/tgcalls/tree/main/pytgcalls'>pytgcalls</a></h4>
+<h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a> and <a href='https://github.com/MarshalX/tgcalls/tree/main/pytgcalls'>pytgcalls</a></h4>
