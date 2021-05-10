@@ -8,7 +8,7 @@ from pyrogram.types import Message
 from pytgcalls import GroupCall     
 
 
-group_call = GroupCall(None, path_to_log_file='')
+group_call = GroupCall(None, enable_logs_to_console=False, path_to_log_file=None)
 
 def init_client(func):
     async def wrapper(client, message):
