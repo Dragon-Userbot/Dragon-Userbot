@@ -1,9 +1,10 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 
 
 @Client.on_message(filters.command('webshot', ["."]) & filters.me)
-async def webshot(client, message):
+async def webshot(client: Client, message: Message):
     try:
         user_link = message.command[1]
         await message.delete()

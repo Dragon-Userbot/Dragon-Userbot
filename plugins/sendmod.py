@@ -1,11 +1,12 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from pyrogram.raw import types, functions
 from .utils.utils import modules_help
 
 import asyncio
 
 @Client.on_message(filters.command(['sendmod', 'sm'], ["."]) & filters.me)
-async def sendmod(client, message):
+async def sendmod(client: Client, message: Message):
     mod_name = message.command[1]
     try:
         await message.edit('<code>Dispatch...</code>')

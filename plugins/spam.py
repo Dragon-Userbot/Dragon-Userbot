@@ -1,11 +1,12 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 
 import asyncio
 
 
 @Client.on_message(filters.command('statspam', ['.']) & filters.me)
-async def statspam(client, message):
+async def statspam(client: Client, message: Message):
     quantity = message.command[1]
     spam_text = ' '.join(message.command[2:])
     quantity = int(quantity)
@@ -17,7 +18,7 @@ async def statspam(client, message):
         await asyncio.sleep(0.1)
 
 @Client.on_message(filters.command('spam', ['.']) & filters.me)
-async def spam(client, message):
+async def spam(client: Client, message: Message):
     quantity = message.command[1]
     spam_text = ' '.join(message.command[2:])
     quantity = int(quantity)
@@ -27,7 +28,7 @@ async def spam(client, message):
         await asyncio.sleep(0.15)
         
 @Client.on_message(filters.command('fastspam', ['.']) & filters.me)
-async def fastspam(client, message):
+async def fastspam(client: Client, message: Message):
     quantity = message.command[1]
     spam_text = ' '.join(message.command[2:])
     quantity = int(quantity)
@@ -37,7 +38,7 @@ async def fastspam(client, message):
         await asyncio.sleep(0.02)
 
 @Client.on_message(filters.command('slowspam', ['.']) & filters.me)
-async def slowspam(client, message):
+async def slowspam(client: Client, message: Message):
     quantity = message.command[1]
     spam_text = ' '.join(message.command[2:])
     quantity = int(quantity)

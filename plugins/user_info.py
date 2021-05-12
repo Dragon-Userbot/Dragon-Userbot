@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 from pyrogram.raw import functions
 from .utils.scripts import date_dict
@@ -6,7 +7,7 @@ import asyncio
 
 
 @Client.on_message(filters.command('inf', ['.']) & filters.me)
-async def get_user_inf(client, message):
+async def get_user_inf(client: Client, message: Message):
     try:
         user = message.reply_to_message.from_user.id
     except:
@@ -33,7 +34,7 @@ async def get_user_inf(client, message):
 
 
 @Client.on_message(filters.command('inffull', ['.']) & filters.me)
-async def get_full_user_inf(client, message):
+async def get_full_user_inf(client: Client, message: Message):
     await message.edit('<code>Receiving the information...</code>')
     try:
         user = message.reply_to_message.from_user.id

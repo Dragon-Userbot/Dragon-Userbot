@@ -1,5 +1,5 @@
 #rewrote the module from @ Fl1yd
-
+from pyrogram.types import Message
 from pyrogram import Client, filters
 from .utils.utils import modules_help
 
@@ -7,7 +7,7 @@ import requests
 
 
 @Client.on_message(filters.command('weather', ['.']) & filters.me)
-async def weather(client, message):
+async def weather(client: Client, message: Message):
     city = message.command[1]
     await message.edit("<code>Processing the request...</code>")
     r = requests.get(f"https://wttr.in/{city}?0?q?T&lang=en")

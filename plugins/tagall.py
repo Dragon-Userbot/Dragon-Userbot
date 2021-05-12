@@ -1,10 +1,11 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 import asyncio
 
 
 @Client.on_message(filters.command('tagall', ['.']) & filters.me)
-async def tagall(client, message):
+async def tagall(client: Client, message: Message):
 	await message.delete()
 	chat_id = message.chat.id
 	string = ""

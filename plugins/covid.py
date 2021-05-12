@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 from .utils.utils import requirements_list
 
@@ -6,7 +7,7 @@ from covid import Covid
 
 
 @Client.on_message(filters.command('covid', ['.']) & filters.me)
-async def covid_local(client, message):
+async def covid_local(client: Client, message: Message):
 	region = ' '.join(message.command[1:])
 	await message.edit('<code>Data retrieval...</code>')
 	covid = Covid(source="worldometers")
@@ -27,7 +28,7 @@ async def covid_local(client, message):
 		await message.edit(f'<code>There is no region called "{region}"</code>')
 
 @Client.on_message(filters.command('regions', ['.']) & filters.me)
-async def regions(client, message):
+async def regions(client: Client, message: Message):
 	countr = ''
 	await message.edit('<code>Data retrieval...</code>')
 	covid = Covid(source="worldometers")

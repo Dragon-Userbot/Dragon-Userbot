@@ -1,10 +1,11 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils import utils
 from .utils.utils import modules_help
 
 
 @Client.on_message(filters.command('repo', ['.']) & filters.me)
-async def repo(client, message):
+async def repo(client: Client, message: Message):
     await message.edit(f'''<b>---Dragon-Userbot---
 • Userbot on{utils.github}
 • License: {utils.license}

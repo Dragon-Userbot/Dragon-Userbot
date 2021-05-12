@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 import requests
 from bs4 import BeautifulSoup 
@@ -11,7 +12,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleW
 
 
 @Client.on_message(filters.command('usd', ['.']) & filters.me)
-async def usd(client, message):
+async def usd(client: Client, message: Message):
 	try:
 		await message.edit('<code>Data retrieval...</code>')
 		full_page = requests.get(DOLLAR, headers=headers, timeout=1)
@@ -22,7 +23,7 @@ async def usd(client, message):
 		await message.edit('<code>Too many requests please try again later</code>')
 
 @Client.on_message(filters.command('eur', ['.']) & filters.me)
-async def eur(client, message):
+async def eur(client: Client, message: Message):
 	try:
 		await message.edit('<code>Data retrieval...</code>')
 		full_page = requests.get(EUR, headers=headers, timeout=1)

@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 
 from gtts import gTTS
@@ -6,7 +7,7 @@ from io import BytesIO
 
 
 @Client.on_message(filters.command('tts', ['.']) & filters.me)
-async def tts(client, message):
+async def tts(client: Client, message: Message):
     lang = message.command[1]
     text =  ' '.join(message.command[2:])
     await message.edit('<code>Speech synthesis...</code>')

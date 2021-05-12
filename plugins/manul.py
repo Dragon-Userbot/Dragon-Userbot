@@ -1,10 +1,11 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 import asyncio
 
 
 @Client.on_message(filters.command('manul', ['.']) & filters.me)
-async def manul(client, message):
+async def manul(client: Client, message: Message):
     quantity = message.command[1]
     quantity = int(quantity) + 1
     print('manul')

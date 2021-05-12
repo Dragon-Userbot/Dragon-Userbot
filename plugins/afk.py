@@ -1,18 +1,20 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
+
 
 import datetime
 import asyncio
 
 
 @Client.on_message(filters.command('afk', ['.']) & filters.me)
-async def afk(client, message):
+async def afk(client: Client, message: Message):
     global start, end
     start = datetime.datetime.now().replace(microsecond=0)
     await message.edit("<b>I'm going afk</b>")
 
 @Client.on_message(filters.command('unafk', ['.']) & filters.me)
-async def unafk(client, message):
+async def unafk(client: Client, message: Message):
     try:
         global start, end
         end = datetime.datetime.now().replace(microsecond=0)
