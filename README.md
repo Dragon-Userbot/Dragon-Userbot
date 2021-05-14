@@ -62,6 +62,7 @@ To add your modules just put a .py file in  <a href='https://github.com/JoHn-111
 
 ```python3
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 from .utils.utils import requirements_list
 
@@ -71,7 +72,7 @@ from .utils.utils import requirements_list
 
 
 @Client.on_message(filters.command('example', ['.']) & filters.me)
-async def module_name(client, message):
+async def module_name(client: Client, message: Message):
     await message.edit('This is an example module')
 
 
@@ -81,9 +82,8 @@ modules_help.update({'example': '''<b>Help for |example|\nUsage:</b>
 <b>[Example module help]</b>''', 'example module': '<b>• Example</b>:<code> example</code>\n'})
 
 #If your custom module requires packages from PyPi, write the names of the packages in these functions
-requirements_list.append('example_1')
-requirements_list.append('example_2')
-#etc
+#requirements_list.append('example_1')
+#requirements_list.append('example_2')
 ```
 <h2>Groups and support</h2>
 <p>Latest news on the official telegram <a href='https://t.me/Dragon_Userbot'>channel</a></p>
