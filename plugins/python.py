@@ -8,7 +8,7 @@ import sys
 
 @Client.on_message(filters.command(['ex', 'py'], ['.']) & filters.me)
 def user_exec(client: Client, message: Message):
-code = ''
+    code = ''
     try:
         code = message.text.split(" ", maxsplit=1)[1]
     except IndexError:
