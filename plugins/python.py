@@ -21,13 +21,13 @@ def user_exec(client: Client, message: Message):
     try:
         exec(code)
         
-        await message.edit(f'''<b>Code:</b>
+        message.edit(f'''<b>Code:</b>
 <code>{code}</code>
 <b>Result</b>:
 <code>{result.getvalue()}</code>
 ''')
     except:
-        await message.edit(f'''<b>Code:</b>
+        message.edit(f'''<b>Code:</b>
 <code>{code}</code>
 <b>Result</b>:
 <code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>
