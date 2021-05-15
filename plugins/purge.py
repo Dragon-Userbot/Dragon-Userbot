@@ -16,26 +16,29 @@ async def del_msg(client: Client, message: Message):
 @Client.on_message(filters.command('purge', ["."]) & filters.me)
 async def purge(client: Client, message: Message):
     if message.reply_to_message:
-        start_message = message.reply_to_message.message_id
-        end_message = message.message_id
-        message_ids = range(start_message, end_message)
-        messages = await client.get_messages(chat_id=message.chat.id, message_ids=message_ids, replies=0)
-        messages_list = []
-        quantity = 0
-        for message_iter in messages:
-            if len(messages_list) == 100:
-                await client.delete_messages(chat_id=message.chat.id, message_ids=message_ids)
-            else:
-                messages_list.append(message_iter.message_id)
-
-        if messages_list:
-            await client.delete_messages(chat_id=message.chat.id,message_ids=messages_list)
-
-        await message.edit('<b>Сleaning was successful!</b>')
-        await asyncio.sleep(3)
         await message.delete()
-    else:
-        await message.edit('<b>Reply to a message after which you want to delete messages</b>')
+        message_ids = []
+        for a_s_message_id in range(message.reply_to_message.message_id, message.message_id):
+            message_ids.append(a_s_message_id)
+            if len(message_ids) == 100:
+                await client.delete_messages(
+                    chat_id=message.chat.id,
+                    message_ids=message_ids,
+                    revoke=True
+                )
+                message_ids = []
+        if len(message_ids) > 0:
+            await client.delete_messages(
+                chat_id=message.chat.id,
+                message_ids=message_ids,
+                revoke=True
+            )
+    msg = await client.send_message(
+        message.chat.id,
+        f"<b>Сleaning was successful!</b>",
+        parse_mode='HTML')
+    await asyncio.sleep(1.20)
+    await msg.delete()
 
 
 modules_help.update({'purge': '''<b>Help for |purge|\nUsage:</b>
