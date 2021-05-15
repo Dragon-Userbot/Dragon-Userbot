@@ -8,3 +8,4 @@ pygments
 pillow
 ffmpeg-python
 pytgcalls
+pymongo

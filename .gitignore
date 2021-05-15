@@ -1,4 +1,10 @@
+
+.DS_Store
+.gitattributes
+.vscode
+/plugins/__pycache__/
+__pycache__/
 *.session
 *.session-journal
-plugins/__pycache__/
-__pycache__/
+/venv/
+.idea
