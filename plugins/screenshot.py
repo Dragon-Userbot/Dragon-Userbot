@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from pyrogram.raw import types, functions
 from .utils.utils import modules_help
 
@@ -6,7 +7,7 @@ import asyncio
 
 
 @Client.on_message(filters.command(['scr', 'screenshot'], ["."]) & filters.private & filters.me)
-async def screenshot(client, message):
+async def screenshot(client: Client, message: Message):
     quantity = int(message.command[1])
     await message.delete()
     for scr in range(quantity):

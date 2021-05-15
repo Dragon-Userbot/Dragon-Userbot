@@ -1,10 +1,11 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 import asyncio
 
 
 @Client.on_message(filters.command(['leave'], ['.']) & filters.me)
-async def leave(client, message):
+async def leave(client: Client, message: Message):
     m = await message.edit('<code>Goodbye...</code>')
     await asyncio.sleep(3)
     await client.leave_chat(chat_id=message.chat.id)

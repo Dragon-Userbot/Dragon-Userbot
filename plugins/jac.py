@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from pyrogram.raw import types, functions
 from .utils.utils import modules_help
 
@@ -9,7 +10,7 @@ from textwrap import wrap
 
 
 @Client.on_message(filters.command(['j', 'jac'], ["."]) & filters.me)
-async def jac(client, message):
+async def jac(client: Client, message: Message):
     if message.command[1:]:
         text = ' '.join(message.command[1:])
     elif message.reply_to_message:

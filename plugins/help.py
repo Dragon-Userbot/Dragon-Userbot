@@ -1,9 +1,10 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 
 
 @Client.on_message(filters.command(['help', 'h'], ['.']) & filters.me)
-async def help(client, message):
+async def help(client: Client, message: Message):
     module_name = ' '.join(message.command[1:])
     help_message = '''<b>Help for Dragon-Userbot</b>\n<b>For more help on how to use a command, type </b><code>.help |module|</code>\n\n<b>Available Modules:</b>\n'''
     if module_name == '':

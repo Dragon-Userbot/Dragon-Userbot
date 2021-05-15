@@ -1,29 +1,30 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 import subprocess
 from .utils.utils import requirements_list
 import asyncio
 
 
-async def restart(client, message):
+async def restart(client: Client, message: Message):
     await client.restart()
     await message.edit('<code>Restart was successful!</code>')
     
     
-async def update_restart(client, message):
+async def update_restart(client: Client, message: Message):
     await client.restart()
     await message.edit('<code>Restart was successful!</code>')
     await asyncio.sleep(3)
     await message.edit('<code>Update process completed!</code>')
     
 @Client.on_message(filters.command('restart', ['.']) & filters.me)
-async def restart_comand(client, message):
+async def restart_comand(client: Client, message: Message):
     await message.edit('<code>Restarting...</code>')
     import asyncio
     asyncio.get_event_loop().create_task(restart(client, message))
     
 @Client.on_message(filters.command('update', ["."]) & filters.me)
-async def update(client, message):
+async def update(client: Client, message: Message):
     await message.edit('<code>Updating...</code>')
     pip_update = subprocess.Popen(["python3", "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE)
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)

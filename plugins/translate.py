@@ -1,9 +1,10 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 
 
 @Client.on_message(filters.command('tr', ['.']) & filters.me)
-async def switch(client, message):
+async def switch(client: Client, message: Message):
     text = ' '.join(message.command[1:])
     ru_keys = """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"""
     en_keys = """eicykengшщzh_fiwaproldgeiчsmit_bu.E"№;%:?ICYKENGШЩZH_FIWAPROLDGEIЧSMIT_BU,"""

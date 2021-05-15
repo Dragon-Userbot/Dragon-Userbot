@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from .utils.utils import modules_help
 from .utils.utils import requirements_list
 
@@ -8,7 +9,7 @@ from .utils.utils import requirements_list
 
 
 @Client.on_message(filters.command('example', ['.']) & filters.me)
-async def module_name(client, message):
+async def module_name(client: Client, message: Message):
     await message.edit('This is an example module')
 
 
