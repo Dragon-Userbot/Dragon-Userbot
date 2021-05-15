@@ -25,7 +25,7 @@ async def afk(client, message):
     if len(message.text.split()) >= 2:
         reason = message.text.split(" ", maxsplit=1)[1]
     else:
-        reason = "еграю"
+        reason = "None"
     await message.edit("<b>I'm going afk</b>")
 
 
