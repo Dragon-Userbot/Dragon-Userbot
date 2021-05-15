@@ -1,14 +1,13 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from .utils.utils import modules_help
-import asyncio
 
 from io import StringIO
 import sys
 
 
 @Client.on_message(filters.command(['ex', 'py'], ['.']) & filters.me)
-async def user_exec(client: Client, message: Message):
+def user_exec(client: Client, message: Message):
     code = ''
     try:
         code = message.text.split(".ex ")[1]
