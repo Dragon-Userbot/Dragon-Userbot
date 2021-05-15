@@ -8,30 +8,29 @@ import sys
 
 @Client.on_message(filters.command(['ex', 'py'], ['.']) & filters.me)
 def user_exec(client: Client, message: Message):
-    code = ''
+code = ''
     try:
-        code = message.text.split(".ex ")[1]
+        code = message.text.split(" ", maxsplit=1)[1]
     except IndexError:
         try:
-           code = message.text.split(".ex\n")[1]
+            code = message.text.split(" \n", maxsplit=1)[1]
         except IndexError:
             pass
 
     result = sys.stdout = StringIO()
     try:
         exec(code)
-        
-        message.edit(f'''<b>Code:</b>
-<code>{code}</code>
-<b>Result</b>:
-<code>{result.getvalue()}</code>
-''')
+
+        message.reply_text(f"<b>Code:</b>\n"
+                           f"<code>{code}</code>\n\n"
+                           f"<b>Result</b>:\n"
+                           f"<code>{result.getvalue()}</code>")
     except:
-        message.edit(f'''<b>Code:</b>
-<code>{code}</code>
-<b>Result</b>:
-<code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>
-''')
+        message.reply_text(f"<b>Code:</b>\n"
+                           f"<code>{code}</code>\n\n"
+                           f"<b>Result</b>:\n"
+                           f"<code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>")
+
 
 
 modules_help.update({'python': '''<b>Help for |python|\nUsage:</b>
