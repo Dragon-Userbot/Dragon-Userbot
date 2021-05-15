@@ -44,7 +44,7 @@ async def unafk(client, message):
 
 
 modules_help.update({'afk': '''<b>Help for |afk|\nUsage:</b>
-<code>.afk</code>
+<code>.afk [reason]</code>
 <b>[To go to afk]</b>
 <code>.unafk</code>
 <b>[To get out of AFK]</b>''', 'afk module': '<b>• Afk</b>:<code> afk, unafk</code>\n'})
