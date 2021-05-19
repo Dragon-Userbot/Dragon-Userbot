@@ -9,9 +9,10 @@ import requests
 @Client.on_message(filters.command('weather', ['.']) & filters.me)
 async def weather(client: Client, message: Message):
     city = message.command[1]
-    await message.edit("<code>Processing the request...</code>")
-    r = requests.get(f"https://wttr.in/{city}?0?q?T&lang=en")
+    await message.edit("```Processing the request...```")
+    r = requests.get(f"https://wttr.in/{city}?m?M?0?q?T&lang=en")
     await message.edit(f"```City: {r.text}```")
+    await client.send_document(chat_id=message.chat.id, document=f'http://wttr.in/{city}_2&lang=en.png', reply_to_message_id=message.message_id)
 
     
 modules_help.update({'weather': '''<b>Help for |weather|\nUsage:</b>
