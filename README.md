@@ -26,7 +26,7 @@
 
 
 
-<h2>Installation (not the final version)</h2>
+<h2>Installation (Linux & wsl only)</h2>
 
 <code>  pip3 install wheel</code>
 
