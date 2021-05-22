@@ -1,5 +1,4 @@
 <p align="center">
-    <a href="https://github.com/pyrogram/pyrogram">
         <img src="https://telegra.ph/file/97ba4adfdf5ac59a213d9.png" width="500" alt="Dragon-Userbot">
     </a>
     <br>
