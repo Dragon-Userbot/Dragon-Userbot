@@ -15,6 +15,5 @@ async def webshot(client: Client, message: Message):
         await client.send_message(message.chat.id, '<code>Something went wrong...</code>')
 
 
-modules_help.update({'webshot': '''<b>Help for |Webshot|\nUsage:</b>
-<code>.webshot [link to the page]</code>
-<b>[Screenshot of web page]</b>''', 'webshot module': '<b>• Webshot</b>:<code> webshot</code>\n'})
+modules_help.update({'webshot': '''webshot [link to the page] - Screenshot of web page''',
+                     'webshot module': 'Webshot: webshot'})

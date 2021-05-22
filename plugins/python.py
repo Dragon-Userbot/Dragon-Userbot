@@ -33,6 +33,4 @@ def user_exec(client: Client, message: Message):
 
 
 
-modules_help.update({'python': '''<b>Help for |python|\nUsage:</b>
-<code>.ex [python code]</code>
-<b>[Python code execution]</b>''', 'python module': '<b>• Python</b>:<code> ex</code>\n'})
+modules_help.update({'python': '''ex [python code] - Python code execution''', 'python module': 'Python: ex'})

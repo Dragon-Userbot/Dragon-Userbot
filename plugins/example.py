@@ -3,22 +3,32 @@ from pyrogram.types import Message
 from .utils.utils import modules_help
 from .utils.utils import requirements_list
 
-#packages from PyPi
+# packages from PyPi
 #import example_1
 #import example_2
 
 
-@Client.on_message(filters.command('example', ['.']) & filters.me)
-async def module_name(client: Client, message: Message):
-    await message.edit('This is an example module')
+@Client.on_message(filters.command('example_edit', ['.']) & filters.me)
+async def example_edit(client: Client, message: Message):
+    await message.edit('<code>This is an example module</code>')
 
 
-#This adds instructions for your module
-modules_help.update({'example': '''<b>Help for |example|\nUsage:</b>
-<code>.example</code>
-<b>[Example module help]</b>''', 'example module': '<b>• Example</b>:<code> example</code>\n'})
+@Client.on_message(filters.command('example_send', ['.']) & filters.me)
+async def example_send(client: Client, message: Message):
+    await client.send_message(message.chat.id, '<b>This is an example module</b>')
 
-#If your custom module requires packages from PyPi, write the names of the packages in these functions
-#requirements_list.append('example_1')
-#requirements_list.append('example_2')
-#etc
+# This adds instructions for your module
+modules_help.update({'example': '''example_send - example send, example_edit - example edit''',
+                     'example module': 'Example: example_send, example_edit'})
+
+#'module_name': '''comand_1 - description, comand_2 - description''',
+#        │          'module_name module': 'Example send: example_send, example_edit\n\n'
+#        │                 │        │
+#        │                 │        │
+#     module_name(only snake_case)  └─ module (here the word 'module' is required)
+
+
+# If your custom module requires packages from PyPi, write the names of the packages in these functions
+# requirements_list.append('example_1')
+# requirements_list.append('example_2')
+# etc

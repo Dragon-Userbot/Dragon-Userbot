@@ -24,8 +24,6 @@ async def switch(client: Client, message: Message):
         await message.edit(text)
 
 
-modules_help.update({'translate': '''<b>Help for |translate|\nUsage:</b>
-<code>.tr [text for translate]</code>
-<b>[message translator]</b>
-<code>.tr </code>
-<b>[Reply to the message for translation]</b>''', 'translate module': '<b>• Translate</b>:<code> tr</code>\n'})
+modules_help.update({'translate': '''tr [text for translate] - message translator,
+                                     tr - Reply to the message for translation''',
+                     'translate module': 'Translate: tr'})

@@ -13,6 +13,4 @@ async def ping(client: Client, message: Message):
     await message.edit(f'<b>Ping</b><code> {round(ping, 3)}s</code>')
 
 
-modules_help.update({'ping': '''<b>Help for |ping|\nUsage:</b>
-<code>.ping</code>
-<b>[To find out the ping]</b>''', 'ping module': '<b>• Ping</b>:<code> ping</code>\n'})
+modules_help.update({'ping': '''ping - To find out the ping''', 'ping module': 'Ping: ping\n'})

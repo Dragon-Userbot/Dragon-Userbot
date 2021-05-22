@@ -19,14 +19,12 @@ async def stick2png(client: Client, message: Message):
             else:
                 msg = await message.edit('<b>Stiker is animated!</b>')
                 await asyncio.sleep(3)
-                await msg.delete()    
+                await msg.delete()
         else:
             msg = await message.edit('<b>Reply to stiker!</b>')
             await asyncio.sleep(3)
             await msg.delete()
 
 
-modules_help.update({'stick2png': '''<b>Help for |Stick to png|\nUsage:</b>
-<code>.stp </code>
-<b>[Reply to stiker]</b>''', 'stick2png module': '<b>• Stick2png</b>:<code> stick2png, stp</code>\n'})
-
+modules_help.update({'stick2png': '''stp - Reply to stiker''',
+                     'stick2png module': 'Stick2png: stick2png, stp'})

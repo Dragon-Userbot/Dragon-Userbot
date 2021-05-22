@@ -5,16 +5,19 @@ import ffmpeg
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from pytgcalls import GroupCall     
+from pytgcalls import GroupCall
 
 
-group_call = GroupCall(None, enable_logs_to_console=False, path_to_log_file=None)
+group_call = GroupCall(
+    None, enable_logs_to_console=False, path_to_log_file=None)
+
 
 def init_client(func):
     async def wrapper(client, message):
         group_call.client = client
         return await func(client, message)
     return wrapper
+
 
 @Client.on_message(filters.command('play', ["."]) & filters.me)
 async def start_playout(client, message: Message):
@@ -37,6 +40,7 @@ async def start_playout(client, message: Message):
     await message.edit_text(f'<code>Playing</code> <b>{message.reply_to_message.audio.title}</b>...')
     group_call.input_filename = input_filename
 
+
 @Client.on_message(filters.command('volume', ["."]) & filters.me)
 @init_client
 async def volume(_, message):
@@ -44,6 +48,7 @@ async def volume(_, message):
         await message.edit_text('<b>You forgot to pass volume [1-200]</b>')
     await group_call.set_my_volume(message.command[1])
     await message.edit_text(f'<b>Your volume is set to</b><code> {message.command[1]}</code>')
+
 
 @Client.on_message(filters.command('join', ["."]) & filters.me)
 @init_client
@@ -54,6 +59,7 @@ async def start(_, message: Message):
         await group_call.start(message.chat.id)
         await message.edit_text('<code>Joining successfully!</code>')
 
+
 @Client.on_message(filters.command('leave_voice', ["."]) & filters.me)
 @init_client
 async def stop(_, message: Message):
@@ -63,11 +69,13 @@ async def stop(_, message: Message):
     else:
         await message.edit_text("<b>You're not in voice chat!</b>")
 
+
 @Client.on_message(filters.command('stop', ["."]) & filters.me)
 @init_client
 async def stop_playout(_, message: Message):
     group_call.stop_playout()
     await message.edit_text('<code>Stoping successfully!</code>')
+
 
 @Client.on_message(filters.command('mute', ["."]) & filters.me)
 @init_client
@@ -75,17 +83,20 @@ async def mute(_, message: Message):
     group_call.set_is_mute(True)
     await message.edit_text('<code>Sound off!</code>')
 
+
 @Client.on_message(filters.command('unmute', ["."]) & filters.me)
 @init_client
 async def unmute(_, message: Message):
     group_call.set_is_mute(False)
     await message.edit_text('<code>Sound on!</code>')
 
+
 @Client.on_message(filters.command('pause', ["."]) & filters.me)
 @init_client
 async def pause(_, message: Message):
     group_call.pause_playout()
     await message.edit_text('<code>Paused!</code>')
+
 
 @Client.on_message(filters.command('resume', ["."]) & filters.me)
 @init_client
@@ -94,22 +105,13 @@ async def resume(_, message: Message):
     await message.edit_text('<code>Resumed!</code>')
 
 
-modules_help.update({'voice_chat': '''<b>Help for |voice_chat|\nUsage:</b>
-<code>.play</code>
-<b>[Reply to a message containing audio]
-<code>.volume [1 - 200]</code>
-[Set the volume level from 1 to 200]
-<code>.join</code>
-[Join the voice chat]
-<code>.leave_voice</code>
-[Leave voice chat]
-<code>.stop</code>
-[Stop playback]
-<code>.mute</code>
-[Mute the userbot]
-<code>.unmute</code>
-[Unmute the userbot]
-<code>.pause</code>
-[Pause]
-<code>.resume</code>
-[Resume]</b>''','voice_chat module': '<b>• Voice_chat</b>:<code> play, volume, join, leave_voice, stop, mute, unmute, pause, resume</code>\n'})
+modules_help.update({'voice_chat': '''play - Reply to a message containing audio,
+                                      volume [1 – 200] - Set the volume level from 1 to 200,
+                                      join - Join the voice chat,
+                                      leave_voice - Leave voice chat,
+                                      stop - Stop playback,
+                                      mute - Mute the userbot,
+                                      unmute - Unmute the userbot,
+                                      pause - Pause, 
+                                      resume - Resume''',
+                     'voice_chat module': 'Voice_chat: play, volume, join, leave_voice, stop, mute, unmute, pause, resume'})

@@ -15,6 +15,5 @@ async def manul(client: Client, message: Message):
         await asyncio.sleep(0.2)
 
 
-modules_help.update({'manul': '''<b>Help for |manul|\nUsage:</b>
-<code>.manul [amount of manul]</code>
-<b>[Release manuls]</b>''', 'manul module': '<b>• Manul</b>:<code> manul</code>\n'})
+modules_help.update(
+    {'manul': '''manul [amount of manul] - Release manuls''', 'manul module': 'Manul: manul'})

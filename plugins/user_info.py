@@ -79,8 +79,6 @@ async def get_full_user_inf(client: Client, message: Message):
     except:
         await message.edit('<code>An error has occurred...</code>')
 
-modules_help.update({'user_info': '''<b>Help for |User info|\nUsage:</b>
-<code>.inf </code>
-<b>[Reply to any user message to find out brief information about him]</b>
-<code>.inffull </code>
-<b>[Reply to any user message to find out full information about him]</b>''', 'user_info module': '<b>• User_info</b>:<code> inf, inffull</code>\n'})
+modules_help.update({'user_info': '''inf - Reply to any user message to find out brief information about him,
+                                     inffull - Reply to any user message to find out full information about him''',
+                     'user_info module': 'User_info: inf, inffull'})

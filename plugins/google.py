@@ -16,14 +16,10 @@ async def webshot(client: Client, message: Message):
 
     else:
         request = user_request.replace(' ', '+')
-        full_request = f'https://lmgtfy.app/?s=g&iie=1&q={request}'  
+        full_request = f'https://lmgtfy.app/?s=g&iie=1&q={request}'
         await message.edit(f'<a href={full_request}>{user_request}</a>')
 
 
-modules_help.update({'google': '''<b>Help for |Google|\nUsage:</b>
-<code>.google [request]</code>
-<b>[To teach the interlocutor to use Google]</b>
-<code>.google</code>
-[Answer a stupid question of your interlocutor to teach him how to use Google]''', 'google module': '<b>• Google</b>:<code> google</code>\n'})
-
-
+modules_help.update({'google': '''google [request] - To teach the interlocutor to use Google, 
+                                  google - Answer a stupid question of your interlocutor to teach him how to use Google''',
+                     'google module': 'Google: google'})
