@@ -6,7 +6,7 @@ from .utils.utils import requirements_list
 # packages from PyPi
 #import example_1
 #import example_2
-#import example_3
+
 
 
 @Client.on_message(filters.command('example_edit', ['.']) & filters.me)
