@@ -1,24 +1,6 @@
 from pyrogram import Client, filters
 from .utils.utils import modules_help
-import re
-
-
-def text_formatting(module_help, help_type, module_name):
-    if help_type == 'all_mods':
-        ready_string = f"• <b>{module_help.split(':')[0].strip()}: </b> <code>{module_help.split(':')[1].strip()}</code>\n"
-        return ready_string
-    elif help_type == 'one_mod':
-        s = f'<b>Help for |{module_name}|\nUsage:</b>\n'
-        try:
-            for i in module_help.split(','):
-                command = i.split('-')[0]
-                command = re.sub(r"^\s+|\s+$", "", command)
-                description = i.split('-')[1]
-                description = re.sub(r"^\s+|\s+$", "", description)
-                s += f'<code>.{command}</code>\n<b>[{description}]</b>\n'
-            return s
-        except IndexError:
-            return module_help
+from .utils.help_formatting import help_formatting
 
 
 @Client.on_message(filters.command(['help', 'h'], ['.']) & filters.me)
@@ -28,7 +10,7 @@ async def help(client, message):
     if module_name == '':
         for modules, module_help in sorted(modules_help.items()):
             if modules.endswith(' module'):
-                module_help = text_formatting(
+                module_help = help_formatting(
                     module_help, help_type='all_mods', module_name=None)
                 help_message += module_help
 
@@ -37,7 +19,7 @@ async def help(client, message):
         await message.edit(help_message, parse_mode='html', disable_web_page_preview=True)
     else:
         try:
-            text = text_formatting(modules_help[module_name.lower(
+            text = help_formatting(modules_help[module_name.lower(
             )], help_type='one_mod', module_name=module_name.lower())
             await message.edit(text)
         except KeyError:

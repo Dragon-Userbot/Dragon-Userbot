@@ -4,25 +4,18 @@ from .utils.utils import modules_help
 import subprocess
 from .utils.utils import requirements_list
 import asyncio
+import os
 
-
-async def restart(client: Client, message: Message):
-    await client.restart()
-    await message.edit('<code>Restart was successful!</code>')
-
-
-async def update_restart(client: Client, message: Message):
-    await client.restart()
-    await message.edit('<code>Restart was successful!</code>')
-    await asyncio.sleep(3)
-    await message.edit('<code>Update process completed!</code>')
+async def restart(message: Message, restart_type):
+    if restart_type == 'update': text = '1'
+    else: text = '2'
+    await os.execvp("python3", ["python3", "main.py", f"{message.chat.id}",  f" {message.message_id}", f"{text}"])
 
 
 @Client.on_message(filters.command('restart', ['.']) & filters.me)
 async def restart_comand(client: Client, message: Message):
     await message.edit('<code>Restarting...</code>')
-    import asyncio
-    asyncio.get_event_loop().create_task(restart(client, message))
+    await restart(message, restart_type='restart')
 
 
 @Client.on_message(filters.command('update', ["."]) & filters.me)
@@ -32,13 +25,15 @@ async def update(client: Client, message: Message):
         ["python3", "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE)
     process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE)
     output = process.communicate()[0]
+    print(output)
     for lib in range(len(requirements_list)):
         process = subprocess.Popen(
             ["pip3", "install", "-U", f"{requirements_list[lib]}"], stdout=subprocess.PIPE)
         output = process.communicate()[0]
+        print(output)
     await message.edit('<code>Restarting...</code>')
-    import asyncio
-    asyncio.get_event_loop().create_task(update_restart(client, message))
+    await restart(message, restart_type='update')
+
 
 modules_help.update({'updater': '''update - Updating the userbot. If new modules are available，they will be installed, 
                                    restart - Restart userbot''',

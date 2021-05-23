@@ -2,6 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.raw import types, functions
 from .utils.utils import modules_help
+from .utils.help_formatting import help_formatting
 
 import asyncio
 
@@ -11,7 +12,8 @@ async def sendmod(client: Client, message: Message):
     mod_name = message.command[1]
     try:
         await message.edit('<code>Dispatch...</code>')
-        await client.send_document(message.chat.id, f"plugins/{mod_name.lower()}.py", caption=modules_help[mod_name.lower()])
+        text = help_formatting(modules_help[mod_name.lower()], help_type='one_mod', module_name=mod_name.lower())
+        await client.send_document(message.chat.id, f"plugins/{mod_name.lower()}.py", caption=text)
         await message.delete()
     except:
         await message.edit('<b>Invalid module name!</b>')
