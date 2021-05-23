@@ -33,7 +33,8 @@ async def help(client, message):
                 help_message += module_help
 
         help_message += f'\n<b>The number of modules in the userbot: {len(modules_help)/2}</b>'
-        await message.edit(help_message, parse_mode='html')
+        help_message += f'\n\n<b><a href="https://t.me/Dragon_Userbot">Channel</a> and <a href="https://t.me/Dragon_Userbot_chat">chat</a> in telegram</b>' 
+        await message.edit(help_message, parse_mode='html', disable_web_page_preview=True)
     else:
         try:
             text = text_formatting(modules_help[module_name.lower(
