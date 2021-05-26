@@ -84,7 +84,7 @@ modules_help.update({'example': '''example_send - example send, example_edit - e
                      'example module': 'Example send: example_send, example_edit'})
 
 #'module_name': '''comand_1 - description, comand_2 - description''',
-#        │          'module_name module': 'Example send: example_send, example_edit\n\n'
+#        │          'module_name module': 'Example send: example_send, example_edit'
 #        │                 │        │
 #        │                 │        │
 #     module_name(only snake_case)  └─ module (here the word 'module' is required)
