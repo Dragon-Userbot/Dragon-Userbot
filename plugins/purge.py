@@ -33,6 +33,7 @@ async def purge(client: Client, message: Message):
                 message_ids=message_ids,
                 revoke=True
             )
+    await asyncio.sleep(1)
     msg = await client.send_message(
         message.chat.id,
         f"<b>Сleaning was successful!</b>",
