@@ -71,6 +71,7 @@ async def stop(_, message: Message):
             await group_call.stop()
             await message.edit_text('<code>Leaving successfully!</code>')
         except:
+            await message.edit_text('<code>Leaving successfully!</code>')
             restart()
     else:
         await message.edit_text("<b>You're not in voice chat!</b>")
