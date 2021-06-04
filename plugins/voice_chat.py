@@ -18,6 +18,9 @@ def init_client(func):
         return await func(client, message)
     return wrapper
 
+async def restart():
+    await os.execvp("python3", ["python3", "main.py"])
+
 
 @Client.on_message(filters.command('play', ["."]) & filters.me)
 async def start_playout(client, message: Message):
@@ -64,8 +67,11 @@ async def start(_, message: Message):
 @init_client
 async def stop(_, message: Message):
     if await group_call.check_group_call():
-        await group_call.stop()
-        await message.edit_text('<code>Leaving successfully!</code>')
+        try:
+            await group_call.stop()
+            await message.edit_text('<code>Leaving successfully!</code>')
+        except:
+            restart()
     else:
         await message.edit_text("<b>You're not in voice chat!</b>")
 
