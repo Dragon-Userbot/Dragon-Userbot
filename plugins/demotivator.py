@@ -9,7 +9,7 @@ import random
 
 @Client.on_message(filters.command(["dem"], ["."]) & filters.me)
 async def demotivator(client: Client, message: Message):
-    message.edit('<code>Process of demotivation...</code>
+    message.edit('<code>Process of demotivation...</code>')
     font = requests.get(
         "https://github.com/Dragon-Userbot/files/blob/main/Times%20New%20Roman.ttf?raw=true")
     f = font.content
