@@ -61,6 +61,5 @@ async def demotivator(client: Client, message: Message):
             await message.edit("<b>Нужно ответить на фото/стикер</b>")
     else:
         await message.edit("<b>Нужно ответить на фото/стикер</b>")
-
-modules_help.update({'demotivator': '''dem - demotivator send, demotivator_edit - demotivator edit''',
-                     'demotivator module': 'Demotivator: dem, demotivator_edit'})
+modules_help.update({'demotivator': '''demotivator - Reply to the picture to make a demotivator out of it''', 
+                     'demotivator module': 'Demotivator: dem\n'})
