@@ -33,7 +33,7 @@ async def demotivator(client: Client, message: Message):
                                      fill=(255, 255, 255),
                                      anchor="ms")
             im.save(f"downloads/{message.message_id}.png")
-            await message.reply_photo(f"downloads/{message.message_id}.png")
+            await message.reply_to_message.reply_photo(f"downloads/{message.message_id}.png")
             await message.delete()
         elif message.reply_to_message.sticker:
             if not message.reply_to_message.sticker.is_animated:
@@ -53,7 +53,7 @@ async def demotivator(client: Client, message: Message):
                                          fill=(255, 255, 255),
                                          anchor="ms")
                 im.save(f"downloads/{message.message_id}.png")
-                await message.reply_photo(f"downloads/{message.message_id}.png")
+                await message.reply_to_message.reply_photo(f"downloads/{message.message_id}.png")
                 await message.delete()
             else:
                 await message.edit("<b>Анимированные стикеры не поддерживаются</b>")
