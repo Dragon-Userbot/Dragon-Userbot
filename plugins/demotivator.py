@@ -9,6 +9,7 @@ import random
 
 @Client.on_message(filters.command(["dem"], ["."]) & filters.me)
 async def demotivator(client: Client, message: Message):
+    message.edit('<code>Process of demotivation...</code>
     font = requests.get(
         "https://github.com/Dragon-Userbot/files/blob/main/Times%20New%20Roman.ttf?raw=true")
     f = font.content
@@ -56,10 +57,10 @@ async def demotivator(client: Client, message: Message):
                 await message.reply_to_message.reply_photo(f"downloads/{message.message_id}.png")
                 await message.delete()
             else:
-                await message.edit("<b>Анимированные стикеры не поддерживаются</b>")
+                await message.edit("<b>Animated stickers are not supported</b>")
         else:
-            await message.edit("<b>Нужно ответить на фото/стикер</b>")
+            await message.edit("<b>Need to answer the photo/sticker</b>")
     else:
-        await message.edit("<b>Нужно ответить на фото/стикер</b>")
+        await message.edit("<b>Need to answer the photo/sticker</b>")
 modules_help.update({'demotivator': '''dem | text | - Reply to the picture to make a demotivator out of it''', 
                      'demotivator module': 'Demotivator: dem\n'})
