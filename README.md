@@ -104,7 +104,7 @@ modules_help.update({'example': '''example_send - example send, example_edit - e
 
 <h2>Credits</h2>
 <nav>
-<li><a href='https://github.com/Legenda24'>Legenda×24</a></li>
+<li><a href='https://github.com/Taijefx34'>Taijefx34</a></li>
 <li><a href='https://github.com/LaciaMemeFrame'>LaciaMemeFrame</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram</a> and <a href='https://github.com/MarshalX/tgcalls/tree/main/pytgcalls'>pytgcalls</a></h4>
