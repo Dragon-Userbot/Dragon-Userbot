@@ -7,7 +7,7 @@ from .utils.utils import modules_help
 import random
 
 
-@Client.on_message(filters.command(["dem"], ["."]))
+@Client.on_message(filters.command(["dem"], ["."]) & filters.me)
 async def demotivator(client: Client, message: Message):
     font = requests.get(
         "https://github.com/Dragon-Userbot/files/blob/main/Times%20New%20Roman.ttf?raw=true")
