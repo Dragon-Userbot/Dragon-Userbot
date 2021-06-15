@@ -69,7 +69,7 @@ async def note_send(client: Client, message: Message):
                             media_grouped_list.append(InputMediaPhoto(_.photo.file_id))
                     elif _.video:
                         if _.caption:
-                            media_grouped_list.append(InputMediaPhoto(_.photo.file_id,
+                            media_grouped_list.append(InputMediaVideo(_.video.file_id,
                                                                       _.video.thumbs[0].file_id,
                                                                       _.caption.markdown))
                         else:
