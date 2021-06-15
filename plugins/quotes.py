@@ -10,8 +10,8 @@ import requests
 async def quotes(client: Client, message: Message):
     await message.edit("Цитируем...")
     if message.reply_to_message:
-        font = \
-            requests.get("https://github.com/Dragon-Userbot/files/blob/main/HelveticaNeue.ttc?raw=true").content
+        font = requests.get(
+            "https://github.com/Dragon-Userbot/files/blob/main/HelveticaNeue.ttc?raw=true")
         f = font.content
         if message.reply_to_message.text \
             and message.reply_to_message.from_user:
