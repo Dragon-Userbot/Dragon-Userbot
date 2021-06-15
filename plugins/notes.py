@@ -130,7 +130,7 @@ async def clear_note(client: Client, message: Message):
     if len(message.text.split()) >= 2:
         find_note = db.find_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
         if find_note:
-            db.delete_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
+            await db.delete_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
             await message.edit(f"Note {message.text.split(' ', maxsplit=1)[1]} deleted")
         else:
             await message.edit("There is no such note")
