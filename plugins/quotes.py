@@ -42,9 +42,9 @@ async def quotes(client: Client, message: Message):
                 x, y = im.size
                 draw = ImageDraw.Draw(im)
                 draw.rounded_rectangle(xy=(0, 0, x, y), radius=15, fill=(3, 29, 45))
-                first_name_font= ImageFont.truetype("HelveticaNeue.ttc", 30)
+                first_name_font= ImageFont.truetype(BytesIO(font), 30)
                 first_name_draw = ImageDraw.Draw(im)
-                text_font = ImageFont.truetype("HelveticaNeue.ttc", 40)
+                text_font = ImageFont.truetype(BytesIO(font), 40)
                 text_draw = ImageDraw.Draw(im)
                 first_name_draw.multiline_text((25, 10),
                                  message.reply_to_message.from_user.first_name,
