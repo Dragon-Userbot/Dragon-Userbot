@@ -7,7 +7,7 @@ db = createDB.notes
 
 @Client.on_message(filters.command(["save"], ".") & filters.me)
 async def save_note(client: Client, message: Message):
-    await message.edit("Loading...")
+    await message.edit("<code>Loading...</code>")
     async def chat_id():
         cheking_chat_id = await db.find_one({"SAVED": "YES"})
         if cheking_chat_id:
@@ -53,7 +53,7 @@ async def save_note(client: Client, message: Message):
 
 @Client.on_message(filters.command(["note"], ".") & filters.me)
 async def note_send(client: Client, message: Message):
-    await message.edit("Loading...")
+    await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
         find_note = await db.find_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
         if find_note:
@@ -116,7 +116,7 @@ async def note_send(client: Client, message: Message):
 
 @Client.on_message(filters.command(["notes"], ".") & filters.me)
 async def notes(client: Client, message: Message):
-    await message.edit("Loading...")
+    await message.edit("<code>Loading...</code>")
     text = "Available notes\n\n"
     async for _ in db.find():
         if "NAME" in _:
@@ -126,7 +126,7 @@ async def notes(client: Client, message: Message):
 
 @Client.on_message(filters.command(["clear"], ".") & filters.me)
 async def clear_note(client: Client, message: Message):
-    await message.edit("Loading...")
+    await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
         find_note = db.find_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
         if find_note:
