@@ -12,6 +12,7 @@ async def quotes(client: Client, message: Message):
     if message.reply_to_message:
         font = \
             requests.get("https://github.com/Dragon-Userbot/files/blob/main/HelveticaNeue.ttc?raw=true").content
+        f = font.content
         if message.reply_to_message.text \
             and message.reply_to_message.from_user:
             if message.reply_to_message.from_user.photo:
@@ -26,7 +27,7 @@ async def quotes(client: Client, message: Message):
                 output.putalpha(mask)
                 output.thumbnail(size, Image.ANTIALIAS)
 
-                font = ImageFont.truetype(BytesIO(font.content), 40)
+                font = ImageFont.truetype(BytesIO(f), 40)
                 size = font.getsize(message.reply_to_message.text.markdown)
                 size_one = int(str(size).split()[0].split("(")[1].split(",")[0])
                 size_two = int(str(size).split()[1].split(")")[0])
@@ -40,7 +41,7 @@ async def quotes(client: Client, message: Message):
                 x, y = im.size
                 draw = ImageDraw.Draw(im)
                 draw.rounded_rectangle(xy=(0, 0, x, y), radius=15, fill=(3, 29, 45))
-                first_name_font= ImageFont.truetype(BytesIO(font.content), 30)
+                first_name_font= ImageFont.truetype(BytesIO(f), 30)
                 first_name_draw = ImageDraw.Draw(im)
                 text_font = ImageFont.truetype(BytesIO(font), 40)
                 text_draw = ImageDraw.Draw(im)
