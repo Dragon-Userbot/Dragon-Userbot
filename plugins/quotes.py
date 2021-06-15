@@ -26,15 +26,13 @@ async def quotes(client: Client, message: Message):
                 output.putalpha(mask)
                 output.thumbnail(size, Image.ANTIALIAS)
 
-                font = ImageFont.truetype(BytesIO(font), 40)
+                font = ImageFont.truetype(BytesIO(font.content), 40)
                 size = font.getsize(message.reply_to_message.text.markdown)
                 size_one = int(str(size).split()[0].split("(")[1].split(",")[0])
-                print(size_one)
                 size_two = int(str(size).split()[1].split(")")[0])
                 y = size_one / 2
                 r = str(y).split(".")[0]
                 e = int(str(int(r) / 2).split(".")[0])
-                print(e)
                 if e > 100:
                     im = Image.new("RGBA", (size_one + 55, e), (0, 0, 0, 0))
                 else:
@@ -42,7 +40,7 @@ async def quotes(client: Client, message: Message):
                 x, y = im.size
                 draw = ImageDraw.Draw(im)
                 draw.rounded_rectangle(xy=(0, 0, x, y), radius=15, fill=(3, 29, 45))
-                first_name_font= ImageFont.truetype(BytesIO(font), 30)
+                first_name_font= ImageFont.truetype(BytesIO(font.content), 30)
                 first_name_draw = ImageDraw.Draw(im)
                 text_font = ImageFont.truetype(BytesIO(font), 40)
                 text_draw = ImageDraw.Draw(im)
