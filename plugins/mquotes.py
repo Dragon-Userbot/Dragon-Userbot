@@ -8,7 +8,7 @@ import requests
 
 @Client.on_message(filters.command(["mquote"], ["."]) & filters.me)
 async def quotes(client: Client, message: Message):
-    await message.edit("Цитируем...")
+    await message.edit("<code>Quoting ...</code>")
     if message.reply_to_message:
         font = requests.get(
             "https://github.com/Dragon-Userbot/files/blob/main/HelveticaNeue.ttc?raw=true")
