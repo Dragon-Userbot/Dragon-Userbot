@@ -80,7 +80,7 @@ async def quotes(client: Client, message: Message):
             template_msg.paste(output, (0, 0))
             template_msg.save(f"downloads/{message.message_id}.webp")
             await message.reply_document(f"downloads/{message.message_id}.webp")
-            await messafe.delete()
+            await message.delete()
 
         if not message.reply_to_message.text \
                 and message.reply_to_message.from_user:
@@ -129,7 +129,7 @@ async def quotes(client: Client, message: Message):
             template_msg.paste(output, (0, 0))
             template_msg.save(f"downloads/{message.message_id}.webp")
             await message.reply_document(f"downloads/{message.message_id}.webp")
-            await messafe.delete()
+            await message.delete()
 
 
 modules_help.update({'mquotes': '''mquote - Reply on user message''',
