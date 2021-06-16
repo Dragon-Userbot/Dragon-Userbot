@@ -10,3 +10,4 @@ ffmpeg-python
 pytgcalls
 pymongo
 motor
+pillow==8.2.0
