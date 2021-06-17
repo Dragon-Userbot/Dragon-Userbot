@@ -2,7 +2,6 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from .utils.utils import modules_help
 from PIL import Image, ImageDraw, ImageFont, ImageOps
-from pyrogram.errors import MessageIdsEmpty
 from io import BytesIO
 import requests
 
@@ -293,6 +292,11 @@ async def quotes(client: Client, message: Message):
                 template_msg.paste(im, (110, 0))
                 template_msg.paste(output, (0, 0))
                 template_msg.save(f"downloads/{message.message_id}.webp")
+                await message.reply_to_message.reply_document(f"downloads/{message.message_id}.webp")
+                await message.delete()
+            except:
+                font_name = ImageFont.truetype(BytesIO(f), 30)
+                size_name = font_name.getsize(message.reply_to_message.from_user.first_name)
                 x_n = int(str(size_name).split()[0].split("(")[1].split(",")[0])
                 y_n = int(str(size_name).split()[1].split(")")[0])
                 im = Image.new("RGBA", (x_n + 100, y_n + 100), (0, 0, 0, 0))
