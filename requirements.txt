@@ -5,7 +5,6 @@ covid
 wheel
 gTTS
 pygments
-pillow
 ffmpeg-python
 pytgcalls
 pymongo
