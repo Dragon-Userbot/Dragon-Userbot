@@ -27,9 +27,11 @@
 
 <h2>Installation (Linux & wsl only)</h2>
 
+<code>  sudo apt install python3-pip</code>
+
 <code>  pip3 install wheel</code>
 
-<code>  pkg install libjpeg-turbo</code>
+<code>  pip3 install --upgrade pip</code>
 
 <code> sudo apt update</code>
 
