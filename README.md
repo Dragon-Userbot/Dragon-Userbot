@@ -39,6 +39,8 @@
 
 <code>  cd Dragon-Userbot/</code>
 
+<code>  apt install mongodb</code>
+
 <code>  pip3 install -r requirements.txt</code>
 
 <code>  python3 main.py</code>
