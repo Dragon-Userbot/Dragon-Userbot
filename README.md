@@ -27,7 +27,7 @@
 
 <h2>Installation (Linux & wsl only)</h2>
 
-<code>  sudo apt install python3-pip</code>
+<code>  sudo apt install python3-pip git</code>
 
 <code>  pip3 install wheel</code>
 
