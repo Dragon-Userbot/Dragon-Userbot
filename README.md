@@ -41,9 +41,15 @@
 
 <code>  cd Dragon-Userbot/</code>
 
-<code>  apt install mongodb</code>
+<h3>Install mongodb</h3>
+<nav>
+<li><b><a href='https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/'>Debian</a></b></li>
+<li><b><a href='https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/'>Ubuntu</a></b></li></br>
+</nav>
 
-<code>  pip3 install -r requirements.txt</code>
+
+
+<code>  pip3 install -r requirements.txt</code></br>
 
 <code>  python3 main.py</code>
 
