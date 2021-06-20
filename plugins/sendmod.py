@@ -13,7 +13,7 @@ async def sendmod(client: Client, message: Message):
     try:
         await message.edit('<code>Dispatch...</code>')
         text = help_formatting(modules_help[mod_name.lower()], help_type='one_mod', module_name=mod_name.lower())
-        await client.send_document(message.chat.id, f"plugins/{mod_name.lower()}.py", caption=text)
+        await client.send_document(message.chat.id, f"plugins/{mod_name}.py", caption=text)
         await message.delete()
     except:
         await message.edit('<b>Invalid module name!</b>')
