@@ -8,5 +8,6 @@ __pycache__/
 *.session-journal
 /venv/
 /downloads/
+/plugins/modules_for_developers/
 .idea
 config.ini
