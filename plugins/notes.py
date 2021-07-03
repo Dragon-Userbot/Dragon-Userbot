@@ -69,12 +69,19 @@ async def note_send(client: Client, message: Message):
                             media_grouped_list.append(InputMediaPhoto(_.photo.file_id))
                     elif _.video:
                         if _.caption:
-                            media_grouped_list.append(InputMediaVideo(_.video.file_id,
-                                                                      _.video.thumbs[0].file_id,
-                                                                      _.caption.markdown))
+                            if _.video.thumbs:
+                                media_grouped_list.append(InputMediaVideo(_.video.file_id,
+                                                                          _.video.thumbs[0].file_id,
+                                                                          _.caption.markdown))
+                            else:
+                                media_grouped_list.append(InputMediaVideo(_.video.file_id,
+                                                                          _.caption.markdown))
                         else:
-                            media_grouped_list.append(InputMediaVideo(_.video.file_id,
-                                                                      _.video.thumbs[0].file_id))
+                            if _.video.thumbs:
+                                media_grouped_list.append(InputMediaVideo(_.video.file_id,
+                                                                          _.video.thumbs[0].file_id))
+                            else:
+                                media_grouped_list.append(InputMediaVideo(_.video.file_id))
                     elif _.audio:
                         if _.caption:
                             media_grouped_list.append(InputMediaAudio(_.audio.file_id,
@@ -83,12 +90,19 @@ async def note_send(client: Client, message: Message):
                             media_grouped_list.append(InputMediaAudio(_.audio.file_id))
                     elif _.document:
                         if _.caption:
-                            media_grouped_list.append(InputMediaDocument(_.document.file_id,
-                                                                         _.document.thumbs[0].file_id,
-                                                                         _.caption.markdown))
+                            if _.document.thumbs:
+                                media_grouped_list.append(InputMediaDocument(_.document.file_id,
+                                                                             _.document.thumbs[0].file_id,
+                                                                             _.caption.markdown))
+                            else:
+                                media_grouped_list.append(InputMediaDocument(_.document.file_id,
+                                                                             _.caption.markdown))
                         else:
-                            media_grouped_list.append(InputMediaDocument(_.document.file_id,
-                                                                         _.document.thumbs[0].file_id))
+                            if _.document.thumbs:
+                                media_grouped_list.append(InputMediaDocument(_.document.file_id,
+                                                                             _.document.thumbs[0].file_id))
+                            else:
+                                media_grouped_list.append(InputMediaDocument(_.document.file_id))
                 if message.reply_to_message:
                     await client.send_media_group(message.chat.id,
                                                   media_grouped_list,
