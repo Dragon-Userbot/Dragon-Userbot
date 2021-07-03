@@ -142,7 +142,7 @@ async def notes(client: Client, message: Message):
 async def clear_note(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
-        find_note = db.find_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
+        find_note = await db.find_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
         if find_note:
             await db.delete_one({"NAME": f"{message.text.split(' ', maxsplit=1)[1]}"})
             await message.edit(f"Note {message.text.split(' ', maxsplit=1)[1]} deleted")
