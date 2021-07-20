@@ -33,7 +33,7 @@ async def spam(client: Client, message: Message):
             await asyncio.sleep(0.15)
         return
 
-    for i in range(quantity):
+    for _ in range(quantity):
         await client.send_message(message.chat.id, spam_text)
         await asyncio.sleep(0.15)
 
@@ -53,8 +53,8 @@ async def fastspam(client: Client, message: Message):
             await asyncio.sleep(0.02)
         return
     
-    for i in range(quantity):
-        msg = await client.send_message(message.chat.id, spam_text)
+    for _ in range(quantity):
+        await client.send_message(message.chat.id, spam_text)
         await asyncio.sleep(0.02)
 
 
@@ -73,7 +73,7 @@ async def slowspam(client: Client, message: Message):
             await asyncio.sleep(0.9)
         return
 
-    for i in range(quantity):
+    for _ in range(quantity):
         msg = await client.send_message(message.chat.id, spam_text)
         await asyncio.sleep(0.9)
 
