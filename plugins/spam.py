@@ -24,8 +24,17 @@ async def spam(client: Client, message: Message):
     spam_text = ' '.join(message.command[2:])
     quantity = int(quantity)
     await message.delete()
-    for i in range(quantity):
-        msg = await client.send_message(message.chat.id, spam_text)
+
+    if message.reply_to_message:
+        reply_to_id = message.reply_to_message.message_id
+        for _ in range(quantity):
+            await client.send_message(message.chat.id, spam_text,
+                                      reply_to_message_id=reply_to_id)
+            await asyncio.sleep(0.15)
+        return
+
+    for _ in range(quantity):
+        await client.send_message(message.chat.id, spam_text)
         await asyncio.sleep(0.15)
 
 
@@ -35,8 +44,17 @@ async def fastspam(client: Client, message: Message):
     spam_text = ' '.join(message.command[2:])
     quantity = int(quantity)
     await message.delete()
-    for i in range(quantity):
-        msg = await client.send_message(message.chat.id, spam_text)
+    
+    if message.reply_to_message:
+        reply_to_id = message.reply_to_message.message_id
+        for _ in range(quantity):
+            await client.send_message(message.chat.id, spam_text,
+                                      reply_to_message_id=reply_to_id)
+            await asyncio.sleep(0.02)
+        return
+    
+    for _ in range(quantity):
+        await client.send_message(message.chat.id, spam_text)
         await asyncio.sleep(0.02)
 
 
@@ -46,7 +64,16 @@ async def slowspam(client: Client, message: Message):
     spam_text = ' '.join(message.command[2:])
     quantity = int(quantity)
     await message.delete()
-    for i in range(quantity):
+
+    if message.reply_to_message:
+        reply_to_id = message.reply_to_message.message_id
+        for _ in range(quantity):
+            await client.send_message(message.chat.id, spam_text,
+                                      reply_to_message_id=reply_to_id)
+            await asyncio.sleep(0.9)
+        return
+
+    for _ in range(quantity):
         msg = await client.send_message(message.chat.id, spam_text)
         await asyncio.sleep(0.9)
 
