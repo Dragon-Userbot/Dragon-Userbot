@@ -5,18 +5,22 @@ import ffmpeg
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from pytgcalls import GroupCall
+from pytgcalls import GroupCallFactory
 
 
-group_call = GroupCall(
-    None, enable_logs_to_console=False, path_to_log_file=None)
+group_call = None
 
 
 def init_client(func):
     async def wrapper(client, message):
-        group_call.client = client
+        global group_call
+        if not group_call:
+            group_call = GroupCallFactory(client).get_file_group_call()
+            group_call.enable_logs_to_console = False
+
         return await func(client, message)
     return wrapper
+
 
 async def restart():
     await os.execvp("python3", ["python3", "main.py"])
@@ -24,7 +28,9 @@ async def restart():
 
 @Client.on_message(filters.command('play', ["."]) & filters.me)
 async def start_playout(client, message: Message):
-    group_call.client = client
+    if not group_call:
+        await message.reply_text('You are not joined (type <code>.join</code>)')
+        return
     if not message.reply_to_message or not message.reply_to_message.audio:
         await message.edit_text('<b>Reply to a message containing audio</b>')
         return
