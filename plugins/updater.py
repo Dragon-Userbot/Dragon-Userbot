@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 import subprocess
 from .utils.utils import requirements_list
 import asyncio
@@ -12,13 +12,13 @@ async def restart(message: Message, restart_type):
     await os.execvp("python3", ["python3", "main.py", f"{message.chat.id}",  f" {message.message_id}", f"{text}"])
 
 
-@Client.on_message(filters.command('restart', ['.']) & filters.me)
+@Client.on_message(filters.command('restart', prefix) & filters.me)
 async def restart_comand(client: Client, message: Message):
     await message.edit('<code>Restarting...</code>')
     await restart(message, restart_type='restart')
 
 
-@Client.on_message(filters.command('update', ["."]) & filters.me)
+@Client.on_message(filters.command('update', prefix) & filters.me)
 async def update(client: Client, message: Message):
     await message.edit('<code>Updating...</code>')
     pip_update = subprocess.Popen(

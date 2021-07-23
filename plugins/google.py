@@ -1,9 +1,9 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 
 
-@Client.on_message(filters.command(['google', 'g'], ["."]) & filters.me)
+@Client.on_message(filters.command(['google', 'g'], prefix) & filters.me)
 async def webshot(client: Client, message: Message):
     user_request = ' '.join(message.command[1:])
 

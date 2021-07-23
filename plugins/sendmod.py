@@ -1,13 +1,13 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.raw import types, functions
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 from .utils.help_formatting import help_formatting
 
 import asyncio
 
 
-@Client.on_message(filters.command(['sendmod', 'sm'], ["."]) & filters.me)
+@Client.on_message(filters.command(['sendmod', 'sm'], prefix) & filters.me)
 async def sendmod(client: Client, message: Message):
     mod_name = message.command[1]
     try:

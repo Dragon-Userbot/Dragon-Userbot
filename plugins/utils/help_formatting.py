@@ -1,4 +1,5 @@
 import re
+from .utils import prefix
 
 
 def help_formatting(module_help, help_type, module_name):
@@ -13,7 +14,7 @@ def help_formatting(module_help, help_type, module_name):
                 command = re.sub(r"^\s+|\s+$", "", command)
                 description = i.split('-')[1]
                 description = re.sub(r"^\s+|\s+$", "", description)
-                s += f'<code>.{command}</code>\n<b>[{description}]</b>\n'
+                s += f'<code>{prefix}{command}</code>\n<b>[{description}]</b>\n'
             return s
         except IndexError:
             return module_help

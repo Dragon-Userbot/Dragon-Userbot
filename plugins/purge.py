@@ -1,11 +1,11 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 
 import asyncio
 
 
-@Client.on_message(filters.command('del', ["."]) & filters.me)
+@Client.on_message(filters.command('del', prefix) & filters.me)
 async def del_msg(client: Client, message: Message):
     if message.reply_to_message:
         message_id = message.reply_to_message.message_id
@@ -13,7 +13,7 @@ async def del_msg(client: Client, message: Message):
         await client.delete_messages(message.chat.id, message_id)
 
 
-@Client.on_message(filters.command('purge', ["."]) & filters.me)
+@Client.on_message(filters.command('purge', prefix) & filters.me)
 async def purge(client: Client, message: Message):
     if message.reply_to_message:
         await message.delete()

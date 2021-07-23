@@ -1,7 +1,7 @@
 # rewrote the module from @ Fl1yd
 from pyrogram.types import Message
 from pyrogram import Client, filters
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 
 import requests
 import os
@@ -22,7 +22,7 @@ def get_pic(city):
             pic.write(block)
         return file_name
 
-@Client.on_message(filters.command('weather', ['.']) & filters.me)
+@Client.on_message(filters.command('weather', prefix) & filters.me)
 async def weather(client: Client, message: Message):
     city = message.command[1]
     await message.edit("```Processing the request...```")

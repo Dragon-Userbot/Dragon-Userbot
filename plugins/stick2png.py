@@ -1,11 +1,11 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 import os
 import asyncio
 
 
-@Client.on_message(filters.command(['stick2png', 'stp'], ['.']) & filters.me)
+@Client.on_message(filters.command(['stick2png', 'stp'], prefix) & filters.me)
 async def stick2png(client: Client, message: Message):
     if message.reply_to_message:
         reply = message.reply_to_message

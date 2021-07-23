@@ -1,12 +1,12 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 
 from io import StringIO
 import sys
 
 
-@Client.on_message(filters.command(['ex', 'py'], ['.']) & filters.me)
+@Client.on_message(filters.command(['ex', 'py'], prefix) & filters.me)
 def user_exec(client: Client, message: Message):
     code = ''
     try:

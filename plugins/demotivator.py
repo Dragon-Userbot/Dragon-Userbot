@@ -3,11 +3,11 @@ from pyrogram.types import Message
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import requests
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 import random
 
 
-@Client.on_message(filters.command(["dem"], ["."]) & filters.me)
+@Client.on_message(filters.command(["dem"], prefix) & filters.me)
 async def demotivator(client: Client, message: Message):
     await message.edit('<code>Process of demotivation...</code>')
     font = requests.get(

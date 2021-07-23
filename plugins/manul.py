@@ -1,14 +1,13 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 import asyncio
 
 
-@Client.on_message(filters.command('manul', ['.']) & filters.me)
+@Client.on_message(filters.command('manul', prefix) & filters.me)
 async def manul(client: Client, message: Message):
     quantity = message.command[1]
     quantity = int(quantity) + 1
-    print('manul')
     await message.delete()
     for i in range(1, quantity):
         await client.send_message(message.chat.id, f"{i} манула(ов)")

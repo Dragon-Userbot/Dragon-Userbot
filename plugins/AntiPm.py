@@ -3,7 +3,7 @@ from pyrogram.types import Message
 from pyrogram.handlers import MessageHandler
 from pyrogram.raw import functions
 from pyrogram.raw.types import InputPeerUser
-from .utils.utils import createDB, modules_help
+from .utils.utils import createDB, modules_help, prefix
 
 db = createDB.anti_pm
 
@@ -23,7 +23,7 @@ async def anti_pm_handler(client: Client, message: Message):
                                                                    revoke=True))
 
 
-@Client.on_message(filters.command(["anti_pm"], ".") & filters.me)
+@Client.on_message(filters.command(["anti_pm"], prefix) & filters.me)
 async def anti_pm(client: Client, message: Message):
     status = await db.find_one({"ANTI_PM": "ENABLE"})
     if status:
@@ -38,7 +38,7 @@ async def anti_pm(client: Client, message: Message):
         await message.edit("Anti-pm enabled")
 
 
-@Client.on_message(filters.command(["disable_anti_pm"], ".") & filters.me)
+@Client.on_message(filters.command(["disable_anti_pm"], prefix) & filters.me)
 async def disable_anti_pm(client: Client, message: Message):
     status = await db.find_one({"ANTI_PM": "ENABLE"})
     if status:

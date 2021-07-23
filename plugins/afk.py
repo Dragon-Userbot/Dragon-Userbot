@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 from pyrogram.handlers import MessageHandler
 import datetime
 import asyncio
@@ -17,7 +17,7 @@ async def afk_handler(client, message):
         pass
 
 
-@Client.on_message(filters.command('afk', ['.']) & filters.me)
+@Client.on_message(filters.command('afk', prefix) & filters.me)
 async def afk(client, message):
     global start, end, handler, reason
     start = datetime.datetime.now().replace(microsecond=0)
@@ -29,7 +29,7 @@ async def afk(client, message):
     await message.edit("<b>I'm going afk</b>")
 
 
-@Client.on_message(filters.command('unafk', ['.']) & filters.me)
+@Client.on_message(filters.command('unafk', prefix) & filters.me)
 async def unafk(client, message):
     try:
         global start, end

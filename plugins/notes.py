@@ -1,11 +1,11 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InputMediaPhoto, InputMediaVideo, InputMediaAudio, InputMediaDocument
-from .utils.utils import createDB, modules_help
+from .utils.utils import createDB, modules_help, prefix
 
 db = createDB.notes
 
 
-@Client.on_message(filters.command(["save"], ".") & filters.me)
+@Client.on_message(filters.command(["save"], prefix) & filters.me)
 async def save_note(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     async def chat_id():
@@ -48,10 +48,10 @@ async def save_note(client: Client, message: Message):
             else:
                 await message.edit("This note already exists")
     else:
-        await message.edit("Example: <code>.save name note</code> Reply on user message")
+        await message.edit(f"Example: <code>{prefix}save name note</code> Reply on user message")
 
 
-@Client.on_message(filters.command(["note"], ".") & filters.me)
+@Client.on_message(filters.command(["note"], prefix) & filters.me)
 async def note_send(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
@@ -125,10 +125,10 @@ async def note_send(client: Client, message: Message):
         else:
             await message.edit("There is no such note")
     else:
-        await message.edit("Example: <code>.note name note</code>")
+        await message.edit(f"Example: <code>{prefix}note name note</code>")
 
 
-@Client.on_message(filters.command(["notes"], ".") & filters.me)
+@Client.on_message(filters.command(["notes"], prefix) & filters.me)
 async def notes(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     text = "Available notes\n\n"
@@ -138,7 +138,7 @@ async def notes(client: Client, message: Message):
     await message.edit(text)
 
 
-@Client.on_message(filters.command(["clear"], ".") & filters.me)
+@Client.on_message(filters.command(["clear"], prefix) & filters.me)
 async def clear_note(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
@@ -149,7 +149,7 @@ async def clear_note(client: Client, message: Message):
         else:
             await message.edit("There is no such note")
     else:
-        await message.edit("Example: <code>.clear name note</code>")
+        await message.edit(f"Example: <code>{prefix}clear name note</code>")
 
 
 

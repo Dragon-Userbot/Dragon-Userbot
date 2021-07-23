@@ -2,11 +2,11 @@ from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
 
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 import asyncio
 
 
-@Client.on_message(filters.command('type', ['.']) & filters.me)
+@Client.on_message(filters.command('type', prefix) & filters.me)
 async def type(client: Client, message: Message):
     orig_text = ' '.join(message.command[1:])
     text = orig_text

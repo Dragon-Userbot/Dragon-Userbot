@@ -1,12 +1,12 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 from .utils.utils import requirements_list
 
 import wikipedia
 
 
-@Client.on_message(filters.command('wiki', ['.']) & filters.me)
+@Client.on_message(filters.command('wiki', prefix) & filters.me)
 async def wiki(client: Client, message: Message):
     lang = message.command[1]
     user_request = ' '.join(message.command[2:])

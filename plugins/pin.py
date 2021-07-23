@@ -1,9 +1,9 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
+from .utils.utils import modules_help, prefix
 
 
-@Client.on_message(filters.command('pin', ['.']) & filters.me)
+@Client.on_message(filters.command('pin', prefix) & filters.me)
 async def pin(client: Client, message: Message):
     try:
         message_id = message.reply_to_message.message_id
