@@ -27,5 +27,14 @@ createDB = connectDB.Dragon_Userbot
 def get_prefix():
     prefix = config.get("prefix", "prefix")
     return prefix
+        
 
-prefix = get_prefix()
+try:
+    prefix = get_prefix()
+
+except Exception as e:
+    config.add_section("prefix")
+    config.set('prefix', 'prefix', '.')
+    with open(config_path, "w") as config_file:
+        config.write(config_file)
+    prefix = '.'
