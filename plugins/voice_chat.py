@@ -1,5 +1,6 @@
 import os
 from .utils.utils import modules_help
+from .utils.scripts import restart
 
 import ffmpeg
 from pyrogram import Client, filters
@@ -20,10 +21,6 @@ def init_client(func):
 
         return await func(client, message)
     return wrapper
-
-
-async def restart():
-    await os.execvp("python3", ["python3", "main.py"])
 
 
 @Client.on_message(filters.command('play', ["."]) & filters.me)
@@ -78,7 +75,7 @@ async def stop(_, message: Message):
             await message.edit_text('<code>Leaving successfully!</code>')
         except:
             await message.edit_text('<code>Leaving successfully!</code>')
-            restart()
+            await restart()
     else:
         await message.edit_text("<b>You're not in voice chat!</b>")
 
