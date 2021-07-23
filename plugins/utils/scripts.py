@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-
+import os
 
 date_dict = {}
 
@@ -8,3 +8,6 @@ date_dict = {}
 async def get_date(client: Client, message: Message):
     await client.read_history("@creationdatebot")
     date_dict.update({"date": message.text})
+
+async def restart():
+    await os.execvp("python3", ["python3", "main.py"])
