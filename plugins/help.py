@@ -6,7 +6,7 @@ from .utils.help_formatting import help_formatting
 @Client.on_message(filters.command(['help', 'h'], prefix) & filters.me)
 async def help(client, message):
     module_name = ' '.join(message.command[1:])
-    help_message = f'''<b>Help for Dragon-Userbot</b>\n<b>For more help on how to use a command, type </b><code>{prefix}help |module|</code>\n'''
+    help_message = f'''<b>Help for Dragon-Userbot</b>\n<b>For more help on how to use a command, type </b> <code>{prefix}help |module|</code>\n'''
     help_message += f'<b>The prefix has the value [ <code>{prefix}</code> ]</b>\n\n'
     help_message += '<b>Available Modules:</b>\n'
     if module_name == '':
