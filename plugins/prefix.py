@@ -5,7 +5,7 @@ from .utils.scripts import restart
     
 
 
-@Client.on_message(filters.command(['sp', 'setprefix'], prefix) & filters.me)
+@Client.on_message(filters.command(['sp', 'setprefix', 'setprefix_dragon'], prefix) & filters.me)
 async def pref(client: Client, message: Message):
     if len(message.command) > 1:
         prefix = message.command[1]
