@@ -49,9 +49,3 @@ modules_help.update(
     {'loader': '''loadmod [link] - Download module]\n[Only modules from the official custom_modules repository are supported, 
                   unloadmod [module_name] - Delete module''',
     'loader module': 'Loader: loadmod, unloadmod'})
-
-
-# modules_help.update(
-#     {'covid': '''covid [region] - Status by region,
-#                  regions - Available regions]\n=======================\n[Worldometer.info statistics are used''',
-#      'covid module': 'Covid: covid, regions'})
