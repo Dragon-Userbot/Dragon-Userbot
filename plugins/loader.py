@@ -79,7 +79,7 @@ async def unload_mods(client: Client, message: Message):
 
 
 modules_help.update(
-    {'loader': '''loadmod [link] - Download module]\n[Only modules from the official custom_modules repository are supported, 
+    {'loader': '''loadmod [link] - Download module]\n[Only modules from the official custom_modules repository and proven modules whose hashes are in modules_hashes.txt are supported, 
                   unloadmod [module_name] - Delete module,
                   modhash [link] - Get module hash by link''',
     'loader module': 'Loader: loadmod, unloadmod, modhash'})
