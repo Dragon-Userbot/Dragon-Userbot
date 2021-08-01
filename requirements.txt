@@ -6,7 +6,6 @@ wheel
 gTTS
 pygments
 ffmpeg-python
-pytgcalls[pyrogram]
 pymongo
 motor
 pillow==8.2.0
