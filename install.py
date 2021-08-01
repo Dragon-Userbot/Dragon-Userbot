@@ -19,3 +19,6 @@ if len(sys.argv) == 2:
     app.start()
     app.send_message('me', f'<b>[{datetime.datetime.now()}] Dragon-Userbot launched!\nFor restart, enter:</b>\n <code>cd Dragon-Userbot-beta/ && python main.py</code>')
 
+    app.stop()
+
+    print('Account is successfully linked, for run use: python main.py')
