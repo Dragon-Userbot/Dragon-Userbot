@@ -27,33 +27,8 @@
 
 <h2>Installation (Linux & wsl only)</h2>
 
-<code>  sudo apt update</code>
-
-<code>  sudo apt install python3-pip git wget</code>
-
-<code>  pip3 install wheel</code>
-
-<code>  pip3 install --upgrade pip</code>
-
-<code> sudo apt update</code>
-
-<code>  sudo apt install ffmpeg</code>
-
-<code>  git clone https://github.com/Dragon-Userbot/Dragon-Userbot.git</code>
-
-<code>  cd Dragon-Userbot/</code>
-
-<h3>Install mongodb</h3>
-<nav>
-<li><b><a href='https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/'>Debian</a></b></li>
-<li><b><a href='https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/'>Ubuntu</a></b></li></br>
-</nav>
-
-
-
-<code>  pip3 install -r requirements.txt</code></br>
-
-<code>  python3 main.py</code>
+<pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/john-phonk/Dragon-Userbot-beta && cd Dragon-Userbot-beta/ && sh install.sh
+</code></pre>
 
 <code>  .help</code> (in telegram chat)
 
