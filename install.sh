@@ -13,6 +13,5 @@ echo ====================================
 read -p 'Enter your db_url: ' uservar
 echo ====================================
 
-python3 add_dburl.py $uservar
+python3 install.py $uservar
 
-python3 main.py
