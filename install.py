@@ -17,7 +17,7 @@ if len(sys.argv) == 2:
 
     app = Client("my_account")
     app.start()
-    app.send_message('me', f'<b>[{datetime.datetime.now()}] Dragon-Userbot launched!\nFor restart, enter:</b>\n <code>cd Dragon-Userbot-beta/ && python main.py</code>')
+    app.send_message('me', f'<b>[{datetime.datetime.now()}] Dragon-Userbot launched!\nFor restart, enter:</b>\n <code>cd Dragon-Userbot/ && python main.py</code>')
 
     app.stop()
 
