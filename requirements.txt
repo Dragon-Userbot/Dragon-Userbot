@@ -11,3 +11,4 @@ pymongo
 motor
 pillow==8.2.0
 pytube
+click
