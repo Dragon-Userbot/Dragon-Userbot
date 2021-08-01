@@ -27,30 +27,31 @@
 
 <h2>Installation (Linux & wsl only)</h2>
 
-<pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/john-phonk/Dragon-Userbot-beta && cd Dragon-Userbot-beta/ && sh install.sh
+<pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/john-phonk/Dragon-Userbot && cd Dragon-Userbot/ && sh install.sh
 </code></pre>
 
-<code>  .help</code> (in telegram chat)
+<p>Next enter mongo_db_url (<a href='https://telegra.ph/How-to-get-Mongodb-URL-and-login-in-telegram-08-01'>How to get Mongodb_URL and login in telegram</a>)</p>
+
+<pre><code>.help</code> (in telegram chat)</pre>
 
 Subsequent launch:
 
-<code>  cd Dragon-Userbot/</code>
+<pre><code>cd Dragon-Userbot/</code></pre>
 
-<code>  python3 main.py</code>
+<pre><code>python3 main.py</code></pre>
 
 
 <h2>Custom modules</h2>
 
 
-
-To add your modules just put a .py file in  <a href='https://github.com/JoHn-111/Userbot/tree/master/plugins'>/plugins.</a>This file should have the following code:
-
+<p>To add your module to the bot, create a pull request in the <a href='https://github.com/Dragon-Userbot/custom_modules/'>modules_hashes</a> repository</p>
+<p>Either send the module and its hash to me (<a href='https://t.me/john_phonk'>@john_phonk</a>) details in this <a href='https://t.me/Dragon_Userbot/65'>post</a></p>
 
 ```python3
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help
-from .utils.utils import requirements_list
+from ..utils.utils import modules_help
+from ..utils.utils import requirements_list
 
 # packages from PyPi
 #import example_1
@@ -93,5 +94,6 @@ modules_help.update({'example': '''example_send - example send, example_edit - e
 <nav>
 <li><a href='https://github.com/Taijefx34'>Taijefx34</a></li>
 <li><a href='https://github.com/LaciaMemeFrame'>LaciaMemeFrame</a></li>
+<li><a href='https://t.me/nalinor'>nalinor</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram❤️</a> and <a href='https://github.com/MarshalX/tgcalls/tree/main/pytgcalls'>pytgcalls❤️</a></h4>
