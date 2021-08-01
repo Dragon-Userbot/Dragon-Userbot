@@ -1,4 +1,6 @@
+from pyrogram import Client, idl
 import configparser
+import datetime
 import os
 import sys
 
@@ -12,4 +14,8 @@ if len(sys.argv) == 2:
     config.set('pyrogram', 'db_url', arg)
     with open(config_path, "w") as config_file:
         config.write(config_file)
+
+    app = Client("my_account")
+    app.start()
+    app.send_message('me', f'<b>[{datetime.datetime.now()}] Dragon-Userbot launched!\nFor restart, enter:</b>\n <code>cd Dragon-Userbot-beta/ && python main.py</code>')
 
