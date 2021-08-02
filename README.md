@@ -6,7 +6,7 @@
     <br>
     <b>Telegram userbot with the easiest installation</b>
     <br>
-    <a href='https://github.com/john-phonk/Dragon-Userbot#installation'>
+    <a href='https://github.com/Dragon-Userbot/Dragon-Userbot#installation'>
         Installation
     </a>
     •
