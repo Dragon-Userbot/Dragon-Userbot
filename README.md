@@ -31,7 +31,7 @@
 </code></pre>
 
 <h2>macOS [<a href='https://brew.sh'>brew</a>]</h2>
-<pre><code>brew install git && git clone https://github.com/Dragon-Userbot/Dragon-Userbot.git && cd Dragon-Userbot && brew install python@3.8 && pip3 install --upgrade pip && pip3 install wheel && brew install ffmpeg && pip3 install -r requirements.txt && pip3 install -U pytgcalls && echo Enter your db_url: && read uservar && python3 install.py $uservar
+<pre><code>brew install git && git clone https://github.com/Dragon-Userbot/Dragon-Userbot.git && cd Dragon-Userbot && brew install python@3.8 && pip3 install --upgrade pip && pip3 install wheel && brew install ffmpeg && pip3 install -r requirements.txt && pip3 install -U 'pytgcalls[pyrogram]' && echo Enter your db_url: && read uservar && python3 install.py $uservar
 </code></pre>
 
 <p>Next enter mongo_db_url (<a href='https://telegra.ph/How-to-get-Mongodb-URL-and-login-in-telegram-08-01'>How to get Mongodb_URL and login in telegram</a>)</p>
