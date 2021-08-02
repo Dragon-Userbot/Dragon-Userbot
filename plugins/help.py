@@ -18,12 +18,12 @@ async def help(client, message):
 
         help_message += f'\n<b>The number of modules in the userbot: {len(modules_help)/2}</b>'
         help_message += f'\n\n<b><a href="https://t.me/Dragon_Userbot">Channel</a> and <a href="https://t.me/Dragon_Userbot_chat">chat</a> in telegram</b>' 
-        await message.edit(help_message, parse_mode='html', disable_web_page_preview=True)
+        await message.edit(help_message, parse_mode='HTML', disable_web_page_preview=True)
     else:
         try:
             text = help_formatting(modules_help[module_name.lower(
             )], help_type='one_mod', module_name=module_name.lower())
-            await message.edit(text)
+            await message.edit(text, parse_mode='HTML')
         except KeyError:
             await message.edit(f'<b>Module <code>|{module_name}|</code> not found!</b>')
 
