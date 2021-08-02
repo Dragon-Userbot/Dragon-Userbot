@@ -10,15 +10,15 @@
         Installation
     </a>
     •
-    <a href="https://github.com/JoHn-111/Dragon-Userbot/releases">
+    <a href="https://github.com/Dragon-Userbot/Dragon-Userbot/releases">
         Releases
     </a>
     •
-    <a href="https://t.me/Dragon_Userbot_chat">
+    <a href="https://github.com/Dragon-Userbot/Dragon-Userbot#groups-and-support">
         Community
     </a>
     •
-    <a href='https://github.com/JoHn-111/Dragon-Userbot/tree/master#custom-modules'>
+    <a href='https://github.com/Dragon-Userbot/Dragon-Userbot#custom-modules'>
         Custom modules
     </a>
 </p>
