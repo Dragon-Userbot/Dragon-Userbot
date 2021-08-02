@@ -25,7 +25,7 @@
 
 
 
-<h2>Installation [Thermux is now supported too]</h2>
+<h2>Installation [Thermux and linux]</h2>
 
 <pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/john-phonk/Dragon-Userbot && cd Dragon-Userbot/ && sh install.sh
 </code></pre>
