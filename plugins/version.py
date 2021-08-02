@@ -9,7 +9,7 @@ import asyncio
 async def version(client: Client, message: Message):
     changelog = ''
     async for m in client.search_messages('dRaGoN_uB_cHaNgElOg', query=utils.version.split('.')[0]):
-        if m.text == utils.version:
+        if utils.version in m.text:
             changelog = m.message_id
     await message.delete()
     await message.reply(f'<b>Version</b> <code>{utils.version}</code>.\n'
