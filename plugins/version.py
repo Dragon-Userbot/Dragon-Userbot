@@ -8,8 +8,9 @@ import asyncio
 @Client.on_message(filters.command(['version', 'ver'], prefix) & filters.me)
 async def version(client: Client, message: Message):
     changelog = ''
-    async for m in client.search_messages('dRaGoN_uB_cHaNgElOg', query=utils.version):
-        changelog = m.message_id
+    async for m in client.search_messages('dRaGoN_uB_cHaNgElOg', query=utils.version.split('.')[0]):
+        if m.text == utils.version:
+            changelog = m.message_id
     await message.delete()
     await message.reply(f'<b>Version</b> <code>{utils.version}</code>.\n'
                        f'<b>Changelog</b> <i><a href=https://t.me/dRaGoN_uB_cHaNgElOg/{changelog}>in channel</a></i>.\n'
