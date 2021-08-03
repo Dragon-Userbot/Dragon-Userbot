@@ -25,7 +25,7 @@
 
 
 <h1>Installation</h1>
-<h2>Termux and Linux</h2>
+<h2>Linux, Termux and Windows [only wsl]</h2>
 
 <pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/john-phonk/Dragon-Userbot && cd Dragon-Userbot/ && sh install.sh
 </code></pre>
