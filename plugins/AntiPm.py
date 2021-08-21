@@ -13,7 +13,8 @@ async def anti_pm_handler(client: Client, message: Message):
     if status:
         if message.chat.type in ["private"]:
             if not message.from_user.is_contact \
-                    and not message.from_user.is_bot:
+                    and not message.from_user.is_bot \
+                    and not message.from_user.is_self:
                 await client.read_history(message.chat.id)
                 user_info = await client.resolve_peer(message.chat.id)
                 await message.delete()

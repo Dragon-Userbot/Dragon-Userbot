@@ -11,3 +11,4 @@ __pycache__/
 /plugins/custom_modules
 .idea
 config.ini
+unknown_errors.txt
