@@ -29,12 +29,14 @@ async def anti_pm(client: Client, message: Message):
     status = await db.find_one({"ANTI_PM": "ENABLE"})
     if status:
         await message.edit("Anti-pm enabled")
-        my_handler = MessageHandler(anti_pm_handler)
+        my_handler = MessageHandler(anti_pm_handler,
+                                    filters.private)
         client.add_handler(my_handler)
     else:
         antipidoras = {"ANTI_PM": "ENABLE"}
         await db.insert_one(antipidoras)
-        my_handler = MessageHandler(anti_pm_handler)
+        my_handler = MessageHandler(anti_pm_handler,
+                                    filters.private)
         client.add_handler(my_handler)
         await message.edit("Anti-pm enabled")
 

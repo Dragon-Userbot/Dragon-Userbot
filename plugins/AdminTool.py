@@ -203,10 +203,10 @@ async def tmute_command(client: Client, message: Message):
                                         "CHAT_ID": f"{message.chat.id}"})
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>in tmute</code>"
                                        + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
-                    client.add_handler(MessageHandler(restrict_users_in_tmute))
+                    client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                 else:
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>already in tmute</code>")
-                    client.add_handler(MessageHandler(restrict_users_in_tmute))
+                    client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
             else:
                 await message.edit("<b>Not on yourself</b>")
         else:
@@ -222,12 +222,12 @@ async def tmute_command(client: Client, message: Message):
                     if not find_user:
                         await db.insert_one({"USER_ID": f"{user_to_tmute.id}",
                                              "CHAT_ID": f"{message.chat.id}"})
-                        client.add_handler(MessageHandler(restrict_users_in_tmute))
+                        client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                         await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>in tmute</code>"
                                            + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
                     else:
                         await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>already in tmute</code>")
-                        client.add_handler(MessageHandler(restrict_users_in_tmute))
+                        client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                 else:
                     await message.edit("<b>Not on yourself</b>")
             except PeerIdInvalid:
