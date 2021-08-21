@@ -54,8 +54,7 @@ Subsequent launch:
 ```python3
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from ..utils.utils import modules_help
-from ..utils.utils import requirements_list
+from ..utils.utils import modules_help, requirements_list
 
 # packages from PyPI
 #import example_1
