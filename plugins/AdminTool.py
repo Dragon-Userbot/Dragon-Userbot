@@ -195,17 +195,20 @@ async def tmute_command(client: Client, message: Message):
     if message.reply_to_message \
             and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
-            find_user = await db.find_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
-                                           "CHAT_ID": f"{message.chat.id}"})
-            if not find_user:
-                await db.insert_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
-                                    "CHAT_ID": f"{message.chat.id}"})
-                await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>in tmute</code>"
-                                   + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
-                client.add_handler(MessageHandler(restrict_users_in_tmute))
+            if not message.reply_to_message.from_user.is_self:
+                find_user = await db.find_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
+                                               "CHAT_ID": f"{message.chat.id}"})
+                if not find_user:
+                    await db.insert_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
+                                        "CHAT_ID": f"{message.chat.id}"})
+                    await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>in tmute</code>"
+                                       + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
+                    client.add_handler(MessageHandler(restrict_users_in_tmute))
+                else:
+                    await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>already in tmute</code>")
+                    client.add_handler(MessageHandler(restrict_users_in_tmute))
             else:
-                await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>already in tmute</code>")
-                client.add_handler(MessageHandler(restrict_users_in_tmute))
+                await message.edit("<b>Not on yourself</b>")
         else:
             await message.edit("<b>Reply on user msg</b>")
     elif not message.reply_to_message \
@@ -213,17 +216,20 @@ async def tmute_command(client: Client, message: Message):
         if len(cause.split()) > 1:
             try:
                 user_to_tmute = await client.get_users(cause.split(" ")[1])
-                find_user = await db.find_one({"USER_ID": f"{user_to_tmute.id}",
-                                               "CHAT_ID": f"{message.chat.id}"})
-                if not find_user:
-                    await db.insert_one({"USER_ID": f"{user_to_tmute.id}",
-                                         "CHAT_ID": f"{message.chat.id}"})
-                    client.add_handler(MessageHandler(restrict_users_in_tmute))
-                    await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>in tmute</code>"
-                                       + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
+                if not user_to_tmute.is_self:
+                    find_user = await db.find_one({"USER_ID": f"{user_to_tmute.id}",
+                                                   "CHAT_ID": f"{message.chat.id}"})
+                    if not find_user:
+                        await db.insert_one({"USER_ID": f"{user_to_tmute.id}",
+                                             "CHAT_ID": f"{message.chat.id}"})
+                        client.add_handler(MessageHandler(restrict_users_in_tmute))
+                        await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>in tmute</code>"
+                                           + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
+                    else:
+                        await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>already in tmute</code>")
+                        client.add_handler(MessageHandler(restrict_users_in_tmute))
                 else:
-                    await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>already in tmute</code>")
-                    client.add_handler(MessageHandler(restrict_users_in_tmute))
+                    await message.edit("<b>Not on yourself</b>")
             except PeerIdInvalid:
                 await message.edit("<b>User is not found</b>")
             except UsernameInvalid:
@@ -242,14 +248,17 @@ async def tunmute_command(client: Client, message: Message):
     if message.reply_to_message \
             and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
-            find_user = await db.find_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
-                                           "CHAT_ID": f"{message.chat.id}"})
-            if not find_user:
-                await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>not in tmute</code>")
+            if not message.reply_to_message.from_user.is_self:
+                find_user = await db.find_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
+                                               "CHAT_ID": f"{message.chat.id}"})
+                if not find_user:
+                    await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>not in tmute</code>")
+                else:
+                    await db.delete_one(find_user)
+                    await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>tunmuted</code>"
+                                       + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
             else:
-                await db.delete_one(find_user)
-                await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>tunmuted</code>"
-                                   + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
+                await message.edit("<b>Not on yourself</b>")
         else:
             await message.edit("<b>Reply on user msg</b>")
     elif not message.reply_to_message \
@@ -257,14 +266,17 @@ async def tunmute_command(client: Client, message: Message):
         if len(cause.split()) > 1:
             try:
                 user_to_tunmute = await client.get_users(cause.split(" ")[1])
-                find_user = await db.find_one({"USER_ID": f"{user_to_tunmute.id}",
-                                               "CHAT_ID": f"{message.chat.id}"})
-                if not find_user:
-                    await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>not in tmute</code>")
+                if not user_to_tunmute.is_self:
+                    find_user = await db.find_one({"USER_ID": f"{user_to_tunmute.id}",
+                                                   "CHAT_ID": f"{message.chat.id}"})
+                    if not find_user:
+                        await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>not in tmute</code>")
+                    else:
+                        await db.delete_one(find_user)
+                        await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>tunmuted</code>"
+                                           + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
                 else:
-                    await db.delete_one(find_user)
-                    await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>tunmuted</code>"
-                                       + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
+                    await message.edit("<b>Not on yourself</b>")
             except PeerIdInvalid:
                 await message.edit("<b>User is not found</b>")
             except UsernameInvalid:
