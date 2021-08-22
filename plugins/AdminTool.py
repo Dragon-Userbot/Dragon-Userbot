@@ -299,13 +299,13 @@ async def tunmute_users_command(client: Client, message: Message):
                 try:
                     _name_ = await client.get_users(_["USER_ID"])
                     count += 1
-                    text += f"<i>{count}</i>. <b>{_name_.first_name}</b>\n"
+                    text += f"{count}. <b>{_name_.first_name}</b>\n"
                 except PeerIdInvalid:
                     pass
         if count == 0:
             await message.edit("<b>No users in tmute</b>")
         else:
-            text += f"\n<b>Total users in tmute</b> <i>{count}</i>"
+            text += f"\n<b>Total users in tmute</b> {count}"
             await message.edit(text)
     else:
         await message.edit("<b>Unsupported</b>")
