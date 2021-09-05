@@ -80,8 +80,10 @@ async def check_new_login(client: Client, update: UpdateServiceNotification, _, 
 
 
 modules_help.update(
-    {'sessionkiller': '''sessionkiller [enable|disable] - When enabled，every new session will be terminated]
+    {'sessionkiller': '''sessionkiller [enable|disable] - When enabled，every new session will be terminated.] 
 [Useful for additional protection for your account''',
      'sessionkiller module': 'Sessionkiller: sessionkiller</code> or <code>sk',
-     'sk': 'sk [on|off] - see sessionkiller help (all commands are exactly same)'})
-
+     })
+modules_help.update(
+    {'sk': 'sk [on|off] - see sessionkiller help (all commands are exactly same)'}
+)
