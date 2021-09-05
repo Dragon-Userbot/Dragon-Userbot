@@ -85,6 +85,3 @@ modules_help.update(
 [Useful for additional protection for your account''',
      'sessionkiller module': 'Sessionkiller: sessionkiller</code> or <code>sk',
      })
-modules_help.update(
-    {'sk': 'sk [on|off] - see sessionkiller help (all commands are exactly same)'}
-)
