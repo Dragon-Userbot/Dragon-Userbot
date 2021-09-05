@@ -1,9 +1,10 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help, prefix, sessionkiller_enabled, config_path, config
-from .utils.scripts import restart
 from pyrogram.raw.functions.account import GetAuthorizations, ResetAuthorization
 from pyrogram.raw.types import UpdateServiceNotification
+from pyrogram import ContinuePropagation
+from .utils.utils import modules_help, prefix, sessionkiller_enabled, config_path, config
+from .utils.scripts import restart
 from html import escape
 from datetime import datetime
 import time
@@ -37,10 +38,10 @@ async def sessionkiller(client: Client, message: Message):
 @Client.on_raw_update()
 async def check_new_login(client: Client, update: UpdateServiceNotification, _, __):
     if not sessionkiller_enabled:
-        return
+        raise ContinuePropagation
     if not isinstance(update, UpdateServiceNotification) or \
             not update.type.startswith('auth'):
-        return
+        raise ContinuePropagation
     authorizations = (await client.send(GetAuthorizations()))['authorizations']
     for auth in authorizations:
         if auth.current:
@@ -84,6 +85,3 @@ modules_help.update(
 [Useful for additional protection for your account''',
      'sessionkiller module': 'Sessionkiller: sessionkiller</code> or <code>sk',
      })
-modules_help.update(
-    {'sk': 'sk [on|off] - see sessionkiller help (all commands are exactly same)'}
-)
