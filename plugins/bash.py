@@ -21,9 +21,10 @@ async def example_edit(client: Client, message: Message):
         text += '<b>Timeout expired (60 seconds)</b>'
     else:
         stop_time = perf_counter()
-        text += '<b>Output:</b>\n' \
-                f'<code>{stdout}</code>\n\n'
-        if stderr != '':
+        if stdout:
+            text += '<b>Output:</b>\n' \
+                    f'<code>{stdout}</code>\n\n'
+        if stderr:
             text += '<b>Error:</b>\n' \
                     f'<code>{stderr}</code>\n\n'
         text += f'<b>Completed in {stop_time - start_time} seconds with code {cmd_obj.returncode}</b>'
