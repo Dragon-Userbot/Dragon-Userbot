@@ -8,7 +8,7 @@ pygments
 ffmpeg-python
 pymongo
 motor
-pillow==8.2.0
+pillow==8.3.2
 pytube
 click
 pymongo[srv]
