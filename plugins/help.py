@@ -7,7 +7,7 @@ from .utils.help_formatting import help_formatting
 async def help(client, message):
     module_name = ' '.join(message.command[1:])
     help_message = f'''<b>Help for <a href="https://t.me/Dragon_Userbot_chat">Dragon-Userbot</a></b>\n'''
-    help_message += '''<b>For more help on how to use a command, type </b> <code>{prefix}help |module|</code>\n\n'''
+    help_message += f'''<b>For more help on how to use a command, type </b> <code>{prefix}help |module|</code>\n\n'''
     help_message += '<b>Available Modules:</b>\n'
     if module_name == '':
         for modules, module_help in sorted(modules_help.items()):
