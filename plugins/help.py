@@ -6,8 +6,7 @@ from .utils.help_formatting import help_formatting
 @Client.on_message(filters.command(['help', 'h'], prefix) & filters.me)
 async def help(client, message):
     module_name = ' '.join(message.command[1:])
-    help_message = f'''<b>Help for Dragon-Userbot</b>\n<b>For more help on how to use a command, type </b> <code>{prefix}help |module|</code>\n'''
-    help_message += f'\n\n<b><a href="https://t.me/Dragon_Userbot">Channel</a> and <a href="https://t.me/Dragon_Userbot_chat">chat</a> in telegram</b>\n\n' 
+    help_message = f'''<b>Help for <b><a href="https://t.me/Dragon_Userbot_chat">Dragon-Userbot</a></b>\n<b>For more help on how to use a command, type </b> <code>{prefix}help |module|</code>\n\n'''
     help_message += '<b>Available Modules:</b>\n'
     if module_name == '':
         for modules, module_help in sorted(modules_help.items()):
