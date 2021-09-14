@@ -78,8 +78,32 @@ async def unload_mods(client: Client, message: Message):
             await message.edit(f'<b>Module <code>{mod}</code> not found</b>')
 
 
+@Client.on_message(filters.command(['loadallmods'], prefix) & filters.me)
+async def load_all_mods(clent: Client, message: Message):
+    await message.edit('<b>Fetching info...</b>')
+    if not os.path.exists(f'{os.path.abspath(os.getcwd())}/plugins/custom_modules'):
+        os.mkdir(f'{os.path.abspath(os.getcwd())}/plugins/custom_modules')
+    modules_list = requests.get('https://api.github.com/repos/Dragon-Userbot/custom_modules/contents/').json()
+    new_modules = {}
+    for module_info in modules_list:
+        if not module_info['name'].endswith('.py'):
+            continue
+        if os.path.exists(f'{os.path.abspath(os.getcwd())}/plugins/custom_modules/{module_info["name"]}'):
+            continue
+        new_modules.update({module_info['name'][:-3]: module_info['download_url']})
+    if len(new_modules) == 0:
+        return await message.edit('<b>All modules already loaded</b>')
+    await message.edit(f'<b>Loading new modules: {" ".join(new_modules.keys())}</b>')
+    for name, url in new_modules.items():
+        with open(f'./plugins/custom_modules/{name}.py', 'wb') as f:
+            f.write(requests.get(url).content)
+    await message.edit(f'<b>Successfully loaded new modules: {" ".join(new_modules.keys())}</b>')
+    await restart()
+
+
 modules_help.update(
     {'loader': '''loadmod [link] - Download module]\n[Only modules from the official custom_modules repository and proven modules whose hashes are in modules_hashes.txt are supported, 
                   unloadmod [module_name] - Delete module,
-                  modhash [link] - Get module hash by link''',
-    'loader module': 'Loader: loadmod, unloadmod, modhash'})
+                  modhash [link] - Get module hash by link,
+                  loadallmods - Load all custom modules (use it at your own risk)''',
+    'loader module': 'Loader: loadmod, unloadmod, modhash, loadallmods'})
