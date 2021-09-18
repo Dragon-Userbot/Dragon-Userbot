@@ -23,12 +23,12 @@ async def get_user_inf(client: Client, message: Message):
     else:
         about = user_info.about
     user_info = (f'''|=<b>Username: {username}
-|-Id: {user_info.user.id}
-|-Bot: {user_info.user.bot}
-|-Scam: {user_info.user.scam}
-|-Name: {user_info.user.first_name}
-|-Deleted: {user_info.user.deleted}
-|-BIO: {about}
+|-Id: <code>{user_info.user.id}</code>
+|-Bot: <code>{user_info.user.bot}</code>
+|-Scam: <code>{user_info.user.scam}</code>
+|-Name: <code>{user_info.user.first_name}</code>
+|-Deleted: <code>{user_info.user.deleted}</code>
+|-BIO: <code>{about}</code>
 </b>''')
     await message.edit(user_info)
 
@@ -58,22 +58,22 @@ async def get_full_user_inf(client: Client, message: Message):
         else:
             about = user_info.about
         user_info = (f'''|=<b>Username: {username}
-|-Id: {user_info.user.id}
-|-Account creation date: {date_dict['date']}
-|-Bot: {user_info.user.bot}
-|-Scam: {user_info.user.scam}
-|-Name: {user_info.user.first_name}
-|-Deleted: {user_info.user.deleted}
-|-BIO: {about}
-|-Contact: {user_info.user.contact}
-|-Can pin message: {user_info.can_pin_message}
-|-Mutual contact: {user_info.user.mutual_contact}
-|-Access hash: {user_info.user.access_hash}
-|-Restricted: {user_info.user.restricted}
-|-Verified: {user_info.user.verified}
-|-Phone calls available: {user_info.phone_calls_available}
-|-Phone calls private: {user_info.phone_calls_private}
-|-Blocked: {user_info.blocked}</b>''')
+|-Id: <code>{user_info.user.id}</code>
+|-Account creation date: <code>{date_dict['date']}</code>
+|-Bot: <code>{user_info.user.bot}</code>
+|-Scam: <code>{user_info.user.scam}</code>
+|-Name: <code>{user_info.user.first_name}</code>
+|-Deleted: <code>{user_info.user.deleted}</code>
+|-BIO: <code>{about}</code>
+|-Contact: <code>{user_info.user.contact}</code>
+|-Can pin message: <code>{user_info.can_pin_message}</code>
+|-Mutual contact: <code>{user_info.user.mutual_contact}</code>
+|-Access hash: <code>{user_info.user.access_hash}</code>
+|-Restricted: <code>{user_info.user.restricted}</code>
+|-Verified: <code>{user_info.user.verified}</code>
+|-Phone calls available: <code>{user_info.phone_calls_available}</code>
+|-Phone calls private: <code>{user_info.phone_calls_private}</code>
+|-Blocked: <code>{user_info.blocked}</code></b>''')
         date_dict.clear()
         await message.edit(user_info)
     except:
