@@ -8,6 +8,7 @@ import sys
 
 @Client.on_message(filters.command(['ex', 'py'], prefix) & filters.me)
 def user_exec(client: Client, message: Message):
+    reply = message.reply_to_message
     code = ''
     try:
         code = message.text.split(" ", maxsplit=1)[1]
