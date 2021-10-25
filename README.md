@@ -80,7 +80,6 @@ modules_help.update({'example': '''example_send - example send, example_edit - e
 #        │                 │        │
 #     module_name(only snake_case)  └─ module (here the word 'module' is required)
 #
-#If you need to put a HYPHEN inside the description, then put not a standard sign, but this ->[ – ]
 #If you need to put a COMMA inside the description, then put not a standard sign, but this ->[ ，]
 
 # If your custom module requires packages from PyPI, write the names of the packages in these functions
