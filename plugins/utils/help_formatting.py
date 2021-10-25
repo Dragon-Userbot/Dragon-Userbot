@@ -10,9 +10,8 @@ def help_formatting(module_help, help_type, module_name):
         s = f'<b>Help for |{module_name}|\nUsage:</b>\n'
         try:
             for i in module_help.split(','):
-                command = i.split('-')[0]
+                command, description = i.split('-', maxsplit=1)
                 command = re.sub(r"^\s+|\s+$", "", command)
-                description = i.split('-')[1]
                 description = re.sub(r"^\s+|\s+$", "", description)
                 s += f'<code>{prefix}{command}</code>\n<b>[{description}]</b>\n'
             return s
