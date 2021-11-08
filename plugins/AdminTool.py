@@ -291,7 +291,6 @@ async def tunmute_users_command(client: Client, message: Message):
         text = f"<b>All users</b> <code>{message.chat.title}</code> <b>who are now in tmute</b>\n\n"
         count = 0
         tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
-        print(tmuted_users)
         for user in tmuted_users:
             try:
                 _name_ = await client.get_users(user)
