@@ -10,7 +10,8 @@ class DataBase():
         config = configparser.ConfigParser()
         config.read(config_path)
         db_url = config.get("pyrogram", "db_url")
-        self._DB = md.MongoClient(db_url).Dragon_Userbot
+        db_name = config.get("db", "db_name")
+        self._DB = md.MongoClient(db_url)[db_name]
     
     def set(self, module: str, variable: str, value):
         modcollection = self._DB[module] 

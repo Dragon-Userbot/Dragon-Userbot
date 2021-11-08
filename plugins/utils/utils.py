@@ -31,17 +31,3 @@ if pr is None:
     prefix = '.'
 else:
     prefix = pr
-
-try:
-    sessionkiller_enabled = config.get("sessionkiller", "enabled")
-except:
-    config.add_section('sessionkiller')
-    config.set('sessionkiller', 'enabled', '0')
-    with open(config_path, 'w') as config_file:
-        config.write(config_file)
-    sessionkiller_enabled = '0'
-
-if sessionkiller_enabled in ['0', 'false', 'no', 'disabled']:
-    sessionkiller_enabled = False
-else:
-    sessionkiller_enabled = True
