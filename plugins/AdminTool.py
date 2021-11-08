@@ -3,21 +3,19 @@ from pyrogram.types import Message, ChatPermissions
 from pyrogram.errors import UserAdminInvalid, ChatAdminRequired, PeerIdInvalid, UsernameInvalid
 from pyrogram.raw import functions
 from pyrogram.handlers import MessageHandler
-from .utils.utils import createDB, modules_help, prefix
+from .utils.utils import modules_help, prefix
 from .utils.scripts import text, chat_permissions
 from time import time
 import re
 from typing import Dict
 
-db = createDB.admin_tool
+from .utils.db import db
 
 
 async def restrict_users_in_tmute(client: Client, message: Message):
-    if message.from_user:
-        user = await db.find_one({"USER_ID": f"{message.from_user.id}",
-                                 "CHAT_ID": f"{message.chat.id}"})
-        if user:
-            await message.delete()
+    tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
+    if message.from_user.id in tmuted_users:
+        await message.delete()
 
 
 @Client.on_message(filters.command(["ban"], prefix) & filters.me)
@@ -196,11 +194,9 @@ async def tmute_command(client: Client, message: Message):
             and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
             if not message.reply_to_message.from_user.is_self:
-                find_user = await db.find_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
-                                               "CHAT_ID": f"{message.chat.id}"})
-                if not find_user:
-                    await db.insert_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
-                                        "CHAT_ID": f"{message.chat.id}"})
+                tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
+                if not message.reply_to_message.from_user.id in tmuted_users:
+                    await db.set('core.ats', f'c{message.chat.id}', tmuted_users.append(message.reply_to_message.from_user.id))
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>in tmute</code>"
                                        + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
                     client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
@@ -217,11 +213,9 @@ async def tmute_command(client: Client, message: Message):
             try:
                 user_to_tmute = await client.get_users(cause.split(" ")[1])
                 if not user_to_tmute.is_self:
-                    find_user = await db.find_one({"USER_ID": f"{user_to_tmute.id}",
-                                                   "CHAT_ID": f"{message.chat.id}"})
-                    if not find_user:
-                        await db.insert_one({"USER_ID": f"{user_to_tmute.id}",
-                                             "CHAT_ID": f"{message.chat.id}"})
+                    tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
+                    if not user_to_tmute.id in tmuted_users:
+                        await db.set('core.ats', f'c{message.chat.id}', tmuted_users.appen(user_to_tmute.id))
                         client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                         await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>in tmute</code>"
                                            + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
@@ -249,12 +243,11 @@ async def tunmute_command(client: Client, message: Message):
             and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
             if not message.reply_to_message.from_user.is_self:
-                find_user = await db.find_one({"USER_ID": f"{message.reply_to_message.from_user.id}",
-                                               "CHAT_ID": f"{message.chat.id}"})
-                if not find_user:
+                tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
+                if not message.reply_to_message.from_user.id in tmuted_users:
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>not in tmute</code>")
                 else:
-                    await db.delete_one(find_user)
+                    await db.set('core.ats', f'c{message.chat.id}', tmuted_users.remove(message.reply_to_message.from_user.id))
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>tunmuted</code>"
                                        + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
             else:
@@ -267,12 +260,11 @@ async def tunmute_command(client: Client, message: Message):
             try:
                 user_to_tunmute = await client.get_users(cause.split(" ")[1])
                 if not user_to_tunmute.is_self:
-                    find_user = await db.find_one({"USER_ID": f"{user_to_tunmute.id}",
-                                                   "CHAT_ID": f"{message.chat.id}"})
-                    if not find_user:
+                    tmuted_users = await db.get('core.ats', f'c{message.chat.id}, []')
+                    if not user_to_tunmute in tmuted_users:
                         await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>not in tmute</code>")
                     else:
-                        await db.delete_one(find_user)
+                        await db.set('core.ats', f'c{message.chat.id}', tmuted_users.remove(user_to_tunmute.id))
                         await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>tunmuted</code>"
                                            + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
                 else:
@@ -294,14 +286,14 @@ async def tunmute_users_command(client: Client, message: Message):
     if message.chat.type not in ["private", "channel"]:
         text = f"<b>All users</b> <code>{message.chat.title}</code> <b>who are now in tmute</b>\n\n"
         count = 0
-        async for _ in db.find():
-            if message.chat.id == int(_["CHAT_ID"]):
-                try:
-                    _name_ = await client.get_users(_["USER_ID"])
-                    count += 1
-                    text += f"{count}. <b>{_name_.first_name}</b>\n"
-                except PeerIdInvalid:
-                    pass
+        tmuted_users = await db.get('core.ats', f'c{message.chat.id}, []')
+        for user in tmuted_users:
+            try:
+                _name_ = await client.get_users(user)
+                count += 1
+                text += f"{count}. <b>{_name_.first_name}</b>\n"
+            except PeerIdInvalid:
+                pass
         if count == 0:
             await message.edit("<b>No users in tmute</b>")
         else:
