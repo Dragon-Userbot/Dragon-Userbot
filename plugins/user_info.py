@@ -8,10 +8,20 @@ import asyncio
 
 @Client.on_message(filters.command('inf', prefix) & filters.me)
 async def get_user_inf(client: Client, message: Message):
-    try:
-        user = message.reply_to_message.from_user.id
-    except:
-        user = message.from_user.id
+    if len(message.text.split()) >= 2:
+        try:
+            user = await client.get_users(message.text.split()[1])
+            user = user.id
+        except:
+            try:
+                user = message.reply_to_message.from_user.id
+            except:
+                user = message.from_user.id  
+    else:     
+        try:
+            user = message.reply_to_message.from_user.id
+        except:
+            user = message.from_user.id
     user_info = await client.send(
         functions.users.GetFullUser(id=await client.resolve_peer(user)))
     if user_info.user.username == None:
@@ -36,10 +46,20 @@ async def get_user_inf(client: Client, message: Message):
 @Client.on_message(filters.command('inffull', prefix) & filters.me)
 async def get_full_user_inf(client: Client, message: Message):
     await message.edit('<code>Receiving the information...</code>')
-    try:
-        user = message.reply_to_message.from_user.id
-    except:
-        user = message.from_user.id
+    if len(message.text.split()) >= 2:
+        try:
+            user = await client.get_users(message.text.split()[1])
+            user = user.id
+        except:
+            try:
+                user = message.reply_to_message.from_user.id
+            except:
+                user = message.from_user.id  
+    else:     
+        try:
+            user = message.reply_to_message.from_user.id
+        except:
+            user = message.from_user.id
     try:
         await client.send_message("@creationdatebot", f"/start")
         await asyncio.sleep(1)
