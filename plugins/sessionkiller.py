@@ -9,7 +9,6 @@ from .utils.db import db
 from html import escape
 from datetime import datetime
 from main import app
-import asyncio
 import time
 
 auth_hashes = db.get('core.sessionkiller', 'auths_hashes', [])
