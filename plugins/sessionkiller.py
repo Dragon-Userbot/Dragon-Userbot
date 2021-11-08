@@ -5,14 +5,15 @@ from pyrogram.raw.functions.account import GetAuthorizations, ResetAuthorization
 from pyrogram.raw.types import UpdateServiceNotification
 from pyrogram import ContinuePropagation
 from .utils.utils import modules_help, prefix
-from .utils.scripts import restart
+from .utils.db import db
 from html import escape
 from datetime import datetime
 from main import app
+import asyncio
 import time
 
 with app:
-    auths = app.send(GetAuthorizations())['authorizations']
+    auths = asyncio.get_event_loop().run_until_complete(app.send(GetAuthorizations()))['authorizations']
     auths_hashs = []
     for auth in auths:
         auths_hashs.append(auth['hash'])
