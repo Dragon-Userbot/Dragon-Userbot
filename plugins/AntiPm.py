@@ -3,13 +3,12 @@ from pyrogram.types import Message
 from pyrogram.handlers import MessageHandler
 from pyrogram.raw import functions
 from pyrogram.raw.types import InputPeerUser
-from .utils.utils import createDB, modules_help, prefix
-
-db = createDB.anti_pm
+from .utils.utils import modules_help, prefix
+from .utils.db import db
 
 
 async def anti_pm_handler(client: Client, message: Message):
-    status = await db.find_one({"ANTI_PM": "ENABLE"})
+    status = await db.get('core.antipm', 'status', False)
     if status:
         if message.chat.type in ["private"]:
             if not message.from_user.is_contact \
@@ -26,15 +25,14 @@ async def anti_pm_handler(client: Client, message: Message):
 
 @Client.on_message(filters.command(["anti_pm"], prefix) & filters.me)
 async def anti_pm(client: Client, message: Message):
-    status = await db.find_one({"ANTI_PM": "ENABLE"})
+    status = await db.get('core.antipm', 'status', False)
     if status:
         await message.edit("Anti-pm enabled")
         my_handler = MessageHandler(anti_pm_handler,
                                     filters.private)
         client.add_handler(my_handler)
     else:
-        antipidoras = {"ANTI_PM": "ENABLE"}
-        await db.insert_one(antipidoras)
+        await db.set('core.antipm', 'status', True)
         my_handler = MessageHandler(anti_pm_handler,
                                     filters.private)
         client.add_handler(my_handler)
@@ -43,12 +41,8 @@ async def anti_pm(client: Client, message: Message):
 
 @Client.on_message(filters.command(["disable_anti_pm"], prefix) & filters.me)
 async def disable_anti_pm(client: Client, message: Message):
-    status = await db.find_one({"ANTI_PM": "ENABLE"})
-    if status:
-        await db.delete_one({"ANTI_PM": "ENABLE"})
-        await message.edit("Anti-pm disable")
-    else:
-        await message.edit("Anti-pm disable")
+    await db.set('core.antipm', 'status', False)
+    await message.edit("Anti-pm disabled")
 
 
 modules_help.update({
