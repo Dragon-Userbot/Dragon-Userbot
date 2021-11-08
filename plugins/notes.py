@@ -7,19 +7,19 @@ from .utils.db import db
 async def save_note(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     async def chat_id():
-        cid = await db.get('core.notes', 'chat_id')
+        cid = db.get('core.notes', 'chat_id')
         if cid != None:
             return cid
         else:
             chat = await client.create_supergroup(f"Dragon_Userbot_Notes_Filters",
                                                   "Don't touch this group, please")
-            await db.set('core.notes', 'chat_id', chat.id)
+            db.set('core.notes', 'chat_id', chat.id)
             return chat.id
     
     if message.reply_to_message and len(message.text.split()) >= 2:
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
         if message.reply_to_message.media_group_id:
-            cheking_note = await db.get('core.notes', f'note{note_name}', False)
+            cheking_note = db.get('core.notes', f'note{note_name}', False)
             if not cheking_note:
                 get_media_group = [_.message_id for _ in await client.get_media_group(message.chat.id, message.reply_to_message.message_id)]
                 message_id = await client.forward_messages(await chat_id(),
@@ -30,12 +30,12 @@ async def save_note(client: Client, message: Message):
                     "MEDIA_GROUP": True,
                     "CHAT_ID": f"{await chat_id()}"
                     }
-                await db.set('core.notes', f'note{note_name}', note)
+                db.set('core.notes', f'note{note_name}', note)
                 await message.edit(f"Note {message.text.split(' ', maxsplit=1)[1]} saved")
             else:
                 await message.edit("This note already exists")
         else:
-            cheking_note = await db.get('core.notes', f'note{note_name}', False)
+            cheking_note = db.get('core.notes', f'note{note_name}', False)
             if not cheking_note:
                 message_id = await message.reply_to_message.forward(await chat_id())
                 note = {
@@ -43,7 +43,7 @@ async def save_note(client: Client, message: Message):
                     "MESSAGE_ID": f"{message_id.message_id}",
                     "CHAT_ID": f"{await chat_id()}"
                     }
-                await db.set('core.notes', f'note{note_name}', note)
+                db.set('core.notes', f'note{note_name}', note)
                 await message.edit(f"Note {message.text.split(' ', maxsplit=1)[1]} saved")
             else:
                 await message.edit("This note already exists")
@@ -56,7 +56,7 @@ async def note_send(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
-        find_note = await db.get('core.notes', f'note{note_name}', False)
+        find_note = db.get('core.notes', f'note{note_name}', False)
         if find_note:
             if find_note.get("MEDIA_GROUP"):
                 messages_grouped = await client.get_media_group(int(find_note["CHAT_ID"]), int(find_note["MESSAGE_ID"]))
@@ -133,7 +133,7 @@ async def note_send(client: Client, message: Message):
 async def notes(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     text = "Available notes\n\n"
-    clct = await db.get_collection('core.notes')
+    clct = db.get_collection('core.notes')
     for note in clct:
         note = list(note.keys())[0]
         if note[:4] == 'note':
@@ -146,9 +146,9 @@ async def clear_note(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
-        find_note = await db.get('core.notes', f'note{note_name}', False)
+        find_note = db.get('core.notes', f'note{note_name}', False)
         if find_note:
-            await db.remove('core.notes', f'note{note_name}')
+            db.remove('core.notes', f'note{note_name}')
             await message.edit(f"Note {note_name} deleted")
         else:
             await message.edit("There is no such note")

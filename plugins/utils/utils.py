@@ -1,9 +1,10 @@
-from sys import version_info
+from sys import prefix, version_info
 import motor.motor_asyncio
 import configparser
 import sys
 import os
-
+from .db import db
+import asyncio
 
 modules_help = {}
 requirements_list = []
@@ -24,20 +25,12 @@ config_path = os.path.join(sys.path[0], 'config.ini')
 config = configparser.ConfigParser()
 config.read(config_path)
 
-def get_prefix():
-    prefix = config.get("prefix", "prefix")
-    return prefix
-
-
-try:
-    prefix = get_prefix()
-
-except Exception as e:
-    config.add_section("prefix")
-    config.set('prefix', 'prefix', '.')
-    with open(config_path, "w") as config_file:
-        config.write(config_file)
+pr = db.get('core.main', 'prefix')
+if pr is None:
+    db.set('core.main', 'prefix', '.')
     prefix = '.'
+else:
+    prefix = pr
 
 try:
     sessionkiller_enabled = config.get("sessionkiller", "enabled")
