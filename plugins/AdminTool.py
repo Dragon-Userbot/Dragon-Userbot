@@ -14,8 +14,13 @@ from .utils.db import db
 
 async def restrict_users_in_tmute(client: Client, message: Message):
     tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
-    if message.from_user.id in tmuted_users:
-        await message.delete()
+    try:
+        if message.from_user.id in tmuted_users:
+            await message.delete()
+    except:
+        # Anonymous anal messages
+        # Just ignore them
+        pass
 
 
 @Client.on_message(filters.command(["ban"], prefix) & filters.me)
