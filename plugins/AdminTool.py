@@ -196,7 +196,8 @@ async def tmute_command(client: Client, message: Message):
             if not message.reply_to_message.from_user.is_self:
                 tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
                 if not message.reply_to_message.from_user.id in tmuted_users:
-                    await db.set('core.ats', f'c{message.chat.id}', tmuted_users.append(message.reply_to_message.from_user.id))
+                    tmuted_users.append(message.reply_to_message.from_user.id)
+                    print(await db.set('core.ats', f'c{message.chat.id}', tmuted_users))
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>in tmute</code>"
                                        + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
                     client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
@@ -215,7 +216,8 @@ async def tmute_command(client: Client, message: Message):
                 if not user_to_tmute.is_self:
                     tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
                     if not user_to_tmute.id in tmuted_users:
-                        await db.set('core.ats', f'c{message.chat.id}', tmuted_users.appen(user_to_tmute.id))
+                        tmuted_users.append(user_to_tmute.id)
+                        await db.set('core.ats', f'c{message.chat.id}', tmuted_users)
                         client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                         await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>in tmute</code>"
                                            + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
@@ -247,7 +249,8 @@ async def tunmute_command(client: Client, message: Message):
                 if not message.reply_to_message.from_user.id in tmuted_users:
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>not in tmute</code>")
                 else:
-                    await db.set('core.ats', f'c{message.chat.id}', tmuted_users.remove(message.reply_to_message.from_user.id))
+                    tmuted_users.remove(message.reply_to_message.from_user.id)
+                    await db.set('core.ats', f'c{message.chat.id}', tmuted_users)
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>tunmuted</code>"
                                        + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
             else:
@@ -264,7 +267,8 @@ async def tunmute_command(client: Client, message: Message):
                     if not user_to_tunmute in tmuted_users:
                         await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>not in tmute</code>")
                     else:
-                        await db.set('core.ats', f'c{message.chat.id}', tmuted_users.remove(user_to_tunmute.id))
+                        tmuted_users.remove(user_to_tunmute.id)
+                        await db.set('core.ats', f'c{message.chat.id}', tmuted_users)
                         await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>tunmuted</code>"
                                            + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
                 else:
