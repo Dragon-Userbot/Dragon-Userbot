@@ -23,10 +23,6 @@ version = '1.2.2.1'
 config_path = os.path.join(sys.path[0], 'config.ini')
 config = configparser.ConfigParser()
 config.read(config_path)
-db_url = config.get("pyrogram", "db_url")
-connectDB = motor.motor_asyncio.AsyncIOMotorClient(db_url)
-createDB = connectDB.Dragon_Userbot
-
 
 def get_prefix():
     prefix = config.get("prefix", "prefix")

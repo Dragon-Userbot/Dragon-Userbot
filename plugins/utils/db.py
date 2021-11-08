@@ -29,5 +29,13 @@ class DataBase():
             return expected_value
         else:
             return doc['val']
+    
+    async def get_collection(self, module: str):
+        modcollection = self._DB[module] 
+        cons = []
+        async for _ in modcollection.find():
+            cons.append({_["var"]: _["val"]})
+        return cons
 
 db = DataBase()
+
