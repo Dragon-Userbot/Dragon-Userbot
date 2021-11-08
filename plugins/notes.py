@@ -12,7 +12,7 @@ async def save_note(client: Client, message: Message):
             return cid
         else:
             chat = await client.create_supergroup(f"Dragon_Userbot_Notes_Filters",
-                                                  "Don't")
+                                                  "Don't touch this group, please")
             await db.set('core.notes', 'chat_id', chat.id)
             return chat.id
     
