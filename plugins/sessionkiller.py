@@ -21,7 +21,7 @@ with app:
 @Client.on_message(filters.command(['sessionkiller', 'sk'], prefix) & filters.me)
 async def sessionkiller(_, message: Message):
     if len(message.command) == 1:
-        if db.get('sessionkiller', 'enabled', False):
+        if db.get('core.sessionkiller', 'enabled', False):
             await message.edit('Sessionkiller status: <b>enabled</b>\n'
                                f'You can disable it with <code>{prefix}sessionkiller disable</code>')
         else:
@@ -29,10 +29,10 @@ async def sessionkiller(_, message: Message):
                                f'You can enable it with <code>{prefix}sessionkiller enable</code>')
     else:
         if message.command[1] in ['enable', 'on', '1', 'yes', 'true']:
-            db.set('sessionkiller', 'enabled', True)
+            db.set('core.sessionkiller', 'enabled', True)
             await message.edit(f'<b>Sessionkiller enabled!</b>')
         elif message.command[1] in ['disable', 'off', '0', 'no', 'false']:
-            db.set('sessionkiller', 'enabled', False)
+            db.set('core.sessionkiller', 'enabled', False)
             await message.edit(f'<b>Sessionkiller disabled!</b>')
         else:
             await message.edit(f'<b>Usage: {prefix}sessionkiller [enable|disable]</b>')
@@ -43,7 +43,7 @@ async def check_new_login(client: Client, update: UpdateServiceNotification, _, 
     if not isinstance(update, UpdateServiceNotification) or \
             not update.type.startswith('auth'):
         raise ContinuePropagation
-    if not db.get('sessionkiller', 'enabled', False):
+    if not db.get('core.sessionkiller', 'enabled', False):
         raise ContinuePropagation
     authorizations = (await client.send(GetAuthorizations()))['authorizations']
     for auth in authorizations:
