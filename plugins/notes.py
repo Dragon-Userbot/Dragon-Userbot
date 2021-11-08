@@ -148,7 +148,7 @@ async def clear_note(client: Client, message: Message):
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
         find_note = await db.get('core.notes', f'note{note_name}', False)
         if find_note:
-            await db.set('core.notes', f'note{note_name}', None)
+            await db.remove('core.notes', f'note{note_name}')
             await message.edit(f"Note {note_name} deleted")
         else:
             await message.edit("There is no such note")

@@ -1,4 +1,5 @@
 import motor.motor_asyncio as m
+import motor.core as c
 import configparser
 import os
 import sys
@@ -36,6 +37,15 @@ class DataBase():
         async for _ in modcollection.find():
             cons.append({_["var"]: _["val"]})
         return cons
+
+    async def remove(self, module: str, variable: str):
+        modcollection = self._DB[module] 
+        doc = (await modcollection.find_one({'var': variable}))
+        if doc != None:
+            modcollection.delete_one(doc)
+            return True
+        else:
+            return False
 
 db = DataBase()
 
