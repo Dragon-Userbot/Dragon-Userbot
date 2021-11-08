@@ -197,7 +197,7 @@ async def tmute_command(client: Client, message: Message):
                 tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
                 if not message.reply_to_message.from_user.id in tmuted_users:
                     tmuted_users.append(message.reply_to_message.from_user.id)
-                    print(await db.set('core.ats', f'c{message.chat.id}', tmuted_users))
+                    await db.set('core.ats', f'c{message.chat.id}', tmuted_users)
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>in tmute</code>"
                                        + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
                     client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
