@@ -263,7 +263,7 @@ async def tunmute_command(client: Client, message: Message):
             try:
                 user_to_tunmute = await client.get_users(cause.split(" ")[1])
                 if not user_to_tunmute.is_self:
-                    tmuted_users = await db.get('core.ats', f'c{message.chat.id}, []')
+                    tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
                     if not user_to_tunmute in tmuted_users:
                         await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>not in tmute</code>")
                     else:
@@ -290,7 +290,8 @@ async def tunmute_users_command(client: Client, message: Message):
     if message.chat.type not in ["private", "channel"]:
         text = f"<b>All users</b> <code>{message.chat.title}</code> <b>who are now in tmute</b>\n\n"
         count = 0
-        tmuted_users = await db.get('core.ats', f'c{message.chat.id}, []')
+        tmuted_users = await db.get('core.ats', f'c{message.chat.id}', [])
+        print(tmuted_users)
         for user in tmuted_users:
             try:
                 _name_ = await client.get_users(user)
