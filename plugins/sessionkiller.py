@@ -12,12 +12,7 @@ from main import app
 import asyncio
 import time
 
-with app:
-    auths = asyncio.get_event_loop().run_until_complete(app.send(GetAuthorizations()))['authorizations']
-    auths_hashs = []
-    for auth in auths:
-        auths_hashs.append(auth['hash'])
-
+auth_hashes = db.get('core.sessionkiller', 'auths_hashes', [])
 
 @Client.on_message(filters.command(['sessionkiller', 'sk'], prefix) & filters.me)
 async def sessionkiller(_, message: Message):
@@ -50,7 +45,7 @@ async def check_new_login(client: Client, update: UpdateServiceNotification, _, 
     for auth in authorizations:
         if auth.current:
             continue
-        if auth['hash'] not in auths_hashs:
+        if auth['hash'] not in auth_hashes:
             # found new unexpected login
             try:
                 await client.send(ResetAuthorization(hash=auth.hash))
