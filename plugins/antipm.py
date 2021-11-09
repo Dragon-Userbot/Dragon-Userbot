@@ -17,7 +17,8 @@ async def anti_pm_handler(client: Client, message: Message):
                 await client.read_history(message.chat.id)
                 user_info = await client.resolve_peer(message.chat.id)
                 await message.delete()
-                await client.send(functions.messages.ReportSpam(peer=(user_info)))
+                if db.get('core.antipm', 'spamrep', False):
+                    await client.send(functions.messages.ReportSpam(peer=(user_info)))
                 await client.send(functions.messages.DeleteHistory(peer=(user_info),
                                                                    max_id=0,
                                                                    revoke=True))
@@ -44,8 +45,16 @@ async def disable_anti_pm(client: Client, message: Message):
     db.set('core.antipm', 'status', False)
     await message.edit("Anti-pm disabled")
 
+@Client.on_message(filters.command(["esr"], prefix) & filters.me)
+async def esr(client: Client, message: Message):
+    db.set('core.antipm', 'spamrep', True)
+    await message.edit("Spam-reporting enabled")
+
+@Client.on_message(filters.command(["dsr"], prefix) & filters.me)
+async def dsr(client: Client, message: Message):
+    db.set('core.antipm', 'spamrep', False)
+    await message.edit("Spam-reporting disabled")
 
 modules_help.update({
-                        'antipm': '''anti_pm - Delete all messages from users who are not in the contact book, disable_anti_pm - Disable''',
-                        'antipm module': 'AntiPm: anti_pm, '
-                                         'disable_anti_pm\n'})
+                        'antipm': '''anti_pm - Delete all messages from users who are not in the contact book, disable_anti_pm - Disable, esr - Enable spam report, dsr - Disable spam report''',
+                        'antipm module': 'AntiPm: anti_pm, disable_anti_pm, esr, dsr'})
