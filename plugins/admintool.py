@@ -269,7 +269,7 @@ async def tunmute_command(client: Client, message: Message):
                 user_to_tunmute = await client.get_users(cause.split(" ")[1])
                 if not user_to_tunmute.is_self:
                     tmuted_users = db.get('core.ats', f'c{message.chat.id}', [])
-                    if not user_to_tunmute in tmuted_users:
+                    if not user_to_tunmute.id in tmuted_users:
                         await message.edit(f"<b>{user_to_tunmute.first_name}</b> <code>not in tmute</code>")
                     else:
                         tmuted_users.remove(user_to_tunmute.id)
