@@ -26,7 +26,7 @@ async def convert(client: Client, message: Message):
         elif message.command[1] == 'btc':
             name = '1₿'
             link = btc
-        full_page = requests.get(link, headers=headers, timeout=1)
+        full_page = requests.get(link, headers=headers, timeout=3)
         soup = BeautifulSoup(full_page.content, 'html.parser')
         rub = soup.find('span', id='last_last')
         await message.edit(f'<b>{name} now is </b><code> {rub} </code><b> rub</b>')
