@@ -34,6 +34,5 @@ async def convert(client: Client, message: Message):
         await message.edit('<code>ERROR</code>')
 
 
-modules_help.update({'course': '''usd - For get course usd to rub, 
-    eur - For get course eur to rub, btc - For get course btc to rub]\n[Dont use more than 10 times per minute''',
-    'course module': 'Course: usd, eur, btc'})
+modules_help.update({'course': '''course - Transfer from any state currency to the ruble]\n[Dont use more than 10 times per minute''',
+    'course module': 'Course: usd, eur, btc and more'})
