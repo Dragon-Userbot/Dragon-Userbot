@@ -1,9 +1,10 @@
-from sys import version_info
+from sys import prefix, version_info
 import motor.motor_asyncio
 import configparser
 import sys
 import os
-
+from .db import db
+import asyncio
 
 modules_help = {}
 requirements_list = []
@@ -23,36 +24,10 @@ version = '1.2.2.2.5.2.7.2.6.2.bugfix.alpha.unstable.dev'
 config_path = os.path.join(sys.path[0], 'config.ini')
 config = configparser.ConfigParser()
 config.read(config_path)
-db_url = config.get("pyrogram", "db_url")
-connectDB = motor.motor_asyncio.AsyncIOMotorClient(db_url)
-createDB = connectDB.Dragon_Userbot
 
-
-def get_prefix():
-    prefix = config.get("prefix", "prefix")
-    return prefix
-
-
-try:
-    prefix = get_prefix()
-
-except Exception as e:
-    config.add_section("prefix")
-    config.set('prefix', 'prefix', '.')
-    with open(config_path, "w") as config_file:
-        config.write(config_file)
+pr = db.get('core.main', 'prefix')
+if pr is None:
+    db.set('core.main', 'prefix', '.')
     prefix = '.'
-
-try:
-    sessionkiller_enabled = config.get("sessionkiller", "enabled")
-except:
-    config.add_section('sessionkiller')
-    config.set('sessionkiller', 'enabled', '0')
-    with open(config_path, 'w') as config_file:
-        config.write(config_file)
-    sessionkiller_enabled = '0'
-
-if sessionkiller_enabled in ['0', 'false', 'no', 'disabled']:
-    sessionkiller_enabled = False
 else:
-    sessionkiller_enabled = True
+    prefix = pr
