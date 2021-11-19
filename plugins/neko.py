@@ -14,7 +14,7 @@ async def neko(client: Client, message: Message):
     await message.edit("<code>Wait...</code>")
     try:
         query = message.command[1]
-        await message.edit(f"{getpic(query)}")
+        await message.edit(f"{getpic(query)}", disable_web_page_preview=False)
     except:
         await message.edit("<code>Error\nYou entered the wrong type for it</code>")
 
