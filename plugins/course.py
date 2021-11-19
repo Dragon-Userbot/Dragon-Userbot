@@ -5,10 +5,6 @@ import requests
 from bs4 import BeautifulSoup
 
 
-usd = 'https://ru.investing.com/currencies/usd-rub'
-eur = 'https://ru.investing.com/currencies/eur-rub'
-btc = 'https://ru.investing.com/crypto/bitcoin/btc-rub'
-
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'}
 
@@ -17,15 +13,14 @@ headers = {
 async def convert(client: Client, message: Message):
     try:
         await message.edit('<code>Data retrieval...</code>')
-        if message.command[1] == 'usd':
-            name = '1$'
-            link = usd
-        elif message.command[1] == 'eur':
-            name = '1€'
-            link = eur
-        elif message.command[1] == 'btc':
-            name = '1₿'
-            link = btc
+        name = message.command[1]
+
+        if name == "btc":
+            name = "1₿"
+            link = f"https://ru.investing.com/crypto/bitcoin"
+        else:    
+            link = f"https://ru.investing.com/currencies/{name}-rub"
+
         full_page = requests.get(link, headers=headers, timeout=3)
         soup = BeautifulSoup(full_page.content, 'html.parser')
         rub = soup.find('span', id='last_last')
