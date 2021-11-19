@@ -18,7 +18,7 @@ copyright = (
     '© <a href=https://github.com/Dragon-Userbot>Dragon-Userbot company</a>, 2021'
 )
 python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
-version = '1.2.2.1'
+version = '1.2.2.2.5.2.7.2.6.2.bugfix.alpha.unstable.dev'
 
 
 config_path = os.path.join(sys.path[0], 'config.ini')
