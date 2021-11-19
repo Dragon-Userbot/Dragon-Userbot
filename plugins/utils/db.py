@@ -10,7 +10,17 @@ class DataBase():
         config = configparser.ConfigParser()
         config.read(config_path)
         db_url = config.get("pyrogram", "db_url")
-        db_name = config.get("db", "db_name")
+        try:
+            db_name = config.get("db", "db_name")
+        except:
+            try:
+                config.add_section("db")
+            except:
+                pass
+            config.set("db", "db_name", "Dragon_Userbot")
+            with open(config_path, 'w') as f:
+                config.write(f)
+            os.system('python3 main.py')
         self._DB = md.MongoClient(db_url)[db_name]
     
     def set(self, module: str, variable: str, value):
