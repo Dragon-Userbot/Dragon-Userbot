@@ -1,4 +1,4 @@
-from pyrogram import Client, filters
+from pyrogram import Client, ContinuePropagation, filters
 from pyrogram.types import Message, ChatPermissions
 from pyrogram.errors import UserAdminInvalid, ChatAdminRequired, PeerIdInvalid, UsernameInvalid
 from pyrogram.raw import functions
@@ -11,7 +11,7 @@ from typing import Dict
 
 from .utils.db import db
 
-
+@Client.on_message()
 async def restrict_users_in_tmute(client: Client, message: Message):
     tmuted_users = db.get('core.ats', f'c{message.chat.id}', [])
     try:
@@ -21,6 +21,7 @@ async def restrict_users_in_tmute(client: Client, message: Message):
         # Anonymous anal messages
         # Just ignore them
         pass
+    raise ContinuePropagation
 
 
 @Client.on_message(filters.command(["ban"], prefix) & filters.me)
