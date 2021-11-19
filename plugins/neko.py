@@ -27,18 +27,12 @@ async def neko_types_func(client: Client, message: Message):
 
 @Client.on_message(filters.command('nekospam', prefix) & filters.me)
 async def neko_spam(client: Client, message: Message):
-    seconds = 3
-    while seconds != 0:
-        await message.edit(f'Spam will start in {seconds}!')
-        await asyncio.sleep(1.0)
-        seconds = seconds - 1
-        if seconds == 0:
-            await message.edit('Spam started!')
-            query = message.command[1]
-            quantity = int(message.command[2])
-            for _ in range(quantity):
-                await client.send_message(message.chat.id, getpic(query))
-                await asyncio.sleep(0.2)
+    await message.delete()
+    query = ' '.join(message.command[2:])
+    quantity = int(message.command[1])
+    for _ in range(quantity):
+        await client.send_message(message.chat.id, getpic(query), disable_web_page_preview=False)
+        await asyncio.sleep(0.2)
 
 
 modules_help.update(
