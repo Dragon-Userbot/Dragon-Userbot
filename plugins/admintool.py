@@ -2,7 +2,6 @@ from pyrogram import Client, ContinuePropagation, filters
 from pyrogram.types import Message, ChatPermissions
 from pyrogram.errors import UserAdminInvalid, ChatAdminRequired, PeerIdInvalid, UsernameInvalid
 from pyrogram.raw import functions
-from pyrogram.handlers import MessageHandler
 from .utils.utils import modules_help, prefix
 from .utils.scripts import text, chat_permissions
 from time import time
@@ -206,10 +205,8 @@ async def tmute_command(client: Client, message: Message):
                     db.set('core.ats', f'c{message.chat.id}', tmuted_users)
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>in tmute</code>"
                                        + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}")
-                    client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                 else:
                     await message.edit(f"<b>{message.reply_to_message.from_user.first_name}</b> <code>already in tmute</code>")
-                    client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
             else:
                 await message.edit("<b>Not on yourself</b>")
         else:
@@ -224,12 +221,10 @@ async def tmute_command(client: Client, message: Message):
                     if not user_to_tmute.id in tmuted_users:
                         tmuted_users.append(user_to_tmute.id)
                         db.set('core.ats', f'c{message.chat.id}', tmuted_users)
-                        client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                         await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>in tmute</code>"
                                            + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}")
                     else:
                         await message.edit(f"<b>{user_to_tmute.first_name}</b> <code>already in tmute</code>")
-                        client.add_handler(MessageHandler(restrict_users_in_tmute, filters.group))
                 else:
                     await message.edit("<b>Not on yourself</b>")
             except PeerIdInvalid:
