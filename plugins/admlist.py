@@ -51,7 +51,7 @@ async def ownlist(client: Client, message: Message):
         elif chat["role"] == "administrator":
             c_adminned_chats += 1
             adminned_chats += f'{c_adminned_chats}. <a href="{chat["link"]}">{t(chat["chat_name"])}</a>\n'
-    stats = f"<b>Total:</b>\n<b><u>Adminned chats:</u></b> {c_adminned_chats}\n<b><u>Owned chats:</u></b> {c_owned_chats}\n<b><u>Owned chats with username:</u></b> {c_owned_chats_with_username}\n\n<b><u>Total:</u></b> {len(chatlist)}"
+    stats = f"<b><u>Total:</u></b> {len(chatlist)}\n<b><u>Adminned chats:</u></b> {c_adminned_chats}\n<b><u>Owned chats:</u></b> {c_owned_chats}\n<b><u>Owned chats with username:</u></b> {c_owned_chats_with_username}"
     tstop = perf_counter()
     await message.edit(
         adminned_chats
