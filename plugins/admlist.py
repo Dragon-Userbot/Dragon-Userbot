@@ -49,7 +49,8 @@ async def ownlist(client: Client, message: Message):
             )
     tstop = perf_counter()
     await message.edit(
-        adminned_chats + "\n" + owned_chats + "\n" + owned_chats_with_username + "\n\n" + f"Done at {int(tstop - tstart)} seconds."
+        adminned_chats + "\n" + owned_chats + "\n" + owned_chats_with_username + "\n\n" + f"Done at {int(tstop - tstart)} seconds.",
+        disable_web_page_preview=True
     )
 
 
