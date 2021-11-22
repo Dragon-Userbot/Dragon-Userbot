@@ -22,24 +22,10 @@ async def purge(client: Client, message: Message):
             offset_id=message.reply_to_message.message_id,
             reverse=True,
         ):
-            messages_to_purge.append(msg)
+            messages_to_purge.append(msg.message_id)
     not_deleted_messages = []
-    for msg in messages_to_purge:
-        try:
-            res = await msg.delete()
-            if not res:
-                not_deleted_messages.append(msg)
-        except:
-            not_deleted_messages.append(msg)
-    if len(not_deleted_messages) > 0:
-        links = "\n".join([msg.link for msg in not_deleted_messages])
-        msg = await client.send_message(
-            message.chat.id,
-            f"<b>I can't delete some messages :(</b>\nLinks:<br>{links}",
-            parse_mode="HTML",
-            disable_web_page_preview=True,
-        )
-    else:
+    for msgs in [ messages_to_purge[i:i+100] for i in range(0, len(messages_to_purge), 100) ]:
+        res = await client.delete_messages(message.chat.id, msgs)
         await asyncio.sleep(1)
         msg = await client.send_message(
             message.chat.id, f"<b>Сleaning was successful!</b>", parse_mode="HTML"

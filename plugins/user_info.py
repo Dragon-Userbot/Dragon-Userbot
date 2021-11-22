@@ -5,7 +5,6 @@ from pyrogram.raw import functions
 from .utils.scripts import date_dict
 import asyncio
 
-
 @Client.on_message(filters.command('inf', prefix) & filters.me)
 async def get_user_inf(client: Client, message: Message):
     if len(message.text.split()) >= 2:
@@ -79,7 +78,7 @@ async def get_full_user_inf(client: Client, message: Message):
             about = user_info.about
         user_info = (f'''|=<b>Username: {username}
 |-Id: <code>{user_info.user.id}</code>
-|-Account creation date: <code>{date_dict['date']}</code>
+|-Account creation date: <code>{date_dict.get('date')}</code>
 |-Bot: <code>{user_info.user.bot}</code>
 |-Scam: <code>{user_info.user.scam}</code>
 |-Name: <code>{user_info.user.first_name}</code>
