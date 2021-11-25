@@ -95,6 +95,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
 
     q_message = await client.get_messages(message.chat.id, message.reply_to_message.message_id)
     q_message.text = fake_quote_text
+    q_message.entities = None
 
     if send_for_me:
         await message.delete()
