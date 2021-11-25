@@ -279,7 +279,7 @@ def get_reply_text(reply: types.Message) -> str:
         if reply.voice
         else (reply.sticker.emoji + " " if reply.sticker.emoji else "") + "Sticker"
         if reply.sticker
-        else '"💾 File " + reply.document.file_name'
+        else "💾 File " + reply.document.file_name
         if reply.document
         else "🎮 Game"
         if reply.game
