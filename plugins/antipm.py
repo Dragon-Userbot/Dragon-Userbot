@@ -55,6 +55,19 @@ async def dsr(client: Client, message: Message):
     db.set('core.antipm', 'spamrep', False)
     await message.edit("Spam-reporting disabled")
 
-modules_help.update({
-                        'antipm': '''anti_pm - Delete all messages from users who are not in the contact book, disable_anti_pm - Disable, esr - Enable spam report, dsr - Disable spam report''',
-                        'antipm module': 'AntiPm: anti_pm, disable_anti_pm, esr, dsr'})
+modules_help.append({
+        "antipm": [
+            {
+                "anti_pm": "Delete all messages from users who are not in the contact book"
+            },
+            {
+                "disable_anti_pm": "Disable"
+            },
+            {
+                "esr": "Enable spam report"
+            },
+            {
+                "dsr": "Disable spam report"
+            }
+        ]
+    })

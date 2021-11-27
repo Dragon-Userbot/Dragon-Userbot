@@ -101,9 +101,21 @@ async def load_all_mods(clent: Client, message: Message):
     await restart()
 
 
-modules_help.update(
-    {'loader': '''loadmod [link] - Download module]\n[Only modules from the official custom_modules repository and proven modules whose hashes are in modules_hashes.txt are supported, 
-                  unloadmod [module_name] - Delete module,
-                  modhash [link] - Get module hash by link,
-                  loadallmods - Load all custom modules (use it at your own risk)''',
-    'loader module': 'Loader: loadmod, unloadmod, modhash, loadallmods'})
+modules_help.append(
+    {
+        "loader": [
+            {
+                "loadmod [link]*": "Download module\nOnly modules from the official custom_modules repository and proven modules whose hashes are in modules_hashes.txt are supported"
+            },
+            {
+                "unloadmod [module_name]*": "Delete module"
+            },
+            {
+                "modhash [link]*": "Get module hash by link"
+            },
+            {
+                "loadallmods": "Load all custom modules (use it at your own risk)"
+            }
+        ]
+    }
+)

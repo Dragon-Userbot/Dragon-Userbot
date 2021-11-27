@@ -20,6 +20,12 @@ async def webshot(client: Client, message: Message):
         await message.edit(f'<a href={full_request}>{user_request}</a>', disable_web_page_preview=True)
 
 
-modules_help.update({'google': '''google [request] - To teach the interlocutor to use Google, 
-                                  google - Answer a stupid question of your interlocutor to teach him how to use Google''',
-                     'google module': 'Google: google'})
+modules_help.append(
+    {
+        "google": [
+            {
+                "google [request]": "To teach the interlocutor to use Google. Request isn't required."
+            }
+        ]
+    }
+)

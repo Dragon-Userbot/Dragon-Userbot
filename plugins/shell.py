@@ -32,5 +32,12 @@ async def example_edit(client: Client, message: Message):
     cmd_obj.kill()
 
 
-modules_help.update({'shell': '''shell - execute command in command line''',
-                     'shell module': 'Shell: shell</code> or <code>sh'})
+modules_help.append(
+    {
+        "shell": [
+            {
+                "shell [command]*": "execute command in command line"
+            }
+        ]
+    }
+)

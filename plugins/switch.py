@@ -26,6 +26,12 @@ async def switch(client: Client, message: Message):
         await message.edit(text)
 
 
-modules_help.update({'switch': '''sw [text for switch] - This is useful if you forgot to change the keyboard layout,
-                                  sw  - Reply to the message to switch keyboard layout''',
-                     'switch module': 'Switch: sw'})
+modules_help.append(
+    {
+        "switch": [
+            {
+                "sw [reply]/[text for switch]*": "This is useful if you forgot to change the keyboard layout"
+            }
+        ]
+    }
+)

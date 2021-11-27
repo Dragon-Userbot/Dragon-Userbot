@@ -78,8 +78,21 @@ async def slowspam(client: Client, message: Message):
         await asyncio.sleep(0.9)
 
 
-modules_help.update({'spam': '''spam [amount of spam] [spam text] - Start spam,
-                                statspam [amount of spam] [spam text] - Send and delete, 
-                                fastspam [amount of spam] [spam text] - Start fast spam,
-                                slowspam [amount of spam] [spam text] - Start slow spam''',
-                     'spam module': 'Spam: spam, statspam, slowspam, fastspam'})
+modules_help.append(
+    {
+        "spam": [
+            {
+                "spam [amount of spam]* [spam text]*": "Start spam"
+            },
+            {
+                "statspam [amount of spam]* [spam text]*": "Send and delete"
+            },
+            {
+                "fastspam [amount of spam]* [spam text]*": "Start fast spam"
+            },
+            {
+                "slowspam [amount of spam]* [spam text]*": "Start slow spam"
+            }
+        ]
+    }
+)

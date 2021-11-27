@@ -34,9 +34,15 @@ async def purge(client: Client, message: Message):
         await msg.delete()
 
 
-modules_help.update(
-    {
-        "purge": """purge - Reply to a message after which you want to delete messages, del - Reply to the message you want to delete""",
-        "purge module": "Purge: purge, del",
+modules_help.append(
+     {
+        "purge": [
+            {
+                "purge [reply]*": "Reply to a message after which you want to delete messages"
+            },
+            {
+                "del [reply]*": "Reply to the message you want to delete"
+            }
+        ]
     }
 )

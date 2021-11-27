@@ -17,5 +17,12 @@ async def screenshot(client: Client, message: Message):
             reply_to_msg_id=0, random_id=client.rnd_id()))
 
 
-modules_help.update({'screenshot': '''scr [amount of screenshot] - Take a screenshot]\n[This only works in private messages!''',
-                     'screenshot module': 'Screenshot: scr'})
+modules_help.append(
+    {
+        "screenshot": [
+            {
+                "scr [amount of screenshots]": "Take a screenshot\nThis only works in private messages!"
+            }
+        ]
+    }
+)

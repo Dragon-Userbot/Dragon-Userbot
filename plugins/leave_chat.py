@@ -11,4 +11,12 @@ async def leave_chat(client: Client, message: Message):
     await client.leave_chat(chat_id=message.chat.id)
     
 
-modules_help.update({'leave_chat': '''leave_chat - Quit chat''', 'leave_chat module': 'Leave_chat: leave_chat'})
+modules_help.append(
+        {
+        "leave_chat": [
+            {
+                "leave_chat": "Quit chat"
+            }
+        ]
+    }
+)

@@ -21,6 +21,12 @@ async def tts(client: Client, message: Message):
     else:
         await client.send_audio(message.chat.id, voice)
 
-modules_help.update(
-    {'tts': '''tts [lang] [text] - Say text''',
-     'tts module': 'Tts: tts'})
+modules_help.append(
+    {
+        "tts": [
+            {
+                "tts [lang]* [text]*": "Say text"
+            }
+        ]
+    }
+)

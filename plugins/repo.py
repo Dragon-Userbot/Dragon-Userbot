@@ -15,4 +15,12 @@ async def repo(client: Client, message: Message):
 • <a href="https://t.me/Dragon_Userbot">Channel</a> and <a href="https://t.me/Dragon_Userbot_chat">chat</a> in telegram</b>''', disable_web_page_preview=True)
 
 
-utils.modules_help.update({'repo': '''repo - Userbot information''', 'repo module': 'Repo: repo'})
+utils.modules_help.append(
+    {
+        "repo": [
+            {
+                "repo": "Userbot information"
+            }
+        ]
+    }
+)

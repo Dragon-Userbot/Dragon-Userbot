@@ -13,5 +13,10 @@ async def pin(client: Client, message: Message):
         await message.edit('<b>[Reply to the message you want to pin]\n[Does not work in private messages!]</b>')
 
 
-modules_help.update({'pin': '''pin - Pin any message]\n[Reply to the message you want to pin''',
-                     'pin module': 'Pin: pin'})
+modules_help.append({
+        "pin": [
+            {
+                "pin": "Pin any message\nReply to the message you want to pin"
+            }
+        ]
+    })

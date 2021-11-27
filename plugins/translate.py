@@ -24,6 +24,12 @@ async def switch(client: Client, message: Message):
         await message.edit(text)
 
 
-modules_help.update({'translate': '''tr [text for translate] - message translator,
-                                     tr - Reply to the message for translation''',
-                     'translate module': 'Translate: tr'})
+modules_help.append(
+     {
+        "translate": [
+            {
+                "tr [reply]/[text for translate]*": "message translator"
+            }
+        ]
+    }
+)

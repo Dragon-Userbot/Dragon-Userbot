@@ -629,16 +629,37 @@ async def promote_command(client: Client, message: Message):
     elif message.chat.type in ["private", "channel"]:
         await message.edit("<b>Unsupported</b>")
 
-modules_help.update({
-                        'admintool': '''ban - reply user message or user_id/username and reason (Available triggers: report_spam and delete_history)
-                        , unban - reply user message or user_id/username and reason
-                        , kick - reply user message or user_id/username and reason (Available triggers: report_spam and delete_history)
-                        , tmute - reply user message or user_id/username and reason
-                        , tunmute -  reply user message or user_id/username and reason
-                        , tmute_users - cheklist all tmute users
-                        , unmute - reply user message or user_id/username and reason
-                        , mute - reply user message or user_id/username time in format 1m/1h/1d/1w and reason
-                        , promote - reply user message or user_id/username and prefix
-                        , demote - reply user message or user_id/username and reason''',
-                        'admintool module': 'AdminTool: ban, '
-                                         'unban, kick, tmute, tunmute, tmute_users, unmute, mute, promote, demote\n'})
+modules_help.append({
+        "admintool": [
+            {
+                "ban [reply]/[userid]* [reason] [report_spam] [delete_history]": "ban user in chat"
+            },
+            {
+                "unban [reply]/[userid]* [reason] [report_spam] [delete_history]": "unban user in chat"
+            },
+            {
+                "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "kick user out of chat"
+            },
+            {
+                "tmute [reply]/[userid]* [reason]": "delete all new messages from user in chat"
+            },
+            {
+                "tunmute [reply]/[userid]* [reason]": "stop deleting all new messages from user in chat"
+            },
+            {
+                "tmute_users": "cheklist all users, whose messages will be deleted in chat"
+            },
+            {
+                "mute [reply]/[userid]* [reason] [1m]/[1h]/[1d]/[1w]": "mute user in chat"
+            },
+            {
+                "unmute [reply]/[userid]* [reason]": "unmute user in chat"
+            },
+            {
+                "promote [reply]/[userid]* [prefix]": "promote user in chat"
+            },
+            {
+                "demote [reply]/[userid]* [reason]": "demote user in chat"
+            }
+        ]
+    })

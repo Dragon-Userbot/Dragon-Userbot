@@ -43,4 +43,13 @@ async def unafk(client, message):
         await message.delete()
 
 
-modules_help.update({'afk': '''afk [reason] - To go to afk, unafk - To get out of AFK''', 'afk module': 'Afk: afk, unafk'})
+modules_help.append(    {
+        "afk": [
+            {
+                "afk [reason]": "Go to afk"
+            },
+            {
+                "unafk": "Get out of AFK"
+            }
+        ]
+    })

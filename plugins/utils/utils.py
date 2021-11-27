@@ -6,7 +6,7 @@ import os
 from .db import db
 import asyncio
 
-modules_help = {}
+modules_help = []
 requirements_list = []
 
 github = '<a href=https://github.com/Dragon-Userbot/Dragon-Userbot> github</a>'

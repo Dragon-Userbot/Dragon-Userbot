@@ -25,5 +25,12 @@ async def sendmod(client: Client, message: Message):
         await message.delete()
 
 
-modules_help.update({'sendmod': '''sendmod |module name| - Send one of the modules to the interlocutor''',
-                     'sendmod module': 'Sendmod: sendmod'})
+modules_help.append(
+    {
+        "sendmod": [
+            {
+                "sendmod [module name]*": "Send one of the modules to the interlocutor"
+            }
+        ]
+    }
+)

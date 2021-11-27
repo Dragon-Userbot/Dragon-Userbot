@@ -69,9 +69,18 @@ async def w(client: Client, message: Message):
         await asyncio.sleep(5)
         await message.delete()
 
-modules_help.update(
+modules_help.append(
     {
-        'weather': '''weather [city] - Get the weather in the selected city, set_weather_city [city] - Set city for w command, w - Quick access to seet-upped city''',
-        'weather module': 'Weather: weather, set_weather_city, w',
+        "weather": [
+            {
+                "weather [city]*": "Get the weather in the selected city"
+            },
+            {
+                "set_weather_city [city]*": "Set city for w command"
+            },
+            {
+                "w": "Quick access to setted city (Moscow if nothing was set)"
+            }
+        ]
     }
 )

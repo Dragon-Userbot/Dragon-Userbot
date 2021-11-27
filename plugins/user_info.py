@@ -98,6 +98,15 @@ async def get_full_user_inf(client: Client, message: Message):
     except:
         await message.edit('<code>An error has occurred...</code>')
 
-modules_help.update({'user_info': '''inf - Reply to any user message to find out brief information about him,
-                                     inffull - Reply to any user message to find out full information about him''',
-                     'user_info module': 'User_info: inf, inffull'})
+modules_help.append(
+    {
+        "user_info": [
+            {
+                "inf [reply]/[user id]*": "Reply to any user message to find out brief information about him"
+            },
+            {
+                "inffull [reply]/[user id]*": "Reply to any user message to find out full information about him"
+            }
+        ]
+    }
+)

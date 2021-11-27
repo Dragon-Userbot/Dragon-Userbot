@@ -29,9 +29,10 @@ async def convert(client: Client, message: Message):
         await message.edit('<code>ERROR</code>')
 
 
-modules_help.update(
-    {
-        'course': '''course [currency] - Transfer from any state currency to the ruble]\n[Dont use more than 10 times per minute''',
-        'course module': 'Course: course',
-    }
-)
+modules_help.append(    {
+        "course": [
+            {
+                "course [currency]*": "Transfer from any state currency to the ruble\nDont use more than 10 times per minute"
+            }
+        ]
+    })

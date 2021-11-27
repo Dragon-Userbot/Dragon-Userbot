@@ -40,9 +40,17 @@ async def regions(client: Client, message: Message):
     await message.edit(f'<code>{countr}</code>')
 
 
-modules_help.update(
-    {'covid': '''covid [region] - Status by region,
-    			 regions - Available regions]\n=======================\n[Worldometer.info statistics are used''',
-     'covid module': 'Covid: covid, regions'})
+modules_help.append(
+    {
+        "covid": [
+            {
+                "covid [region]*": "Status by region"
+            },
+            {
+                "regions": "Available regions]\n=======================\n[Worldometer.info statistics are used"
+            }
+        ]
+    }
+)
 
 requirements_list.append('covid')

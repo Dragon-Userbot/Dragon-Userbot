@@ -34,4 +34,12 @@ def user_exec(client: Client, message: Message):
 
 
 
-modules_help.update({'python': '''ex [python code] - Python code execution''', 'python module': 'Python: ex'})
+modules_help.append(
+        {
+        "python": [
+            {
+                "ex [python code]*": "Python code execution"
+            }
+        ]
+    }
+)

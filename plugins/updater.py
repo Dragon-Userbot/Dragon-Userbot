@@ -35,6 +35,15 @@ async def update(client: Client, message: Message):
     await restart(message, restart_type='update')
 
 
-modules_help.update({'updater': '''update - Updating the userbot. If new modules are available，they will be installed, 
-                                   restart - Restart userbot''',
-                     'updater module': 'Updater: update, restart'})
+modules_help.append(
+    {
+        "updater": [
+            {
+                "update": "Updating the userbot. If new modules are available，they will be installed"
+            },
+            {
+                "restart": "Restart userbot"
+            }
+        ]
+    }
+)

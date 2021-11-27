@@ -157,6 +157,19 @@ async def clear_note(client: Client, message: Message):
 
 
 
-modules_help.update({'notes': '''save |name note| - Reply on user message, note |name note| - Cheking note, notes - Cheking notes, clear - Delete note''',
-'notes module': 'Notes: save, '
-                'note, notes, clear\n'})
+modules_help.append({
+        "notes": [
+            {
+                "save [name note]*": "Reply on user message"
+            },
+            {
+                "note [name note]*": "Cheking note"
+            },
+            {
+                "notes": "Cheking notes"
+            },
+            {
+                "clear [name note]*": "Delete note"
+            }
+        ]
+    })

@@ -28,6 +28,12 @@ async def type(client: Client, message: Message):
             time.sleep(e.x)
 
 
-modules_help.update(
-    {'type': '''type [What to print] - Typing emulation]\n[Don't use for a lot of characters. Your account may be banned!''',
-     'type module': 'Type: type'})
+modules_help.append(
+    {
+        "type": [
+            {
+                "type [text]*": "Typing emulation\nDon't use for a lot of characters. Your account may be banned!"
+            }
+        ]
+    }
+)

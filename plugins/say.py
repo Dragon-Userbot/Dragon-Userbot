@@ -11,5 +11,12 @@ async def say(client: Client, message: Message):
     await message.edit(f'<code>{command}</code>')
     
 
-modules_help.update({'say': '''say [command] - Show the command to the interlocutor''',
-                     'say module': 'Say: say'})
+modules_help.append(
+    {
+        "say": [
+            {
+                "say [command]*": "Show the command to the interlocutor"
+            }
+        ]
+    }
+)

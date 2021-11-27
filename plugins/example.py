@@ -19,9 +19,18 @@ async def example_send(client: Client, message: Message):
     await client.send_message(message.chat.id, '<b>This is an example module</b>')
 
 # This adds instructions for your module
-modules_help.update({'example': '''example_send - example send, example_edit - example edit''',
-                     'example module': 'Example: example_send, example_edit'})
-
+modules_help.append(
+    {
+        "example": [
+            {
+                "example_send": "example send"
+            },
+            {
+                "example_edit": "example edit"
+            }
+        ]
+    }
+)
 #'module_name': '''comand_1 - description, comand_2 - description''',
 #        │          'module_name module': 'Example send: example_send, example_edit\n\n'
 #        │                 │        │

@@ -17,5 +17,15 @@ async def pref(client: Client, message: Message):
         await message.edit('<b>The prefix must not be empty!</b>')
 
 
-modules_help.update({'prefix': f'''setprefix [prefix]\n{prefix}setprefix_dragon [prefix]- Set custom prefix''',
-                     'prefix module': 'Prefix: setprefix </code><i>or</i><code> setprefix_dragon'})
+modules_help.append(
+    {
+        "prefix": [
+            {
+                "setprefix [prefix]*": "Set custom prefix"
+            },
+            {
+                "setprefix_dragon [prefix]*": "Set custom prefix"
+            }
+        ]
+    }
+)
