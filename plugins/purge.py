@@ -24,7 +24,9 @@ async def purge(client: Client, message: Message):
         ):
             messages_to_purge.append(msg.message_id)
     not_deleted_messages = []
-    for msgs in [ messages_to_purge[i:i+100] for i in range(0, len(messages_to_purge), 100) ]:
+    for msgs in [
+        messages_to_purge[i : i + 100] for i in range(0, len(messages_to_purge), 100)
+    ]:
         res = await client.delete_messages(message.chat.id, msgs)
         await asyncio.sleep(1)
         msg = await client.send_message(
@@ -35,14 +37,12 @@ async def purge(client: Client, message: Message):
 
 
 modules_help.append(
-     {
+    {
         "purge": [
             {
                 "purge [reply]*": "Reply to a message after which you want to delete messages"
             },
-            {
-                "del [reply]*": "Reply to the message you want to delete"
-            }
+            {"del [reply]*": "Reply to the message you want to delete"},
         ]
     }
 )

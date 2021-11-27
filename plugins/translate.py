@@ -3,19 +3,23 @@ from pyrogram.types import Message
 from .utils.utils import modules_help, prefix
 
 
-@Client.on_message(filters.command('tr', prefix) & filters.me)
+@Client.on_message(filters.command("tr", prefix) & filters.me)
 async def switch(client: Client, message: Message):
-    text = ' '.join(message.command[1:])
-    ru_keys = """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"""
-    en_keys = """eicykengшщzh_fiwaproldgeiчsmit_bu.E"№;%:?ICYKENGШЩZH_FIWAPROLDGEIЧSMIT_BU,"""
-    if text == '':
+    text = " ".join(message.command[1:])
+    ru_keys = (
+        """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"""
+    )
+    en_keys = (
+        """eicykengшщzh_fiwaproldgeiчsmit_bu.E"№;%:?ICYKENGШЩZH_FIWAPROLDGEIЧSMIT_BU,"""
+    )
+    if text == "":
         if message.reply_to_message:
             reply_text = message.reply_to_message.text
             change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
             reply_text = str.translate(reply_text, change)
             await message.edit(reply_text)
         else:
-            await message.edit('No text for switch')
+            await message.edit("No text for switch")
             await asyncio.sleep(3)
             await message.delete()
     else:
@@ -25,11 +29,5 @@ async def switch(client: Client, message: Message):
 
 
 modules_help.append(
-     {
-        "translate": [
-            {
-                "tr [reply]/[text for translate]*": "message translator"
-            }
-        ]
-    }
+    {"translate": [{"tr [reply]/[text for translate]*": "message translator"}]}
 )

@@ -4,7 +4,7 @@ from .utils.utils import modules_help, prefix
 import asyncio
 
 
-@Client.on_message(filters.command('manul', prefix) & filters.me)
+@Client.on_message(filters.command("manul", prefix) & filters.me)
 async def manul(client: Client, message: Message):
     quantity = message.command[1]
     quantity = int(quantity) + 1
@@ -14,12 +14,4 @@ async def manul(client: Client, message: Message):
         await asyncio.sleep(0.2)
 
 
-modules_help.append(
-        {
-        "manul": [
-            {
-                "manul [amount of manul]*": "Release manuls"
-            }
-        ]
-    }
-)
+modules_help.append({"manul": [{"manul [amount of manul]*": "Release manuls"}]})

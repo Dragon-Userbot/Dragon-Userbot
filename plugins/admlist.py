@@ -75,12 +75,4 @@ async def ownlist(client: Client, message: Message):
         )
 
 
-modules_help.append(
-    {
-        "admlist": [
-            {
-                "admlist": "Get adminned and owned chats"
-            }
-        ]
-    }
-)
+modules_help.append({"admlist": [{"admlist": "Get adminned and owned chats"}]})

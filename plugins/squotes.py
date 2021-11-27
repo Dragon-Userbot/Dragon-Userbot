@@ -370,9 +370,7 @@ modules_help.append(
             {
                 "q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send quote as png; !me — send quote to saved messages"
             },
-            {
-                "fq [text]* [userid]/[reply]* [args] [text]": "Generate a fake quote"
-            }
+            {"fq [text]* [userid]/[reply]* [args] [text]": "Generate a fake quote"},
         ]
     }
 )
