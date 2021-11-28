@@ -379,8 +379,8 @@ def get_full_name(user: types.User) -> str:
 
 
 modules_help.append(
-        "squotes": [
+        {"squotes": [
             {"q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send a quote as png; !me — send a quote to saved messages; !noreply - make a quote without reply message"},
             {"fq [reply]* [args] [text]": "Generate a fake quote"},
-        ]
+        ]}
 )
