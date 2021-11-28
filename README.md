@@ -21,6 +21,10 @@
     <a href='https://github.com/Dragon-Userbot/Dragon-Userbot#custom-modules'>
         Custom modules
     </a>
+    <br>
+    <img src="https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge" alt="Code style">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Dragon-Userbot/Dragon-Userbot?style=for-the-badge">
+    <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Dragon-Userbot/Dragon-Userbot?style=for-the-badge">
 </p>
 
 
