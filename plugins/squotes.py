@@ -15,15 +15,16 @@ async def quote_cmd(client: Client, message: types.Message):
         count = int(message.command[1])
         if count < 1:
             count = 1
-        elif count > 10:
-            count = 10
+        elif count > 15:
+            count = 15
     else:
         count = 1
 
     is_png = "!png" in message.command or "!file" in message.command
     send_for_me = "!me" in message.command or "!ls" in message.command
+    no_reply = "!noreply" in message.command or "!nr" in message.command
 
-    messages = filter(
+    messages = list(filter(
         lambda x: x.message_id < message.message_id,
         await client.get_messages(
             message.chat.id,
@@ -32,7 +33,10 @@ async def quote_cmd(client: Client, message: types.Message):
                 message.reply_to_message.message_id + count,
             ),
         ),
-    )
+    ))
+
+    if no_reply:
+        messages[0].reply_to_message = None
 
     if send_for_me:
         await message.delete()
@@ -80,12 +84,13 @@ async def fake_quote_cmd(client: Client, message: types.Message):
 
     is_png = "!png" in message.command or "!file" in message.command
     send_for_me = "!me" in message.command or "!ls" in message.command
+    no_reply = "!noreply" in message.command or "!nr" in message.command
 
     fake_quote_text = " ".join(
         [
             arg
             for arg in message.command[1:]
-            if arg not in ["!png", "!file", "!me", "!ls"]
+            if arg not in ["!png", "!file", "!me", "!ls", "!noreply", "!nr"]
         ]  # remove some special arg words
     )
 
@@ -97,6 +102,8 @@ async def fake_quote_cmd(client: Client, message: types.Message):
     )
     q_message.text = fake_quote_text
     q_message.entities = None
+    if no_reply:
+        q_message.reply_to_message = None
 
     if send_for_me:
         await message.delete()
@@ -135,13 +142,47 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         await message.delete()
 
 
+@Client.on_message(filters.command(["getpng"], prefix) & filters.me)
+async def getpng_cmd(client: Client, message: types.Message):
+    if not message.reply_to_message:
+        return await message.edit("<b>Reply to message</b>")
+
+    try:
+        file_name = await message.reply_to_message.download()
+    except ValueError:
+        return await message.edit("<b>Specified message doesn't contain any downloadable media</b>")
+
+    await message.edit('<b>Downloading...</b>')
+
+    with open(file_name, "rb") as f:
+        content = f.read()
+    os.remove(file_name)
+
+    file_io = BytesIO(content)
+    file_io.name = 'sticker.png'
+
+    try:
+        await client.send_document(message.chat.id, file_io)
+    except errors.RPCError as e:  # no rights to send stickers, etc
+        await message.edit(f"<b>Telegram API error!</b>\n" f"<code>{e}</code>")
+    else:
+        await message.delete()
+
+
+files_cache = {}
+
+
 async def render_message(app: Client, message: types.Message) -> dict:
     async def get_file(file_id) -> str:
+        if file_id in files_cache:
+            return files_cache[file_id]
+
         file_name = await app.download_media(file_id)
         with open(file_name, "rb") as f:
             content = f.read()
         os.remove(file_name)
         data = base64.b64encode(content).decode()
+        files_cache[file_id] = data
         return data
 
     # text
@@ -367,8 +408,9 @@ def get_full_name(user: types.User) -> str:
 modules_help.update(
     {
         "squotes": "q [count] [args] - Generate a quote]\n"
-        "[Available args: !png — send quote as png; !me — send quote to saved messages,\n"
-        "fq [args] [text] - Generate a fake quote",
+        "[Available args: !png|!file — send quote as png; !me|!pm — send quote to saved messages, !noreply - generate quote without reply,\n"
+        "fq [args] [text] - Generate a fake quote\n",
+        "getpng - Get PNG for an existent quote"
         "squotes module": "SQuotes: q",
     }
 )
