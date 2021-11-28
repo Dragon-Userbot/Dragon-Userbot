@@ -7,16 +7,17 @@ from .utils.help_formatting import help_formatting
 @Client.on_message(filters.command(["help", "h"], prefix) & filters.me)
 async def help(client, message: Message):
     module_name = " ".join(message.command[1:])
-    help_message = f"""<b>Help for <a href="https://t.me/Dragon_Userbot_chat">Dragon-Userbot</a></b>\n"""
-    help_message += f"""<b>For more help on how to use a command, type </b> <code>{prefix}help [module]</code>\n\n"""
-    help_message += "<b>Available Modules:</b>\n"
     if module_name == "":
+        messages = [
+            """<b>Help for <a href="https://t.me/Dragon_Userbot_chat">Dragon-Userbot</a></b>\n<b>For more help on how to use a command, type </b> <code>{prefix}help [module]</code>\n\n<b>Available Modules:</b>\n"""
+        ]
+        msg_cnt = 0
         for mod in modules_help:
-            help_message += (
+            help_message = (
                 "<b>"
                 + list(mod.keys())[0]
                 + ": </b>"
-                + ", ".join(
+                + " ".join(
                     [
                         "<code>" + prefix + str(cmd.split()[0]) + "</code>"
                         for cmd in [
@@ -26,12 +27,22 @@ async def help(client, message: Message):
                 )
                 + "\n"
             )
-        help_message += """\n\nThe number of modules in the userbot: """ + str(
-            len(modules_help)
-        )
+            if len(messages[msg_cnt] + help_message) < 2048:
+                messages[msg_cnt] = messages[msg_cnt] + help_message
+            else:
+                msg_cnt += 1
+                messages.append(help_message)
+        tc = """\n\nThe number of modules in the userbot: """ + str(len(modules_help))
+        if len(messages[msg_cnt] + tc) < 2048:
+            messages[msg_cnt] += tc
+        else:
+            messages.append(tc)
         await message.edit(
-            help_message, parse_mode="HTML", disable_web_page_preview=True
+            messages[0], parse_mode="HTML", disable_web_page_preview=True
         )
+        messages.pop(0)
+        for msg in messages:
+            await message.reply(msg, parse_mode="HTML", disable_web_page_preview=True)
     else:
         text = f"<b>Help for <i>{module_name}</i>\n\nUsage:</b>\n"
         found = False
