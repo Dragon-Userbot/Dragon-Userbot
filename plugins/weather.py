@@ -8,10 +8,11 @@ import requests
 import os
 import asyncio
 
+
 def get_pic(city):
-    file_name = f'{city}.png'
-    with open(file_name, 'wb') as pic:
-        response = requests.get(f'http://wttr.in/{city}_2&lang=en.png', stream=True)
+    file_name = f"{city}.png"
+    with open(file_name, "wb") as pic:
+        response = requests.get(f"http://wttr.in/{city}_2&lang=en.png", stream=True)
 
         if not response.ok:
             print(response)
@@ -24,7 +25,7 @@ def get_pic(city):
         return file_name
 
 
-@Client.on_message(filters.command('weather', prefix) & filters.me)
+@Client.on_message(filters.command("weather", prefix) & filters.me)
 async def weather(client: Client, message: Message):
     try:
         city = message.command[1]
@@ -36,25 +37,26 @@ async def weather(client: Client, message: Message):
             document=get_pic(city),
             reply_to_message_id=message.message_id,
         )
-        os.remove(f'{city}.png')
+        os.remove(f"{city}.png")
     except:
-        await message.edit('<code>Error occured</code>')
+        await message.edit("<code>Error occured</code>")
         await asyncio.sleep(5)
         await message.delete()
 
-@Client.on_message(filters.command('set_weather_city', prefix) & filters.me)
+
+@Client.on_message(filters.command("set_weather_city", prefix) & filters.me)
 async def set_weather_city(client: Client, message: Message):
     try:
-        db.set('core.weather', 'city', message.command[1])
-        await message.edit('<code>City set-upped.</code>')
+        db.set("core.weather", "city", message.command[1])
+        await message.edit("<code>City set-upped.</code>")
     except:
-        await message.edit('<code>Error occured.</code>')
+        await message.edit("<code>Error occured.</code>")
 
 
-@Client.on_message(filters.command('w', prefix) & filters.me)
+@Client.on_message(filters.command("w", prefix) & filters.me)
 async def w(client: Client, message: Message):
     try:
-        city = db.get('core.weather', 'city', 'Moscow')
+        city = db.get("core.weather", "city", "Moscow")
         await message.edit("```Processing the request...```")
         r = requests.get(f"https://wttr.in/{city}?m?M?0?q?T&lang=en")
         await message.edit(f"```City: {r.text}```")
@@ -63,15 +65,19 @@ async def w(client: Client, message: Message):
             document=get_pic(city),
             reply_to_message_id=message.message_id,
         )
-        os.remove(f'{city}.png')
+        os.remove(f"{city}.png")
     except:
-        await message.edit('<code>Error occured</code>')
+        await message.edit("<code>Error occured</code>")
         await asyncio.sleep(5)
         await message.delete()
 
-modules_help.update(
+
+modules_help.append(
     {
-        'weather': '''weather [city] - Get the weather in the selected city, set_weather_city [city] - Set city for w command, w - Quick access to seet-upped city''',
-        'weather module': 'Weather: weather, set_weather_city, w',
+        "weather": [
+            {"weather [city]*": "Get the weather in the selected city"},
+            {"set_weather_city [city]*": "Set city for w command"},
+            {"w": "Quick access to setted city (Moscow if nothing was set)"},
+        ]
     }
 )

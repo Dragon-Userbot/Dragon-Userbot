@@ -40,9 +40,11 @@ async def neko_spam(client: Client, message: Message):
         await asyncio.sleep(0.2)
 
 
-modules_help.update(
+modules_help.append(
     {
-        "neko": """neko [type] - For get neko media, neko_types - Available neko types, nekospam [type] [amount of spam] - Spam""",
-        "neko module": "Neko: neko, neko_types, nekospam",
+        "neko": [
+            {"neko [type]* [amount of spam]": "For get neko media"},
+            {"neko_types": "Available neko types"},
+        ]
     }
 )

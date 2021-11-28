@@ -364,11 +364,13 @@ def get_full_name(user: types.User) -> str:
     return name
 
 
-modules_help.update(
+modules_help.append(
     {
-        "squotes": "q [count] [args] - Generate a quote]\n"
-        "[Available args: !png — send quote as png; !me — send quote to saved messages,\n"
-        "fq [args] [text] - Generate a fake quote",
-        "squotes module": "SQuotes: q",
+        "squotes": [
+            {
+                "q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send quote as png; !me — send quote to saved messages"
+            },
+            {"fq [text]* [userid]/[reply]* [args] [text]": "Generate a fake quote"},
+        ]
     }
 )
