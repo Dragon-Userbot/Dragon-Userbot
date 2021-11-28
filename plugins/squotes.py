@@ -142,33 +142,6 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         await message.delete()
 
 
-@Client.on_message(filters.command(["getpng"], prefix) & filters.me)
-async def getpng_cmd(client: Client, message: types.Message):
-    if not message.reply_to_message:
-        return await message.edit("<b>Reply to message</b>")
-
-    try:
-        file_name = await message.reply_to_message.download()
-    except ValueError:
-        return await message.edit("<b>Specified message doesn't contain any downloadable media</b>")
-
-    await message.edit('<b>Downloading...</b>')
-
-    with open(file_name, "rb") as f:
-        content = f.read()
-    os.remove(file_name)
-
-    file_io = BytesIO(content)
-    file_io.name = 'sticker.png'
-
-    try:
-        await client.send_document(message.chat.id, file_io)
-    except errors.RPCError as e:  # no rights to send stickers, etc
-        await message.edit(f"<b>Telegram API error!</b>\n" f"<code>{e}</code>")
-    else:
-        await message.delete()
-
-
 files_cache = {}
 
 
@@ -405,12 +378,9 @@ def get_full_name(user: types.User) -> str:
     return name
 
 
-modules_help.update(
-    {
-        "squotes": "q [count] [args] - Generate a quote]\n"
-        "[Available args: !png|!file — send quote as png; !me|!pm — send quote to saved messages, !noreply - generate quote without reply,\n"
-        "fq [args] [text] - Generate a fake quote\n",
-        "getpng - Get PNG for an existent quote"
-        "squotes module": "SQuotes: q",
-    }
+modules_help.append(
+        "squotes": [
+            {"q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send quote as png; !me — send quote to saved messages; !noreply - ..."},
+            {"fq [text]* [userid]/[reply]* [args] [text]": "Generate a fake quote"},
+        ]
 )
