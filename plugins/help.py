@@ -14,7 +14,7 @@ async def help(client, message: Message):
         msg_cnt = 0
         for mod in modules_help:
             help_message = (
-                "<b>" 
+                "<b>• " 
                 + list(mod.keys())[0].title()
                 + ": </b>"
                 + " ".join(
