@@ -1,5 +1,4 @@
 from sys import prefix, version_info
-import motor.motor_asyncio
 import configparser
 import sys
 import os
