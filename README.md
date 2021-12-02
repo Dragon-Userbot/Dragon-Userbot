@@ -75,16 +75,9 @@ async def example_send(client: Client, message: Message):
     await client.send_message(message.chat.id, '<b>This is an example module</b>')
 
 # This adds instructions for your module
-modules_help.update({'example': '''example_send - example send, example_edit - example edit''',
-                     'example module': 'Example_send: example_send, example_edit'})
-
-#'module_name': '''comand_1 - description, comand_2 - description''',
-#        │          'module_name module': 'Example_send: example_send, example_edit'
-#        │                 │        │
-#        │                 │        │
-#     module_name(only snake_case)  └─ module (here the word 'module' is required)
-#
-#If you need to put a COMMA inside the description, then put not a standard sign, but this ->[ ，]
+modules_help.append(
+    {"example": [{"example_send": "example send"}, {"example_edit": "example edit"}]}
+)
 
 # If your custom module requires packages from PyPI, write the names of the packages in these functions
 # requirements_list.append('example_1')
