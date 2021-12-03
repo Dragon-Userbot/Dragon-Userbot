@@ -61,18 +61,19 @@ from pyrogram.types import Message
 from .utils.utils import modules_help, requirements_list, prefix
 
 # packages from PyPI
-#import example_1
-#import example_2
+# import example_1
+# import example_2
 
 
-@Client.on_message(filters.command('example_edit', prefix) & filters.me)
+@Client.on_message(filters.command("example_edit", prefix) & filters.me)
 async def example_edit(client: Client, message: Message):
-    await message.edit('<code>This is an example module</code>')
+    await message.edit("<code>This is an example module</code>")
 
 
-@Client.on_message(filters.command('example_send', prefix) & filters.me)
+@Client.on_message(filters.command("example_send", prefix) & filters.me)
 async def example_send(client: Client, message: Message):
-    await client.send_message(message.chat.id, '<b>This is an example module</b>')
+    await client.send_message(message.chat.id, "<b>This is an example module</b>")
+
 
 # This adds instructions for your module
 modules_help.append(
@@ -83,7 +84,6 @@ modules_help.append(
 # requirements_list.append('example_1')
 # requirements_list.append('example_2')
 # etc
-
 ```
 <h2>Groups and support</h2>
 <p><a href='https://t.me/Dragon_Userbot'>Channel</a> with latest news on the official telegram [ru/en]</p>
