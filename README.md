@@ -29,7 +29,7 @@
 
 
 <h1>Installation</h1>
-<h2>Linux, Termux and Windows [only wsl]</h2>
+<h2>Linux, Termux (use <a href='https://f-droid.org/en/packages/com.termux/'>f-droid</a> version) and Windows [only wsl]</h2>
 
 <pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/Dragon-Userbot/Dragon-Userbot.git && cd Dragon-Userbot/ && sh install.sh
 </code></pre>
