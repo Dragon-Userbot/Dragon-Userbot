@@ -25,9 +25,9 @@ async def sendmod(client: Client, message: Message):
         if not found:
             text = "<b>Module <i>{module_name}</i> not found!</b>"
 
-        if os.path.isfile(f"plugins/{mod_name}.py"):
+        if os.path.isfile(f"plugins/{module_name.lower()}.py"):
             await client.send_document(
-                message.chat.id, f"plugins/{mod_name}.py", caption=text
+                message.chat.id, f"plugins/{module_name.lower()}.py", caption=text
             )
         elif os.path.isfile(f"plugins/custom_modules/{mod_name}.py"):
             await client.send_document(
