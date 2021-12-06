@@ -10,7 +10,7 @@ import asyncio
 
 @Client.on_message(filters.command(["sendmod", "sm"], prefix) & filters.me)
 async def sendmod(client: Client, message: Message):
-    mod_name = message.command[1]
+    module_name = message.command[1]
     try:
         await message.edit("<code>Dispatch...</code>")
         text = f"<b>Help for <i>{module_name}</i>\n\nUsage:</b>\n"
