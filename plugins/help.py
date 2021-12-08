@@ -14,7 +14,7 @@ async def help(client, message: Message):
         msg_cnt = 0
         for mod in modules_help:
             help_message = (
-                "<b>• " 
+                "<b>• "
                 + list(mod.keys())[0].title()
                 + ": </b>"
                 + " ".join(
@@ -32,7 +32,9 @@ async def help(client, message: Message):
             else:
                 msg_cnt += 1
                 messages.append(help_message)
-        tc = """\nThe number of modules in the userbot: """ + str(float(len(modules_help)))
+        tc = """\nThe number of modules in the userbot: """ + str(
+            float(len(modules_help))
+        )
         if len(messages[msg_cnt] + tc) < 2048:
             messages[msg_cnt] += tc
         else:

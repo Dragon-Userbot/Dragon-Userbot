@@ -24,16 +24,18 @@ async def quote_cmd(client: Client, message: types.Message):
     send_for_me = "!me" in message.command or "!ls" in message.command
     no_reply = "!noreply" in message.command or "!nr" in message.command
 
-    messages = list(filter(
-        lambda x: x.message_id < message.message_id,
-        await client.get_messages(
-            message.chat.id,
-            range(
-                message.reply_to_message.message_id,
-                message.reply_to_message.message_id + count,
+    messages = list(
+        filter(
+            lambda x: x.message_id < message.message_id,
+            await client.get_messages(
+                message.chat.id,
+                range(
+                    message.reply_to_message.message_id,
+                    message.reply_to_message.message_id + count,
+                ),
             ),
-        ),
-    ))
+        )
+    )
 
     if no_reply:
         messages[0].reply_to_message = None
@@ -379,8 +381,12 @@ def get_full_name(user: types.User) -> str:
 
 
 modules_help.append(
-        {"squotes": [
-            {"q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send a quote as png; !me — send a quote to saved messages; !noreply - make a quote without reply message"},
+    {
+        "squotes": [
+            {
+                "q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send a quote as png; !me — send a quote to saved messages; !noreply - make a quote without reply message"
+            },
             {"fq [reply]* [args] [text]": "Generate a fake quote"},
-        ]}
+        ]
+    }
 )

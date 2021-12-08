@@ -31,7 +31,9 @@ async def sendmod(client: Client, message: Message):
             )
         elif os.path.isfile(f"plugins/custom_modules/{module_name.lower()}.py"):
             await client.send_document(
-                message.chat.id, f"plugins/custom_modules/{module_name.lower()}.py", caption=text
+                message.chat.id,
+                f"plugins/custom_modules/{module_name.lower()}.py",
+                caption=text,
             )
         await message.delete()
     except:
