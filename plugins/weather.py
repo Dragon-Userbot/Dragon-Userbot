@@ -77,7 +77,7 @@ modules_help.append(
         "weather": [
             {"weather [city]*": "Get the weather in the selected city"},
             {"set_weather_city [city]*": "Set city for w command"},
-            {"w": "Quick access to setted city (Moscow if nothing was set)"},
+            {"w": "Quick access to set city (Moscow if nothing was set)"},
         ]
     }
 )
