@@ -117,7 +117,6 @@ async def ban_command(client: Client, message: Message):
     ]:
         if len(cause.split()) > 1:
             try:
-                print(await check_username_or_id(cause.split(" ")[1]))
                 if await check_username_or_id(cause.split(" ")[1]) == "channel":
                     user_to_ban = await client.get_chat(cause.split(" ")[1])
                     name = user_to_ban.title
