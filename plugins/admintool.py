@@ -828,22 +828,22 @@ modules_help.append(
     {
         "admintool": [
             {
-                "ban [reply]/[userid]* [reason] [report_spam] [delete_history]": "ban user in chat"
+                "ban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "ban user/channel in chat"
             },
             {
-                "unban [reply]/[userid]* [reason] [report_spam] [delete_history]": "unban user in chat"
+                "unban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "unban user/channel in chat"
             },
             {
                 "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "kick user out of chat"
             },
             {
-                "tmute [reply]/[userid]* [reason]": "delete all new messages from user in chat"
+                "tmute [reply]/[username/id]* [reason]": "delete all new messages from user/channel in chat"
             },
             {
-                "tunmute [reply]/[userid]* [reason]": "stop deleting all new messages from user in chat"
+                "tunmute [reply]/[username/id]* [reason]": "stop deleting all new messages from user/channel in chat"
             },
             {
-                "tmute_users": "cheklist all users, whose messages will be deleted in chat"
+                "tmute_users": "cheklist all users/channel, whose messages will be deleted in chat"
             },
             {
                 "mute [reply]/[userid]* [reason] [1m]/[1h]/[1d]/[1w]": "mute user in chat"
