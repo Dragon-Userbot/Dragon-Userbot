@@ -28,6 +28,18 @@
 </p>
 
 
+
+
+<h1>About</h1>
+<p>Dragon-Userbot is a Telegram userbot (in case you didn't know, selfbot/userbot are used to automate user accounts).
+So how does it work? It works in a very simple way, using the pyrogram library, a python script connects to your account (creating a new session) and catches your commands.
+
+Using selfbot/userbot is against Telegram's Terms of Service, and you may get banned for using it if you're not careful.
+
+The developers are not responsible for any consequences you may encounter when using Dragon-Userbot. We are also not responsible for any damage to chat rooms caused by using this userbot.</p>
+
+
+
 <h1>Installation</h1>
 <h2>Linux, Termux (use <a href='https://f-droid.org/en/packages/com.termux/'>f-droid</a> version) and Windows [only wsl]</h2>
 
@@ -49,7 +61,7 @@ Subsequent launch:
 <pre><code>python3 main.py</code></pre>
 
 
-<h2>Custom modules</h2>
+<h1>Custom modules</h1>
 
 
 <p>To add your module to the bot, create a pull request in the <a href='https://github.com/Dragon-Userbot/custom_modules/'>custom_modules</a> repository</p>
