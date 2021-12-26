@@ -1,8 +1,10 @@
+import asyncio
+
+import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
+
 from .utils.utils import modules_help, prefix
-import requests
-import asyncio
 
 
 def getpic(query):
@@ -22,9 +24,7 @@ async def neko(client: Client, message: Message):
 @Client.on_message(filters.command("neko_types", prefix) & filters.me)
 async def neko_types_func(client: Client, message: Message):
     neko_t = """femdom tickle classic ngif erofeet meow erok poke les hololewd lewdk keta feetg nsfw_neko_gif eroyuri kiss 8ball kuni tits pussy_jpg cum_jpg pussy lewdkemo lizard slap lewd cum cuddle spank smallboobs goose Random_hentai_gif avatar fox_girl nsfw_avatar hug gecg boobs pat feet smug kemonomimi solog holo wallpaper bj woof yuri trap anal baka blowjob holoero feed neko gasm hentai futanari ero solo waifu pwankg eron erokemo"""
-    neko_types = ""
-    for ntype in neko_t.split():
-        neko_types += f"<code>{ntype}</code>  "
+    neko_types = "".join(f"<code>{ntype}</code>  " for ntype in neko_t.split())
     await message.edit(neko_types)
 
 

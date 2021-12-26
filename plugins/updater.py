@@ -1,17 +1,15 @@
+import os
+import subprocess
+
 from pyrogram import Client, filters
 from pyrogram.types import Message
+
 from .utils.utils import modules_help, prefix
-import subprocess
 from .utils.utils import requirements_list
-import asyncio
-import os
 
 
 async def restart(message: Message, restart_type):
-    if restart_type == "update":
-        text = "1"
-    else:
-        text = "2"
+    text = "1" if restart_type == "update" else "2"
     await os.execvp(
         "python3",
         [

@@ -1,9 +1,9 @@
-from sys import prefix, version_info
 import configparser
-import sys
 import os
+import sys
+from sys import version_info
+
 from .db import db
-import asyncio
 
 modules_help = []
 requirements_list = []
@@ -18,7 +18,6 @@ copyright = (
 )
 python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
 version = "2.0.2"
-
 
 config_path = os.path.join(sys.path[0], "config.ini")
 config = configparser.ConfigParser()

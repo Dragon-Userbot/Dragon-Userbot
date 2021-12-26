@@ -1,8 +1,9 @@
-import pymongo as md
 import configparser
 import os
 import sys
+
 import dns.resolver
+import pymongo as md
 
 dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
 dns.resolver.default_resolver.nameservers = ["8.8.8.8"]
@@ -46,10 +47,7 @@ class DataBase:
 
     def get_collection(self, module: str):
         modcollection = self._DB[module]
-        cons = []
-        for _ in modcollection.find():
-            cons.append({_["var"]: _["val"]})
-        return cons
+        return [{_["var"]: _["val"]} for _ in modcollection.find()]
 
     def remove(self, module: str, variable: str):
         modcollection = self._DB[module]

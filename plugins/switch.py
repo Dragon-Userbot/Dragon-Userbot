@@ -1,8 +1,9 @@
+import asyncio
+
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help, prefix
 
-import asyncio
+from .utils.utils import modules_help, prefix
 
 
 @Client.on_message(filters.command("sw", prefix) & filters.me)
@@ -17,7 +18,7 @@ async def switch(client: Client, message: Message):
             reply_text = str.translate(reply_text, change)
             await message.edit(reply_text)
         else:
-            message.edit("No text for switch")
+            await message.edit("No text for switch")
             await asyncio.sleep(3)
             await message.delete()
     else:

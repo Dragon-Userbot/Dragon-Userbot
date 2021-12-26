@@ -1,7 +1,8 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
+
 from .utils.utils import modules_help, prefix
-from .utils.utils import requirements_list
+
 
 # packages from PyPi
 # import example_1
@@ -22,7 +23,7 @@ async def example_send(client: Client, message: Message):
 modules_help.append(
     {"example": [{"example_send": "example send"}, {"example_edit": "example edit"}]}
 )
-#'module_name': '''comand_1 - description, comand_2 - description''',
+# 'module_name': '''comand_1 - description, comand_2 - description''',
 #        │          'module_name module': 'Example send: example_send, example_edit\n\n'
 #        │                 │        │
 #        │                 │        │

@@ -1,9 +1,9 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help, prefix
-from .utils.utils import requirements_list
 
 from covid import Covid
+from .utils.utils import modules_help, prefix
+from .utils.utils import requirements_list
 
 
 @Client.on_message(filters.command("covid", prefix) & filters.me)
