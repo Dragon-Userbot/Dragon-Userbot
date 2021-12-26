@@ -17,14 +17,14 @@ async def save_note(client: Client, message: Message):
 
     async def chat_id():
         cid = db.get("core.notes", "chat_id")
-        if cid != None:
+        if cid is not None:
             return cid
-        else:
-            chat = await client.create_supergroup(
-                f"Dragon_Userbot_Notes_Filters", "Don't touch this group, please"
-            )
-            db.set("core.notes", "chat_id", chat.id)
-            return chat.id
+        chat = await client.create_supergroup(
+            'Dragon_Userbot_Notes_Filters', "Don't touch this group, please"
+        )
+
+        db.set("core.notes", "chat_id", chat.id)
+        return chat.id
 
     if message.reply_to_message and len(message.text.split()) >= 2:
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"

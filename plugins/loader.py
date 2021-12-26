@@ -82,13 +82,13 @@ async def unload_mods(client: Client, message: Message):
         return
     mod = message.command[1]
     if (
-            "/".join(mod.split("/")[:6])
-            == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
+        "/".join(mod.split("/")[:6])
+        == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
     ):
         mod = "/".join(mod.split("/")[6:]).split(".")[0]
 
     if os.path.exists(
-                f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py"
+            f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py"
         ):
         os.remove(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py")
         await message.edit(f"<b>The module <code>{mod}</code> removed!</b>")

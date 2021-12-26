@@ -27,11 +27,11 @@ from .utils.utils import modules_help, prefix
 async def check_username_or_id(data: Union[str, int]) -> str:
     data = str(data)
     if (
-            not data.isdigit()
-            and data[0] == "-"
-            and not data[1:].isdigit()
-            or not data.isdigit()
-            and data[0] != "-"
+        not data.isdigit()
+        and data[0] == "-"
+        and not data[1:].isdigit()
+        or not data.isdigit()
+        and data[0] != "-"
     ):
         return "channel"
     else:
@@ -65,11 +65,11 @@ async def get_user_and_name(message):
 async def restrict_users_in_tmute(client: Client, message: Message):
     tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
     if (
-            message.from_user
-            and message.from_user.id in tmuted_users
-            or not message.from_user
-            and message.sender_chat
-            and message.sender_chat.id in tmuted_users
+        message.from_user
+        and message.from_user.id in tmuted_users
+        or not message.from_user
+        and message.sender_chat
+        and message.sender_chat.id in tmuted_users
     ):
         await message.delete()
     raise ContinuePropagation
