@@ -25,17 +25,16 @@ from .utils.db import db
 
 async def check_username_or_id(data: Union[str, int]) -> str:
     data = str(data)
-    if data.isdigit():
-        peer_id = int(data)
-
-    elif data[0] == "-":
-        if not data[1:].isdigit():
-            return "channel"
-        else:
-            peer_id = int(data)
-    else:
+    if (
+        not data.isdigit()
+        and data[0] == "-"
+        and not data[1:].isdigit()
+        or not data.isdigit()
+        and data[0] != "-"
+    ):
         return "channel"
-
+    else:
+        peer_id = int(data)
     if peer_id < 0:
         if MIN_CHAT_ID <= peer_id:
             return "chat"
@@ -64,12 +63,14 @@ async def get_user_and_name(message):
 @Client.on_message()
 async def restrict_users_in_tmute(client: Client, message: Message):
     tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-    if message.from_user:
-        if message.from_user.id in tmuted_users:
-            await message.delete()
-    elif message.sender_chat:
-        if message.sender_chat.id in tmuted_users:
-            await message.delete()
+    if (
+        message.from_user
+        and message.from_user.id in tmuted_users
+        or not message.from_user
+        and message.sender_chat
+        and message.sender_chat.id in tmuted_users
+    ):
+        await message.delete()
     raise ContinuePropagation
 
 
@@ -96,10 +97,12 @@ async def ban_command(client: Client, message: Message):
                         channel=(channel), user_id=(user_id)
                     )
                 )
-            text_c = ""
-            for _ in cause.split():
-                if _.lower() != "delete_history" and _.lower() != "report_spam":
-                    text_c += f" {_}"
+            text_c = "".join(
+                f" {_}"
+                for _ in cause.split()
+                if _.lower() not in ["delete_history", "report_spam"]
+            )
+
             await message.edit(
                 f"<b>{name}</b> <code>banned!</code>"
                 + f"\n{'<b>Cause:</b> <i>' + text_c.split(maxsplit=1)[1] + '</i>' if len(text_c.split()) > 1 else ''}"
@@ -144,7 +147,7 @@ async def ban_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -200,7 +203,7 @@ async def unban_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -234,10 +237,12 @@ async def kick_command(client: Client, message: Message):
                             channel=(channel), user_id=(user_id)
                         )
                     )
-                text_c = ""
-                for _ in cause.split():
-                    if _.lower() != "delete_history" and _.lower() != "report_spam":
-                        text_c += f" {_}"
+                text_c = "".join(
+                    f" {_}"
+                    for _ in cause.split()
+                    if _.lower() not in ["delete_history", "report_spam"]
+                )
+
                 await message.edit(
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code>kicked!</code>"
                     + f"\n{'<b>Cause:</b> <i>' + text_c.split(maxsplit=1)[1] + '</i>' if len(text_c.split()) > 1 else ''}"
@@ -280,7 +285,7 @@ async def kick_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -294,7 +299,7 @@ async def tmute_command(client: Client, message: Message):
             return await message.edit("<b>Not on yourself</b>")
 
         tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-        if not user_for_tmute in tmuted_users:
+        if user_for_tmute not in tmuted_users:
             tmuted_users.append(user_for_tmute)
             db.set("core.ats", f"c{message.chat.id}", tmuted_users)
             await message.edit(
@@ -320,7 +325,7 @@ async def tmute_command(client: Client, message: Message):
                         return await message.edit("<b>Not on yourself</b>")
 
                 tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-                if not user_to_tmute.id in tmuted_users:
+                if user_to_tmute.id not in tmuted_users:
                     tmuted_users.append(user_to_tmute.id)
                     db.set("core.ats", f"c{message.chat.id}", tmuted_users)
                     await message.edit(
@@ -338,7 +343,7 @@ async def tmute_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -353,7 +358,7 @@ async def tunmute_command(client: Client, message: Message):
             return await message.edit("<b>Not on yourself</b>")
 
         tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-        if not user_for_tunmute in tmuted_users:
+        if user_for_tunmute not in tmuted_users:
             await message.edit(f"<b>{name}</b> <code>not in tmute</code>")
         else:
             tmuted_users.remove(user_for_tunmute)
@@ -379,7 +384,7 @@ async def tunmute_command(client: Client, message: Message):
                         return await message.edit("<b>Not on yourself</b>")
 
                 tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-                if not user_to_tunmute.id in tmuted_users:
+                if user_to_tunmute.id not in tmuted_users:
                     await message.edit(f"<b>{name}</b> <code>not in tmute</code>")
                 else:
                     tmuted_users.remove(user_to_tunmute.id)
@@ -396,7 +401,7 @@ async def tunmute_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -494,7 +499,7 @@ async def unmute_command(client, message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -526,8 +531,8 @@ async def mute_command(client: Client, message: Message):
                         * 604800
                         // 1
                     )
-        if mute_seconds > 30:
-            try:
+        try:
+            if mute_seconds > 30:
                 await client.restrict_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
@@ -549,16 +554,7 @@ async def mute_command(client: Client, message: Message):
                 )
                 while "  " in message_text:
                     message_text = message_text.replace("  ", " ")
-                await message.edit(message_text)
-            except UserAdminInvalid:
-                await message.edit("<b>No rights</b>")
-            except ChatAdminRequired:
-                await message.edit("<b>No rights</b>")
-            except Exception as e:
-                print(e)
-                await message.edit("<b>No rights</b>")
-        else:
-            try:
+            else:
                 await client.restrict_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
@@ -568,14 +564,14 @@ async def mute_command(client: Client, message: Message):
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code> was muted for never</code>"
                     + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
-                await message.edit(message_text)
-            except UserAdminInvalid:
-                await message.edit("<b>No rights</b>")
-            except ChatAdminRequired:
-                await message.edit("<b>No rights</b>")
-            except Exception as e:
-                print(e)
-                await message.edit("<b>No rights</b>")
+            await message.edit(message_text)
+        except UserAdminInvalid:
+            await message.edit("<b>No rights</b>")
+        except ChatAdminRequired:
+            await message.edit("<b>No rights</b>")
+        except Exception as e:
+            print(e)
+            await message.edit("<b>No rights</b>")
     elif not message.reply_to_message and message.chat.type not in [
         "private",
         "channel",
@@ -611,8 +607,8 @@ async def mute_command(client: Client, message: Message):
                                 * 604800
                                 // 1
                             )
-                if mute_seconds > 30:
-                    try:
+                try:
+                    if mute_seconds > 30:
                         await client.restrict_chat_member(
                             message.chat.id,
                             user_to_unmute.id,
@@ -633,16 +629,7 @@ async def mute_command(client: Client, message: Message):
                         )
                         while "  " in message_text:
                             message_text = message_text.replace("  ", " ")
-                        await message.edit(message_text)
-                    except UserAdminInvalid:
-                        await message.edit("<b>No rights</b>")
-                    except ChatAdminRequired:
-                        await message.edit("<b>No rights</b>")
-                    except Exception as e:
-                        print(e)
-                        await message.edit("<b>No rights</b>")
-                else:
-                    try:
+                    else:
                         await client.restrict_chat_member(
                             message.chat.id, user_to_unmute.id, ChatPermissions()
                         )
@@ -650,14 +637,14 @@ async def mute_command(client: Client, message: Message):
                             f"<b>{user_to_unmute.first_name}</b> <code> was muted for never</code>"
                             + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                         )
-                        await message.edit(message_text)
-                    except UserAdminInvalid:
-                        await message.edit("<b>No rights</b>")
-                    except ChatAdminRequired:
-                        await message.edit("<b>No rights</b>")
-                    except Exception as e:
-                        print(e)
-                        await message.edit("<b>No rights</b>")
+                    await message.edit(message_text)
+                except UserAdminInvalid:
+                    await message.edit("<b>No rights</b>")
+                except ChatAdminRequired:
+                    await message.edit("<b>No rights</b>")
+                except Exception as e:
+                    print(e)
+                    await message.edit("<b>No rights</b>")
             except PeerIdInvalid:
                 await message.edit("<b>User is not found</b>")
             except UsernameInvalid:
@@ -666,7 +653,7 @@ async def mute_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -744,7 +731,7 @@ async def demote_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -820,7 +807,7 @@ async def promote_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 

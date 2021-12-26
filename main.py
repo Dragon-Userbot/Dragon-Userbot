@@ -20,8 +20,6 @@ if __name__ == "__main__":
         except:
             app.send_message(chat_id=sys.argv[1], text=text)
     auths = app.send(GetAuthorizations())["authorizations"]
-    auth_hashes = []
-    for auth in auths:
-        auth_hashes.append(auth["hash"])
+    auth_hashes = [auth["hash"] for auth in auths]
     db.set("core.sessionkiller", "auths_hashes", auth_hashes)
     idle()

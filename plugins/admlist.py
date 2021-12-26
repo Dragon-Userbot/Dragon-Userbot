@@ -19,21 +19,20 @@ async def ownlist(client: Client, message: Message):
         _ = await client.send(GetAllChats(except_ids=[]))
         chats = json.loads(str(_))
         for chat in chats["chats"]:
-            if chat.get("migrated_to") is None:
-                if chat.get("creator") is True or chat.get("admin_rights") is not None:
-                    if chat.get("creator") is True:
-                        role = "creator"
-                    else:
-                        role = "administrator"
-                    chatlist.append(
-                        {
-                            "chat_name": str(chat["title"]),
-                            "chat_id": chat["id"],
-                            "role": role,
-                            "username": chat.get("username"),
-                            "link": "https://t.me/c/{}/1".format(chat["id"]),
-                        }
-                    )
+            if chat.get("migrated_to") is None and (
+                chat.get("creator") is True
+                or chat.get("admin_rights") is not None
+            ):
+                role = "creator" if chat.get("creator") is True else "administrator"
+                chatlist.append(
+                    {
+                        "chat_name": str(chat["title"]),
+                        "chat_id": chat["id"],
+                        "role": role,
+                        "username": chat.get("username"),
+                        "link": "https://t.me/c/{}/1".format(chat["id"]),
+                    }
+                )
 
         adminned_chats = "<b>Adminned chats:</b>\n"
         owned_chats = "<b>Owned chats:</b>\n"

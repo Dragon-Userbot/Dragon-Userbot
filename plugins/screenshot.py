@@ -12,7 +12,7 @@ import asyncio
 async def screenshot(client: Client, message: Message):
     quantity = int(message.command[1])
     await message.delete()
-    for scr in range(quantity):
+    for _ in range(quantity):
         await asyncio.sleep(0.1)
         await client.send(
             functions.messages.SendScreenshotNotification(

@@ -76,28 +76,30 @@ async def load_mods(client: Client, message: Message):
 
 @Client.on_message(filters.command(["unloadmod", "ulm"], prefix) & filters.me)
 async def unload_mods(client: Client, message: Message):
-    if len(message.command) > 1:
-        mod = message.command[1]
-        if (
-            "/".join(mod.split("/")[:6])
-            == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
-        ):
-            mod = "/".join(mod.split("/")[6:]).split(".")[0]
+    if len(message.command) <= 1:
+        return
+    mod = message.command[1]
+    if (
+        "/".join(mod.split("/")[:6])
+        == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
+    ):
+        mod = "/".join(mod.split("/")[6:]).split(".")[0]
 
-        if os.path.exists(
+    if os.path.exists(
             f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py"
         ):
-            os.remove(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py")
-            await message.edit(f"<b>The module <code>{mod}</code> removed!</b>")
-            await restart()
+        os.remove(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py")
+        await message.edit(f"<b>The module <code>{mod}</code> removed!</b>")
+        await restart()
 
-        elif os.path.exists(f"{os.path.abspath(os.getcwd())}/plugins/{mod}.py"):
-            await message.edit(
-                f"<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>"
-            )
+    elif os.path.exists(f"{os.path.abspath(os.getcwd())}/plugins/{mod}.py"):
+        await message.edit(
+            '<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>'
+        )
 
-        else:
-            await message.edit(f"<b>Module <code>{mod}</code> not found</b>")
+
+    else:
+        await message.edit(f"<b>Module <code>{mod}</code> not found</b>")
 
 
 @Client.on_message(filters.command(["loadallmods"], prefix) & filters.me)
@@ -116,8 +118,8 @@ async def load_all_mods(clent: Client, message: Message):
             f'{os.path.abspath(os.getcwd())}/plugins/custom_modules/{module_info["name"]}'
         ):
             continue
-        new_modules.update({module_info["name"][:-3]: module_info["download_url"]})
-    if len(new_modules) == 0:
+        new_modules[module_info["name"][:-3]] = module_info["download_url"]
+    if not new_modules:
         return await message.edit("<b>All modules already loaded</b>")
     await message.edit(f'<b>Loading new modules: {" ".join(new_modules.keys())}</b>')
     for name, url in new_modules.items():

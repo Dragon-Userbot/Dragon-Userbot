@@ -16,14 +16,14 @@ async def save_note(client: Client, message: Message):
 
     async def chat_id():
         cid = db.get("core.notes", "chat_id")
-        if cid != None:
+        if cid is not None:
             return cid
-        else:
-            chat = await client.create_supergroup(
-                f"Dragon_Userbot_Notes_Filters", "Don't touch this group, please"
-            )
-            db.set("core.notes", "chat_id", chat.id)
-            return chat.id
+        chat = await client.create_supergroup(
+            'Dragon_Userbot_Notes_Filters', "Don't touch this group, please"
+        )
+
+        db.set("core.notes", "chat_id", chat.id)
+        return chat.id
 
     if message.reply_to_message and len(message.text.split()) >= 2:
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
@@ -105,17 +105,16 @@ async def note_send(client: Client, message: Message):
                                 media_grouped_list.append(
                                     InputMediaVideo(_.video.file_id, _.caption.markdown)
                                 )
+                        elif _.video.thumbs:
+                            media_grouped_list.append(
+                                InputMediaVideo(
+                                    _.video.file_id, _.video.thumbs[0].file_id
+                                )
+                            )
                         else:
-                            if _.video.thumbs:
-                                media_grouped_list.append(
-                                    InputMediaVideo(
-                                        _.video.file_id, _.video.thumbs[0].file_id
-                                    )
-                                )
-                            else:
-                                media_grouped_list.append(
-                                    InputMediaVideo(_.video.file_id)
-                                )
+                            media_grouped_list.append(
+                                InputMediaVideo(_.video.file_id)
+                            )
                     elif _.audio:
                         if _.caption:
                             media_grouped_list.append(
@@ -139,17 +138,16 @@ async def note_send(client: Client, message: Message):
                                         _.document.file_id, _.caption.markdown
                                     )
                                 )
+                        elif _.document.thumbs:
+                            media_grouped_list.append(
+                                InputMediaDocument(
+                                    _.document.file_id, _.document.thumbs[0].file_id
+                                )
+                            )
                         else:
-                            if _.document.thumbs:
-                                media_grouped_list.append(
-                                    InputMediaDocument(
-                                        _.document.file_id, _.document.thumbs[0].file_id
-                                    )
-                                )
-                            else:
-                                media_grouped_list.append(
-                                    InputMediaDocument(_.document.file_id)
-                                )
+                            media_grouped_list.append(
+                                InputMediaDocument(_.document.file_id)
+                            )
                 if message.reply_to_message:
                     await client.send_media_group(
                         message.chat.id,
@@ -158,22 +156,20 @@ async def note_send(client: Client, message: Message):
                     )
                 else:
                     await client.send_media_group(message.chat.id, media_grouped_list)
-                await message.delete()
+            elif message.reply_to_message:
+                await client.copy_message(
+                    message.chat.id,
+                    int(find_note["CHAT_ID"]),
+                    int(find_note["MESSAGE_ID"]),
+                    reply_to_message_id=message.reply_to_message.message_id,
+                )
             else:
-                if message.reply_to_message:
-                    await client.copy_message(
-                        message.chat.id,
-                        int(find_note["CHAT_ID"]),
-                        int(find_note["MESSAGE_ID"]),
-                        reply_to_message_id=message.reply_to_message.message_id,
-                    )
-                else:
-                    await client.copy_message(
-                        message.chat.id,
-                        int(find_note["CHAT_ID"]),
-                        int(find_note["MESSAGE_ID"]),
-                    )
-                await message.delete()
+                await client.copy_message(
+                    message.chat.id,
+                    int(find_note["CHAT_ID"]),
+                    int(find_note["MESSAGE_ID"]),
+                )
+            await message.delete()
         else:
             await message.edit("There is no such note")
     else:

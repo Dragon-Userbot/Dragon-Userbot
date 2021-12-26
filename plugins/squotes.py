@@ -62,11 +62,7 @@ async def quote_cmd(client: Client, message: types.Message):
         )
 
     file_io = BytesIO(response.content)
-    if is_png:
-        file_io.name = "sticker.png"
-    else:
-        file_io.name = "sticker.webp"
-
+    file_io.name = "sticker.png" if is_png else "sticker.webp"
     await message.edit("<b>Sending...</b>")
 
     try:
@@ -127,11 +123,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         )
 
     file_io = BytesIO(response.content)
-    if is_png:
-        file_io.name = "sticker.png"
-    else:
-        file_io.name = "sticker.webp"
-
+    file_io.name = "sticker.png" if is_png else "sticker.webp"
     await message.edit("<b>Sending...</b>")
 
     try:
@@ -274,7 +266,7 @@ def get_audio_text(audio: types.Audio) -> str:
 
 
 def get_reply_text(reply: types.Message) -> str:
-    text = (
+    return (
         "📷 Photo" + ("\n" + reply.caption if reply.caption else "")
         if reply.photo
         else get_reply_poll_text(reply.poll)
@@ -337,8 +329,6 @@ def get_reply_text(reply: types.Message) -> str:
         else reply.text or "unsupported message"
     )
 
-    return text
-
 
 def get_poll_text(poll: types.Poll) -> str:
     text = get_reply_poll_text(poll) + "\n"
@@ -357,16 +347,9 @@ def get_poll_text(poll: types.Poll) -> str:
 
 def get_reply_poll_text(poll: types.Poll) -> str:
     if poll.is_anonymous:
-        if poll.type == "regular":
-            text = "📊 Anonymous poll"
-        else:
-            text = "📊 Anonymous quiz"
+        text = "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
     else:
-        if poll.type == "regular":
-            text = "📊 Poll"
-        else:
-            text = "📊 Quiz"
-
+        text = "📊 Poll" if poll.type == "regular" else "📊 Quiz"
     if poll.is_closed:
         text += " (closed)"
 

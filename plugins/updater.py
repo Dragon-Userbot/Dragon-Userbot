@@ -8,10 +8,7 @@ import os
 
 
 async def restart(message: Message, restart_type):
-    if restart_type == "update":
-        text = "1"
-    else:
-        text = "2"
+    text = "1" if restart_type == "update" else "2"
     await os.execvp(
         "python3",
         [

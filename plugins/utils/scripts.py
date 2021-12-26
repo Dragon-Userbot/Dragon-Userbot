@@ -19,7 +19,7 @@ async def text(client: Client, message: Message):
 
 
 async def chat_permissions(client: Client, message: Message):
-    unmute_permissions = ChatPermissions(
+    return ChatPermissions(
         can_send_messages=message.chat.permissions.can_send_messages,
         can_send_media_messages=message.chat.permissions.can_send_media_messages,
         can_send_stickers=message.chat.permissions.can_send_stickers,
@@ -32,7 +32,6 @@ async def chat_permissions(client: Client, message: Message):
         can_invite_users=message.chat.permissions.can_invite_users,
         can_pin_messages=message.chat.permissions.can_pin_messages,
     )
-    return unmute_permissions
 
 
 async def restart():

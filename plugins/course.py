@@ -18,7 +18,7 @@ async def convert(client: Client, message: Message):
 
         if name == "btc":
             name = "1₿"
-            link = f"https://ru.investing.com/crypto/bitcoin"
+            link = 'https://ru.investing.com/crypto/bitcoin'
         else:
             link = f"https://ru.investing.com/currencies/{name}-rub"
 

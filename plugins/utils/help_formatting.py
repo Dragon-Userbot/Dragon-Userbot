@@ -4,8 +4,8 @@ from .utils import prefix
 
 def help_formatting(module_help, help_type, module_name):
     if help_type == "all_mods":
-        ready_string = f"• <b>{module_help.split(':')[0].strip()}: </b> <code>{module_help.split(':')[1].strip()}</code>\n"
-        return ready_string
+        return f"• <b>{module_help.split(':')[0].strip()}: </b> <code>{module_help.split(':')[1].strip()}</code>\n"
+
     elif help_type == "one_mod":
         s = f"<b>Help for |{module_name}|\nUsage:</b>\n"
         try:

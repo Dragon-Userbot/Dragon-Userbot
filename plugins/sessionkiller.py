@@ -27,15 +27,14 @@ async def sessionkiller(_, message: Message):
                 "Sessionkiller status: <b>disabled</b>\n"
                 f"You can enable it with <code>{prefix}sessionkiller enable</code>"
             )
+    elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
+        db.set("core.sessionkiller", "enabled", True)
+        await message.edit('<b>Sessionkiller enabled!</b>')
+    elif message.command[1] in ["disable", "off", "0", "no", "false"]:
+        db.set("core.sessionkiller", "enabled", False)
+        await message.edit('<b>Sessionkiller disabled!</b>')
     else:
-        if message.command[1] in ["enable", "on", "1", "yes", "true"]:
-            db.set("core.sessionkiller", "enabled", True)
-            await message.edit(f"<b>Sessionkiller enabled!</b>")
-        elif message.command[1] in ["disable", "off", "0", "no", "false"]:
-            db.set("core.sessionkiller", "enabled", False)
-            await message.edit(f"<b>Sessionkiller disabled!</b>")
-        else:
-            await message.edit(f"<b>Usage: {prefix}sessionkiller [enable|disable]</b>")
+        await message.edit(f"<b>Usage: {prefix}sessionkiller [enable|disable]</b>")
 
 
 @Client.on_raw_update()
