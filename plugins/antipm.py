@@ -1,10 +1,10 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message
 from pyrogram.handlers import MessageHandler
 from pyrogram.raw import functions
-from pyrogram.raw.types import InputPeerUser
-from .utils.utils import modules_help, prefix
+from pyrogram.types import Message
+
 from .utils.db import db
+from .utils.utils import modules_help, prefix
 
 
 async def anti_pm_handler(client: Client, message: Message):

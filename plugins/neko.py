@@ -1,8 +1,10 @@
+import asyncio
+
+import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
+
 from .utils.utils import modules_help, prefix
-import requests
-import asyncio
 
 
 def getpic(query):

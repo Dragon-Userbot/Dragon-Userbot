@@ -1,7 +1,9 @@
-from pyrogram import Client, idle
 import sys
-from plugins.utils.db import db
+
+from pyrogram import Client, idle
 from pyrogram.raw.functions.account import GetAuthorizations
+
+from plugins.utils.db import db
 
 app = Client("my_account")
 

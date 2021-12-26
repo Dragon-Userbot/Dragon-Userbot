@@ -1,9 +1,11 @@
+import asyncio
+import time
+
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
 
 from .utils.utils import modules_help, prefix
-import asyncio
 
 
 @Client.on_message(filters.command("type", prefix) & filters.me)

@@ -1,10 +1,11 @@
+import os
+import subprocess
+
 from pyrogram import Client, filters
 from pyrogram.types import Message
+
 from .utils.utils import modules_help, prefix
-import subprocess
 from .utils.utils import requirements_list
-import asyncio
-import os
 
 
 async def restart(message: Message, restart_type):

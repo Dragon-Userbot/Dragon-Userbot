@@ -36,7 +36,8 @@ So how does it work? It works in a very simple way, using the pyrogram library, 
 
 Using selfbot/userbot is against Telegram's Terms of Service, and you may get banned for using it if you're not careful.
 
-The developers are not responsible for any consequences you may encounter when using Dragon-Userbot. We are also not responsible for any damage to chat rooms caused by using this userbot.</p>
+The developers are not responsible for any consequences you may encounter when using Dragon-Userbot. We are also not
+responsible for any damage to chat rooms caused by using this userbot.</p>
 
 
 
@@ -97,6 +98,7 @@ modules_help.append(
 # requirements_list.append('example_2')
 # etc
 ```
+
 <h2>Groups and support</h2>
 <p><a href='https://t.me/Dragon_Userbot'>Channel</a> with latest news on the official telegram [ru/en]</p>
 

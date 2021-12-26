@@ -1,5 +1,8 @@
+import re
+from time import time
+from typing import Dict, Union
+
 from pyrogram import Client, ContinuePropagation, filters
-from pyrogram.types import Message, ChatPermissions
 from pyrogram.errors import (
     UserAdminInvalid,
     ChatAdminRequired,
@@ -7,6 +10,7 @@ from pyrogram.errors import (
     UsernameInvalid,
 )
 from pyrogram.raw import functions, types
+from pyrogram.types import Message, ChatPermissions
 from pyrogram.utils import (
     get_channel_id,
     MAX_USER_ID,
@@ -14,13 +18,10 @@ from pyrogram.utils import (
     MAX_CHANNEL_ID,
     MIN_CHANNEL_ID,
 )
-from .utils.utils import modules_help, prefix
-from .utils.scripts import text, chat_permissions
-from time import time
-import re
-from typing import Dict, Union
 
 from .utils.db import db
+from .utils.scripts import text, chat_permissions
+from .utils.utils import modules_help, prefix
 
 
 async def check_username_or_id(data: Union[str, int]) -> str:
@@ -513,21 +514,21 @@ async def mute_command(client: Client, message: Message):
             if match:
                 if character == "m":
                     mute_seconds += int(
-                        float(match.string[match.start() : match.end() - 1]) * 60 // 1
+                        float(match.string[match.start(): match.end() - 1]) * 60 // 1
                     )
                 if character == "h":
                     mute_seconds += int(
-                        float(match.string[match.start() : match.end() - 1]) * 3600 // 1
+                        float(match.string[match.start(): match.end() - 1]) * 3600 // 1
                     )
                 if character == "d":
                     mute_seconds += int(
-                        float(match.string[match.start() : match.end() - 1])
+                        float(match.string[match.start(): match.end() - 1])
                         * 86400
                         // 1
                     )
                 if character == "w":
                     mute_seconds += int(
-                        float(match.string[match.start() : match.end() - 1])
+                        float(match.string[match.start(): match.end() - 1])
                         * 604800
                         // 1
                     )
@@ -546,11 +547,11 @@ async def mute_command(client: Client, message: Message):
                     "minutes": mute_seconds % 86400 % 3600 // 60,
                 }
                 message_text = (
-                    f"<b>{from_user.first_name}</b> <code> was muted for"
-                    f" {((str(mute_time['days']) + ' day') if mute_time['days'] > 0 else '') + ('s' if mute_time['days'] > 1 else '')}"
-                    f" {((str(mute_time['hours']) + ' hour') if mute_time['hours'] > 0 else '') + ('s' if mute_time['hours'] > 1 else '')}"
-                    f" {((str(mute_time['minutes']) + ' minute') if mute_time['minutes'] > 0 else '') + ('s' if mute_time['minutes'] > 1 else '')}</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        f"<b>{from_user.first_name}</b> <code> was muted for"
+                        f" {((str(mute_time['days']) + ' day') if mute_time['days'] > 0 else '') + ('s' if mute_time['days'] > 1 else '')}"
+                        f" {((str(mute_time['hours']) + ' hour') if mute_time['hours'] > 0 else '') + ('s' if mute_time['hours'] > 1 else '')}"
+                        f" {((str(mute_time['minutes']) + ' minute') if mute_time['minutes'] > 0 else '') + ('s' if mute_time['minutes'] > 1 else '')}</code>"
+                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                 )
                 while "  " in message_text:
                     message_text = message_text.replace("  ", " ")
@@ -561,8 +562,8 @@ async def mute_command(client: Client, message: Message):
                     ChatPermissions(),
                 )
                 message_text = (
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code> was muted for never</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
+                        f"<b>{message.reply_to_message.from_user.first_name}</b> <code> was muted for never</code>"
+                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             await message.edit(message_text)
         except UserAdminInvalid:
@@ -585,25 +586,25 @@ async def mute_command(client: Client, message: Message):
                     if match:
                         if character == "m":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(match.string[match.start(): match.end() - 1])
                                 * 60
                                 // 1
                             )
                         if character == "h":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(match.string[match.start(): match.end() - 1])
                                 * 3600
                                 // 1
                             )
                         if character == "d":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(match.string[match.start(): match.end() - 1])
                                 * 86400
                                 // 1
                             )
                         if character == "w":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(match.string[match.start(): match.end() - 1])
                                 * 604800
                                 // 1
                             )
@@ -621,11 +622,11 @@ async def mute_command(client: Client, message: Message):
                             "minutes": mute_seconds % 86400 % 3600 // 60,
                         }
                         message_text = (
-                            f"<b>{user_to_unmute.first_name}</b> <code> was muted for"
-                            f" {((str(mute_time['days']) + ' day') if mute_time['days'] > 0 else '') + ('s' if mute_time['days'] > 1 else '')}"
-                            f" {((str(mute_time['hours']) + ' hour') if mute_time['hours'] > 0 else '') + ('s' if mute_time['hours'] > 1 else '')}"
-                            f" {((str(mute_time['minutes']) + ' minute') if mute_time['minutes'] > 0 else '') + ('s' if mute_time['minutes'] > 1 else '')}</code>"
-                            + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=3)[3] + '</i>' if len(cause.split()) > 3 else ''}"
+                                f"<b>{user_to_unmute.first_name}</b> <code> was muted for"
+                                f" {((str(mute_time['days']) + ' day') if mute_time['days'] > 0 else '') + ('s' if mute_time['days'] > 1 else '')}"
+                                f" {((str(mute_time['hours']) + ' hour') if mute_time['hours'] > 0 else '') + ('s' if mute_time['hours'] > 1 else '')}"
+                                f" {((str(mute_time['minutes']) + ' minute') if mute_time['minutes'] > 0 else '') + ('s' if mute_time['minutes'] > 1 else '')}</code>"
+                                + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=3)[3] + '</i>' if len(cause.split()) > 3 else ''}"
                         )
                         while "  " in message_text:
                             message_text = message_text.replace("  ", " ")
@@ -634,8 +635,8 @@ async def mute_command(client: Client, message: Message):
                             message.chat.id, user_to_unmute.id, ChatPermissions()
                         )
                         message_text = (
-                            f"<b>{user_to_unmute.first_name}</b> <code> was muted for never</code>"
-                            + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                                f"<b>{user_to_unmute.first_name}</b> <code> was muted for never</code>"
+                                + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                         )
                     await message.edit(message_text)
                 except UserAdminInvalid:

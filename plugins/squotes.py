@@ -1,8 +1,10 @@
 import base64
 import os
 from io import BytesIO
+
 import requests
 from pyrogram import Client, filters, errors, types
+
 from .utils.utils import modules_help, prefix
 
 
@@ -299,7 +301,7 @@ def get_reply_text(reply: types.Message) -> str:
             "👤 joined the group"
             if reply.new_chat_members[0].id == reply.from_user.id
             else "👤 invited %s to the group"
-            % (get_full_name(reply.new_chat_members[0]))
+                 % (get_full_name(reply.new_chat_members[0]))
         )
         if reply.new_chat_members
         else (

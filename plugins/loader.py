@@ -1,10 +1,12 @@
+import hashlib
+import os
+
+import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help, prefix
+
 from .utils.scripts import restart
-import requests
-import os
-import hashlib
+from .utils.utils import modules_help, prefix
 
 
 @Client.on_message(filters.command(["modhash", "mh"], prefix) & filters.me)
@@ -46,8 +48,8 @@ async def load_mods(client: Client, message: Message):
         await restart()
 
     if (
-        "/".join(url.split("/")[:6])
-        == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
+            "/".join(url.split("/")[:6])
+            == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
     ):
         await download_mod()
     elif "/" not in url and "." not in url:
@@ -115,7 +117,7 @@ async def load_all_mods(clent: Client, message: Message):
         if not module_info["name"].endswith(".py"):
             continue
         if os.path.exists(
-            f'{os.path.abspath(os.getcwd())}/plugins/custom_modules/{module_info["name"]}'
+                f'{os.path.abspath(os.getcwd())}/plugins/custom_modules/{module_info["name"]}'
         ):
             continue
         new_modules[module_info["name"][:-3]] = module_info["download_url"]

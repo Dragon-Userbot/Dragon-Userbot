@@ -1,9 +1,9 @@
-from pyrogram import Client, idle
 import configparser
 import datetime
 import os
 import sys
 
+from pyrogram import Client
 
 if len(sys.argv) == 2:
     arg = sys.argv[1]
@@ -19,7 +19,9 @@ if len(sys.argv) == 2:
     app.start()
     app.send_message(
         "me",
-        f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched!\nFor restart, enter:</b>\n <code>cd Dragon-Userbot/ && python main.py</code>",
+        f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched! \n"
+        f"For restart, enter:</b> \n"
+        f"<code>cd Dragon-Userbot/ && python main.py</code>",
     )
 
     app.stop()

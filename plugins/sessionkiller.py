@@ -1,15 +1,16 @@
+import time
+from datetime import datetime
+from html import escape
+
 from pyrogram import Client, filters
+from pyrogram import ContinuePropagation
 from pyrogram.errors import RPCError
-from pyrogram.types import Message
 from pyrogram.raw.functions.account import GetAuthorizations, ResetAuthorization
 from pyrogram.raw.types import UpdateServiceNotification
-from pyrogram import ContinuePropagation
-from .utils.utils import modules_help, prefix
+from pyrogram.types import Message
+
 from .utils.db import db
-from html import escape
-from datetime import datetime
-from main import app
-import time
+from .utils.utils import modules_help, prefix
 
 auth_hashes = db.get("core.sessionkiller", "auths_hashes", [])
 
@@ -40,7 +41,7 @@ async def sessionkiller(_, message: Message):
 @Client.on_raw_update()
 async def check_new_login(client: Client, update: UpdateServiceNotification, _, __):
     if not isinstance(update, UpdateServiceNotification) or not update.type.startswith(
-        "auth"
+            "auth"
     ):
         raise ContinuePropagation
     if not db.get("core.sessionkiller", "enabled", False):
@@ -70,21 +71,21 @@ async def check_new_login(client: Client, update: UpdateServiceNotification, _, 
                 "%d-%m-%Y %H-%M-%S UTC"
             )
             full_report = (
-                "<b>!!! ACTION REQUIRED !!!</b>\n"
-                + info_text
-                + "Below is the information about the attacker that I got.\n\n"
-                f"Unique authorization hash: <code>{auth.hash}</code> (not valid anymore)\n"
-                f"Device model: <code>{escape(auth.device_model)}</code>\n"
-                f"Platform: <code>{escape(auth.platform)}</code>\n"
-                f"API ID: <code>{auth.api_id}</code>\n"
-                f"App name: <code>{escape(auth.app_name)}</code>\n"
-                f"App version: <code>{auth.app_version}</code>\n"
-                f"Logined at: <code>{logined_time}</code>\n"
-                f"IP: <code>{auth.ip}</code>\n"
-                f"Country: <code>{auth.country}</code>\n"
-                f'Official app: <b>{"yes" if auth.official_app else "no"}</b>\n\n'
-                f"<b>It is you? Type <code>{prefix}sk off</code> and try logging "
-                f"in again.</b>"
+                    "<b>!!! ACTION REQUIRED !!!</b>\n"
+                    + info_text
+                    + "Below is the information about the attacker that I got.\n\n"
+                      f"Unique authorization hash: <code>{auth.hash}</code> (not valid anymore)\n"
+                      f"Device model: <code>{escape(auth.device_model)}</code>\n"
+                      f"Platform: <code>{escape(auth.platform)}</code>\n"
+                      f"API ID: <code>{auth.api_id}</code>\n"
+                      f"App name: <code>{escape(auth.app_name)}</code>\n"
+                      f"App version: <code>{auth.app_version}</code>\n"
+                      f"Logined at: <code>{logined_time}</code>\n"
+                      f"IP: <code>{auth.ip}</code>\n"
+                      f"Country: <code>{auth.country}</code>\n"
+                      f'Official app: <b>{"yes" if auth.official_app else "no"}</b>\n\n'
+                      f"<b>It is you? Type <code>{prefix}sk off</code> and try logging "
+                      f"in again.</b>"
             )
             # schedule sending report message so user will get notification
             schedule_date = int(time.time() + 5)

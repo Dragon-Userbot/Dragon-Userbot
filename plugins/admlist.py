@@ -1,13 +1,13 @@
-from time import perf_counter
-from pyrogram import Client, filters
-from pyrogram.methods import messages
-from pyrogram.types import Message
-from html import escape as t
-from pyrogram.errors.exceptions.flood_420 import FloodWait
-from .utils.utils import modules_help, prefix
-from .utils.db import db
-from pyrogram.raw.functions.messages.get_all_chats import GetAllChats
 import json
+from html import escape as t
+from time import perf_counter
+
+from pyrogram import Client, filters
+from pyrogram.errors.exceptions.flood_420 import FloodWait
+from pyrogram.raw.functions.messages.get_all_chats import GetAllChats
+from pyrogram.types import Message
+
+from .utils.utils import modules_help, prefix
 
 
 @Client.on_message(filters.command("admlist", prefix) & filters.me)
