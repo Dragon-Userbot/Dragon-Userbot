@@ -1,31 +1,33 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message
 from pyrogram.handlers import MessageHandler
 from pyrogram.raw import functions
-from pyrogram.raw.types import InputPeerUser
-from .utils.utils import modules_help, prefix
+from pyrogram.types import Message
+
 from .utils.db import db
+from .utils.utils import modules_help, prefix
 
 
 async def anti_pm_handler(client: Client, message: Message):
     status = db.get("core.antipm", "status", False)
-    if status:
-        if message.chat.type in ["private"]:
-            if (
-                not message.from_user.is_contact
-                and not message.from_user.is_bot
-                and not message.from_user.is_self
-            ):
-                await client.read_history(message.chat.id)
-                user_info = await client.resolve_peer(message.chat.id)
-                await message.delete()
-                if db.get("core.antipm", "spamrep", False):
-                    await client.send(functions.messages.ReportSpam(peer=(user_info)))
-                await client.send(
-                    functions.messages.DeleteHistory(
-                        peer=(user_info), max_id=0, revoke=True
-                    )
-                )
+    if (
+        status
+        and message.chat.type in ["private"]
+        and (
+            not message.from_user.is_contact
+            and not message.from_user.is_bot
+            and not message.from_user.is_self
+        )
+    ):
+        await client.read_history(message.chat.id)
+        user_info = await client.resolve_peer(message.chat.id)
+        await message.delete()
+        if db.get("core.antipm", "spamrep", False):
+            await client.send(functions.messages.ReportSpam(peer=(user_info)))
+        await client.send(
+            functions.messages.DeleteHistory(
+                peer=(user_info), max_id=0, revoke=True
+            )
+        )
 
 
 @Client.on_message(filters.command(["anti_pm"], prefix) & filters.me)

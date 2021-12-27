@@ -1,9 +1,11 @@
-from pyrogram import Client, filters
-from pyrogram.types import Message
-from .utils.utils import modules_help, prefix
-from pyrogram.raw import functions
-from .utils.scripts import date_dict
 import asyncio
+
+from pyrogram import Client, filters
+from pyrogram.raw import functions
+from pyrogram.types import Message
+
+from .utils.scripts import date_dict
+from .utils.utils import modules_help, prefix
 
 
 @Client.on_message(filters.command("inf", prefix) & filters.me)
@@ -25,14 +27,11 @@ async def get_user_inf(client: Client, message: Message):
     user_info = await client.send(
         functions.users.GetFullUser(id=await client.resolve_peer(user))
     )
-    if user_info.user.username == None:
+    if user_info.user.username is None:
         username = "None"
     else:
         username = f"@{user_info.user.username}"
-    if user_info.about == None:
-        about = "None"
-    else:
-        about = user_info.about
+    about = "None" if user_info.about is None else user_info.about
     user_info = f"""|=<b>Username: {username}
 |-Id: <code>{user_info.user.id}</code>
 |-Bot: <code>{user_info.user.bot}</code>
@@ -62,7 +61,7 @@ async def get_full_user_inf(client: Client, message: Message):
         except:
             user = message.from_user.id
     try:
-        await client.send_message("@creationdatebot", f"/start")
+        await client.send_message("@creationdatebot", '/start')
         await asyncio.sleep(1)
         date_dict.clear()
         msg = await client.send_message("@creationdatebot", f"/id {user}")
@@ -75,14 +74,11 @@ async def get_full_user_inf(client: Client, message: Message):
         user_info = await client.send(
             functions.users.GetFullUser(id=await client.resolve_peer(user))
         )
-        if user_info.user.username == None:
+        if user_info.user.username is None:
             username = "None"
         else:
             username = f"@{user_info.user.username}"
-        if user_info.about == None:
-            about = "None"
-        else:
-            about = user_info.about
+        about = "None" if user_info.about is None else user_info.about
         user_info = f"""|=<b>Username: {username}
 |-Id: <code>{user_info.user.id}</code>
 |-Account creation date: <code>{date_dict.get('date')}</code>

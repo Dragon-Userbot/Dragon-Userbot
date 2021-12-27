@@ -1,9 +1,9 @@
-from pyrogram import Client, filters
-from pyrogram.types import Message
-from .utils.utils import modules_help, prefix
 import requests
 from bs4 import BeautifulSoup
+from pyrogram import Client, filters
+from pyrogram.types import Message
 
+from .utils.utils import modules_help, prefix
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
@@ -18,7 +18,7 @@ async def convert(client: Client, message: Message):
 
         if name == "btc":
             name = "1₿"
-            link = f"https://ru.investing.com/crypto/bitcoin"
+            link = 'https://ru.investing.com/crypto/bitcoin'
         else:
             link = f"https://ru.investing.com/currencies/{name}-rub"
 

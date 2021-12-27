@@ -1,8 +1,10 @@
-from pyrogram import Client, filters
-from pyrogram.types import Message
-from .utils.utils import modules_help, prefix
 from subprocess import Popen, PIPE, TimeoutExpired
 from time import perf_counter
+
+from pyrogram import Client, filters
+from pyrogram.types import Message
+
+from .utils.utils import modules_help, prefix
 
 
 @Client.on_message(filters.command(["shell", "sh"], prefix) & filters.me)

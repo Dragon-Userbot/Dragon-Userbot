@@ -1,15 +1,15 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
+
 from .utils import utils
 from .utils.utils import modules_help, prefix
-import asyncio
 
 
 @Client.on_message(filters.command(["version", "ver"], prefix) & filters.me)
 async def version(client: Client, message: Message):
     changelog = ""
     async for m in client.search_messages(
-        "dRaGoN_uB_cHaNgElOg", query=utils.version.split(".")[0]
+            "dRaGoN_uB_cHaNgElOg", query=utils.version.split(".")[0]
     ):
         if utils.version in m.text:
             changelog = m.message_id
