@@ -24,7 +24,7 @@ async def convert(client: Client, message: Message):
 
         full_page = requests.get(link, headers=headers, timeout=3)
         soup = BeautifulSoup(full_page.content, "html.parser")
-        rub = soup.find("span", id="last_last")
+        rub = soup.find("span", class_="text-2xl")
         await message.edit(f"<b>{name} now is </b><code> {rub} </code><b> rub</b>")
     except:
         await message.edit("<code>ERROR</code>")
