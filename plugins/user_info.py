@@ -9,7 +9,7 @@ from .utils.utils import modules_help, prefix
 
 
 @Client.on_message(filters.command("inf", prefix) & filters.me)
-async def get_user_inf(client, message):
+async def get_user_inf(client: Client, message: Message):
     if len(message.text.split()) >= 2:
         try:
             user = await client.get_users(message.text.split()[1])
@@ -44,7 +44,7 @@ async def get_user_inf(client, message):
 
 
 @Client.on_message(filters.command("inffull", prefix) & filters.me)
-async def get_full_user_inf(client, message):
+async def get_full_user_inf(client: Client, message: Message):
     await message.edit("<code>Receiving the information...</code>")
     if len(message.text.split()) >= 2:
         try:
