@@ -13,7 +13,7 @@ from .utils.utils import modules_help, prefix
 async def get_mod_hash(client: Client, message: Message):
     if len(message.command) == 1:
         return
-    url = message.command[1]
+    url = message.command[1].lower()
     resp = requests.get(url)
     if not resp.ok:
         await message.edit(
@@ -29,7 +29,7 @@ async def get_mod_hash(client: Client, message: Message):
 async def load_mods(client: Client, message: Message):
     if len(message.command) == 1:
         return
-    url = message.command[1]
+    url = message.command[1].lower()
 
     async def download_mod(content=None):
         if not os.path.exists(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules"):
@@ -80,7 +80,7 @@ async def load_mods(client: Client, message: Message):
 async def unload_mods(client: Client, message: Message):
     if len(message.command) <= 1:
         return
-    mod = message.command[1]
+    mod = message.command[1].lower()
     if (
         "/".join(mod.split("/")[:6])
         == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
