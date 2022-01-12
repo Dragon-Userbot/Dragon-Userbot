@@ -1,3 +1,19 @@
+#  Dragon-Userbot - telegram userbot
+#  Copyright (C) 2020-present Dragon Userbot Organization
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import hashlib
 import os
 
@@ -48,8 +64,8 @@ async def load_mods(client: Client, message: Message):
         await restart()
 
     if (
-            "/".join(url.split("/")[:6])
-            == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
+        "/".join(url.split("/")[:6])
+        == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
     ):
         await download_mod()
     elif "/" not in url and "." not in url:
@@ -88,17 +104,16 @@ async def unload_mods(client: Client, message: Message):
         mod = "/".join(mod.split("/")[6:]).split(".")[0]
 
     if os.path.exists(
-            f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py"
-        ):
+        f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py"
+    ):
         os.remove(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py")
         await message.edit(f"<b>The module <code>{mod}</code> removed!</b>")
         await restart()
 
     elif os.path.exists(f"{os.path.abspath(os.getcwd())}/plugins/{mod}.py"):
         await message.edit(
-            '<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>'
+            "<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>"
         )
-
 
     else:
         await message.edit(f"<b>Module <code>{mod}</code> not found</b>")
@@ -117,7 +132,7 @@ async def load_all_mods(clent: Client, message: Message):
         if not module_info["name"].endswith(".py"):
             continue
         if os.path.exists(
-                f'{os.path.abspath(os.getcwd())}/plugins/custom_modules/{module_info["name"]}'
+            f'{os.path.abspath(os.getcwd())}/plugins/custom_modules/{module_info["name"]}'
         ):
             continue
         new_modules[module_info["name"][:-3]] = module_info["download_url"]

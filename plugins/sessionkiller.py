@@ -1,3 +1,19 @@
+#  Dragon-Userbot - telegram userbot
+#  Copyright (C) 2020-present Dragon Userbot Organization
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import time
 from datetime import datetime
 from html import escape
@@ -30,10 +46,10 @@ async def sessionkiller(_, message: Message):
             )
     elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
         db.set("core.sessionkiller", "enabled", True)
-        await message.edit('<b>Sessionkiller enabled!</b>')
+        await message.edit("<b>Sessionkiller enabled!</b>")
     elif message.command[1] in ["disable", "off", "0", "no", "false"]:
         db.set("core.sessionkiller", "enabled", False)
-        await message.edit('<b>Sessionkiller disabled!</b>')
+        await message.edit("<b>Sessionkiller disabled!</b>")
     else:
         await message.edit(f"<b>Usage: {prefix}sessionkiller [enable|disable]</b>")
 
@@ -41,7 +57,7 @@ async def sessionkiller(_, message: Message):
 @Client.on_raw_update()
 async def check_new_login(client: Client, update: UpdateServiceNotification, _, __):
     if not isinstance(update, UpdateServiceNotification) or not update.type.startswith(
-            "auth"
+        "auth"
     ):
         raise ContinuePropagation
     if not db.get("core.sessionkiller", "enabled", False):
@@ -71,21 +87,21 @@ async def check_new_login(client: Client, update: UpdateServiceNotification, _, 
                 "%d-%m-%Y %H-%M-%S UTC"
             )
             full_report = (
-                    "<b>!!! ACTION REQUIRED !!!</b>\n"
-                    + info_text
-                    + "Below is the information about the attacker that I got.\n\n"
-                      f"Unique authorization hash: <code>{auth.hash}</code> (not valid anymore)\n"
-                      f"Device model: <code>{escape(auth.device_model)}</code>\n"
-                      f"Platform: <code>{escape(auth.platform)}</code>\n"
-                      f"API ID: <code>{auth.api_id}</code>\n"
-                      f"App name: <code>{escape(auth.app_name)}</code>\n"
-                      f"App version: <code>{auth.app_version}</code>\n"
-                      f"Logined at: <code>{logined_time}</code>\n"
-                      f"IP: <code>{auth.ip}</code>\n"
-                      f"Country: <code>{auth.country}</code>\n"
-                      f'Official app: <b>{"yes" if auth.official_app else "no"}</b>\n\n'
-                      f"<b>It is you? Type <code>{prefix}sk off</code> and try logging "
-                      f"in again.</b>"
+                "<b>!!! ACTION REQUIRED !!!</b>\n"
+                + info_text
+                + "Below is the information about the attacker that I got.\n\n"
+                f"Unique authorization hash: <code>{auth.hash}</code> (not valid anymore)\n"
+                f"Device model: <code>{escape(auth.device_model)}</code>\n"
+                f"Platform: <code>{escape(auth.platform)}</code>\n"
+                f"API ID: <code>{auth.api_id}</code>\n"
+                f"App name: <code>{escape(auth.app_name)}</code>\n"
+                f"App version: <code>{auth.app_version}</code>\n"
+                f"Logined at: <code>{logined_time}</code>\n"
+                f"IP: <code>{auth.ip}</code>\n"
+                f"Country: <code>{auth.country}</code>\n"
+                f'Official app: <b>{"yes" if auth.official_app else "no"}</b>\n\n'
+                f"<b>It is you? Type <code>{prefix}sk off</code> and try logging "
+                f"in again.</b>"
             )
             # schedule sending report message so user will get notification
             schedule_date = int(time.time() + 5)

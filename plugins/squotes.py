@@ -1,3 +1,19 @@
+#  Dragon-Userbot - telegram userbot
+#  Copyright (C) 2020-present Dragon Userbot Organization
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import base64
 import os
 from io import BytesIO
@@ -301,7 +317,7 @@ def get_reply_text(reply: types.Message) -> str:
             "👤 joined the group"
             if reply.new_chat_members[0].id == reply.from_user.id
             else "👤 invited %s to the group"
-                 % (get_full_name(reply.new_chat_members[0]))
+            % (get_full_name(reply.new_chat_members[0]))
         )
         if reply.new_chat_members
         else (

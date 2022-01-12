@@ -1,3 +1,19 @@
+#  Dragon-Userbot - telegram userbot
+#  Copyright (C) 2020-present Dragon Userbot Organization
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from pyrogram import Client, filters
 from pyrogram.handlers import MessageHandler
 from pyrogram.raw import functions
@@ -24,9 +40,7 @@ async def anti_pm_handler(client: Client, message: Message):
         if db.get("core.antipm", "spamrep", False):
             await client.send(functions.messages.ReportSpam(peer=(user_info)))
         await client.send(
-            functions.messages.DeleteHistory(
-                peer=(user_info), max_id=0, revoke=True
-            )
+            functions.messages.DeleteHistory(peer=(user_info), max_id=0, revoke=True)
         )
 
 

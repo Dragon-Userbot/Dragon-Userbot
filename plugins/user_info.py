@@ -1,3 +1,19 @@
+#  Dragon-Userbot - telegram userbot
+#  Copyright (C) 2020-present Dragon Userbot Organization
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import asyncio
 
 from pyrogram import Client, filters
@@ -77,7 +93,9 @@ async def get_full_user_inf(client: Client, message: Message):
             username = "None"
         else:
             username = f"@{user_info.users[0].username}"
-        about = "None" if user_info.full_user.about is None else user_info.full_user.about
+        about = (
+            "None" if user_info.full_user.about is None else user_info.full_user.about
+        )
         user_info = f"""|=<b>Username: {username}
 |-Id: <code>{user_info.users[0].id}</code>
 |-Account creation date: <code>{date_dict}</code>
@@ -98,6 +116,7 @@ async def get_full_user_inf(client: Client, message: Message):
         await message.edit(user_info)
     except:
         await msg.edit("An error has occurred...")
+
 
 modules_help.append(
     {

@@ -1,3 +1,19 @@
+#  Dragon-Userbot - telegram userbot
+#  Copyright (C) 2020-present Dragon Userbot Organization
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
@@ -9,7 +25,7 @@ from .utils.utils import modules_help, prefix
 async def version(client: Client, message: Message):
     changelog = ""
     async for m in client.search_messages(
-            "dRaGoN_uB_cHaNgElOg", query=utils.version.split(".")[0]
+        "dRaGoN_uB_cHaNgElOg", query=utils.version.split(".")[0]
     ):
         if utils.version in m.text:
             changelog = m.message_id

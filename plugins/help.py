@@ -1,3 +1,19 @@
+#  Dragon-Userbot - telegram userbot
+#  Copyright (C) 2020-present Dragon Userbot Organization
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
@@ -14,18 +30,18 @@ async def help(client, message: Message):
         msg_cnt = 0
         for mod in modules_help:
             help_message = (
-                    "<b>• "
-                    + list(mod.keys())[0].title()
-                    + ": </b>"
-                    + " ".join(
-                [
-                    "<code>" + prefix + str(cmd.split()[0]) + "</code>"
-                    for cmd in [
-                    list(rc.keys())[0] for rc in list(mod.values()).pop(0)
-                ]
-                ]
-            )
-                    + "\n"
+                "<b>• "
+                + list(mod.keys())[0].title()
+                + ": </b>"
+                + " ".join(
+                    [
+                        "<code>" + prefix + str(cmd.split()[0]) + "</code>"
+                        for cmd in [
+                            list(rc.keys())[0] for rc in list(mod.values()).pop(0)
+                        ]
+                    ]
+                )
+                + "\n"
             )
             if len(messages[msg_cnt] + help_message) < 2048:
                 messages[msg_cnt] = messages[msg_cnt] + help_message
