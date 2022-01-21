@@ -31,7 +31,7 @@ async def type(client: Client, message: Message):
     tbp = ""
     typing_symbol = "▒"
 
-    while tbp != text:
+    while text: # while the text string is not empty
         try:
             await message.edit(tbp + typing_symbol)
             await asyncio.sleep(0.1)
