@@ -35,9 +35,9 @@ from pyrogram.utils import (
     MIN_CHANNEL_ID,
 )
 
-from .utils.db import db
-from .utils.scripts import text, chat_permissions
-from .utils.utils import modules_help, prefix
+from utils.db import db
+from utils.scripts import text, chat_permissions
+from utils.misc import modules_help, prefix
 
 
 async def check_username_or_id(data: Union[str, int]) -> str:
@@ -828,33 +828,15 @@ async def promote_command(client: Client, message: Message):
         await message.edit("<b>Unsupported</b>")
 
 
-modules_help.append(
-    {
-        "admintool": [
-            {
-                "ban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "ban user/channel in chat"
-            },
-            {
-                "unban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "unban user/channel in chat"
-            },
-            {
-                "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "kick user out of chat"
-            },
-            {
-                "tmute [reply]/[username/id]* [reason]": "delete all new messages from user/channel in chat"
-            },
-            {
-                "tunmute [reply]/[username/id]* [reason]": "stop deleting all new messages from user/channel in chat"
-            },
-            {
-                "tmute_users": "cheklist all users/channel, whose messages will be deleted in chat"
-            },
-            {
-                "mute [reply]/[userid]* [reason] [1m]/[1h]/[1d]/[1w]": "mute user in chat"
-            },
-            {"unmute [reply]/[userid]* [reason]": "unmute user in chat"},
-            {"promote [reply]/[userid]* [prefix]": "promote user in chat"},
-            {"demote [reply]/[userid]* [reason]": "demote user in chat"},
-        ]
-    }
-)
+modules_help["admintool"] = {
+    "ban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "ban user in chat",
+    "unban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "unban user in chat",
+    "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "kick user out of chat",
+    "mute [reply]/[userid]* [reason] [1m]/[1h]/[1d]/[1w]": "mute user in chat",
+    "unmute [reply]/[userid]* [reason]": "unmute user in chat",
+    "promote [reply]/[userid]* [prefix]": "promote user in chat",
+    "demote [reply]/[userid]* [reason]": "demote user in chat",
+    "tmute [reply]/[username/id]* [reason]": "delete all new messages from user in chat",
+    "tunmute [reply]/[username/id]* [reason]": "stop deleting all messages from user in chat",
+    "tmute_users": "list of tmuted (.tmute) users",
+}

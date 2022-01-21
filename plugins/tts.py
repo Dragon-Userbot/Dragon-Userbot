@@ -20,14 +20,14 @@ from gtts import gTTS
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command("tts", prefix) & filters.me)
 async def tts(client: Client, message: Message):
     lang = message.command[1]
     text = " ".join(message.command[2:])
-    await message.edit("<code>Speech synthesis...</code>")
+    await message.edit("<b>Speech synthesis...</b>")
     tts = gTTS(text, lang=lang)
     voice = BytesIO()
     tts.write_to_fp(voice)

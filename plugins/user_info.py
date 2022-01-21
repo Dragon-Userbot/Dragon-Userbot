@@ -20,8 +20,7 @@ from pyrogram import Client, filters
 from pyrogram.raw import functions
 from pyrogram.types import Message
 
-from .utils.scripts import date_dict
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command("inf", prefix) & filters.me)

@@ -17,7 +17,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
 
 
 # packages from PyPi
@@ -36,14 +36,17 @@ async def example_send(client: Client, message: Message):
 
 
 # This adds instructions for your module
-modules_help.append(
-    {"example": [{"example_send": "example send"}, {"example_edit": "example edit"}]}
-)
-# 'module_name': '''comand_1 - description, comand_2 - description''',
-#        │          'module_name module': 'Example send: example_send, example_edit\n\n'
-#        │                 │        │
-#        │                 │        │
-#     module_name(only snake_case)  └─ module (here the word 'module' is required)
+
+modules_help["example"] = {
+    "example_send": "example send",
+    "example_edit": "example edit",
+}
+
+# modules_help["example"] = { "example_send [text]": "example send" }
+#                  |            |              |        |
+#                  |            |              |        └─ command description
+#           module_name         command_name   └─ optional command arguments
+#        (only snake_case)   (only snake_case too)
 
 
 # If your custom module requires packages from PyPi, write the names of the packages in these functions

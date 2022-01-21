@@ -19,15 +19,17 @@ from bs4 import BeautifulSoup
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.scripts import format_exc
+from utils.misc import modules_help, prefix
 
 headers = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
 }
 
 
 @Client.on_message(filters.command("course", prefix) & filters.me)
-async def convert(client: Client, message: Message):
+async def convert(_, message: Message):
     try:
         await message.edit("<code>Data retrieval...</code>")
         name = message.command[1]
@@ -42,16 +44,10 @@ async def convert(client: Client, message: Message):
         soup = BeautifulSoup(full_page.content, "html.parser")
         rub = soup.find("span", class_="text-2xl")
         await message.edit(f"<b>{name} now is </b><code> {rub} </code><b> rub</b>")
-    except:
-        await message.edit("<code>ERROR</code>")
+    except Exception as e:
+        await message.edit(format_exc(e))
 
 
-modules_help.append(
-    {
-        "course": [
-            {
-                "course [currency]*": "Transfer from any state currency to the ruble\nDont use more than 10 times per minute"
-            }
-        ]
-    }
-)
+modules_help["course"] = {
+    "course [currency]*": "Transfer from any state currency to the ruble. Don't use more than 10 times per minute"
+}

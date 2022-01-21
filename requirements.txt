@@ -13,3 +13,4 @@ pytube
 click
 pymongo[srv]
 dnspython
+requests

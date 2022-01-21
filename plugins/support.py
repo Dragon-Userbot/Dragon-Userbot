@@ -17,14 +17,52 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix, userbot_version, python_version
 
 
-@Client.on_message(filters.command("support", prefix) & filters.me)
-async def support(client: Client, message: Message):
+@Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
+async def support(_, message: Message):
     await message.edit(
-        "<b>Channel: @Dragon_Userbot\n\nChat [RU]: @Dragon_Userbot_chat\nChat [EN]: @Dragon_Userbot_chat_en\n\nMain developers: @john_phonk, @thefsch, @LaciaMemeFrame</b>"
+        f"<b>Dragon-Userbot\n"
+        "GitHub: <a href=https://github.com/Dragon-Userbot/Dragon-Userbot>Dragon-Userbot/Dragon-Userbot</a>\n"
+        "Custom modules repository: <a href=https://github.com/Dragon-Userbot/custom_modules>"
+        "Dragon-Userbot/custom_modules</a>\n"
+        "License: <a href=https://github.com/Dragon-Userbot/Dragon-Userbot/blob/master/LICENSE>GNU GPL v3</a>\n\n"
+        "Channel: @Dragon_Userbot\n"
+        "Custom modules: @Dragon_Userbot_modules\n"
+        "Chat [RU]: @Dragon_Userbot_chat\n"
+        "Chat [EN]: @Dragon_Userbot_chat_en\n"
+        "Main developers: @john_phonk, @thefsch, @nalinor\n\n"
+        f"Python version: {python_version}\n"
+        f"Modules count: {len(modules_help) / 1}\n</b>",
+        disable_web_page_preview=True,
     )
 
 
-modules_help.append({"support": [{"support": "Support information"}]})
+@Client.on_message(filters.command(["version", "ver"], prefix) & filters.me)
+async def version(client: Client, message: Message):
+    changelog = ""
+    async for m in client.search_messages("dRaGoN_uB_cHaNgElOg", query=userbot_version):
+        if userbot_version in m.text:
+            changelog = m.message_id
+
+    await message.delete()
+    await message.reply(
+        f"<b>Dragon Userbot version: {userbot_version}\n"
+        f"Changelog </b><i><a href=https://t.me/dRaGoN_uB_cHaNgElOg/{changelog}>in channel</a></i>.<b>\n"
+        f"Changelogs are written by </b><i>"
+        f"<a href=tg://user?id=318865588>\u2060</a>"
+        f"<a href=tg://user?id=293490416>♿️</a>"
+        f"<a href=https://t.me/LKRinternationalrunetcomphinc>asphuy</a>"
+        f"<a href=https://t.me/artemjj2>♿️</a></i>",
+    )
+
+
+modules_help.append(
+    {
+        "support": [
+            {"support": "Information about userbot"},
+            {"version": "Check userbot version"},
+        ]
+    }
+)

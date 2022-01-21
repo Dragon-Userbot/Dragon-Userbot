@@ -18,12 +18,12 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 
 from covid import Covid
-from .utils.utils import modules_help, prefix
-from .utils.utils import requirements_list
+from utils.misc import modules_help, prefix
+from utils.misc import requirements_list
 
 
 @Client.on_message(filters.command("covid", prefix) & filters.me)
-async def covid_local(client: Client, message: Message):
+async def covid_local(_, message: Message):
     region = " ".join(message.command[1:])
     await message.edit("<code>Data retrieval...</code>")
     covid = Covid(source="worldometers")
@@ -60,7 +60,7 @@ async def regions(client: Client, message: Message):
 
 modules_help.append(
     {
-        "covid": [
+        "covidinfo": [
             {"covid [region]*": "Status by region"},
             {
                 "regions": "Available regions]\n=======================\n[Worldometer.info statistics are used"

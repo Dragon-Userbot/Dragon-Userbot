@@ -17,21 +17,35 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.scripts import with_reply, format_exc
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command("pin", prefix) & filters.me)
-async def pin(client: Client, message: Message):
+@with_reply
+async def pin(_, message: Message):
     try:
-        message_id = message.reply_to_message.message_id
-        await client.pin_chat_message(message.chat.id, message_id)
-        await message.edit("<code>Pinned successfully! </code>")
-    except:
-        await message.edit(
-            "<b>[Reply to the message you want to pin]\n[Does not work in private messages!]</b>"
-        )
+        await message.reply_to_message.pin()
+        await message.edit("<b>Pinned!</b>")
+    except Exception as e:
+        await message.edit(format_exc(e))
+
+
+@Client.on_message(filters.command("unpin", prefix) & filters.me)
+@with_reply
+async def unpin(_, message: Message):
+    try:
+        await message.reply_to_message.unpin()
+        await message.edit("<b>Unpinned!</b>")
+    except Exception as e:
+        await message.edit(format_exc(e))
 
 
 modules_help.append(
-    {"pin": [{"pin": "Pin any message\nReply to the message you want to pin"}]}
+    {
+        "pin": [
+            {"pin": "Pin replied message"},
+            {"unpin": "Unpin replied message"},
+        ]
+    }
 )

@@ -21,7 +21,7 @@ from io import BytesIO
 import requests
 from pyrogram import Client, filters, errors, types
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command(["q", "quote"], prefix) & filters.me)
