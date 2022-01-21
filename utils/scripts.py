@@ -16,8 +16,11 @@
 
 import os
 
-from pyrogram import Client, filters
+from pyrogram import Client, filters, errors
 from pyrogram.types import Message, ChatPermissions
+import logging
+
+from .misc import modules_help, prefix
 
 date_dict = {}
 
@@ -28,14 +31,11 @@ async def get_date(client: Client, message: Message):
     date_dict.update({"date": message.text})
 
 
-async def text(client: Client, message: Message):
-    if message.text:
-        return message.text
-    else:
-        return message.caption
+async def text(_, message: Message):
+    return message.text if message.text else message.caption
 
 
-async def chat_permissions(client: Client, message: Message):
+async def chat_permissions(_, message: Message):
     return ChatPermissions(
         can_send_messages=message.chat.permissions.can_send_messages,
         can_send_media_messages=message.chat.permissions.can_send_media_messages,
@@ -53,3 +53,35 @@ async def chat_permissions(client: Client, message: Message):
 
 async def restart():
     await os.execvp("python3", ["python3", "main.py"])
+
+
+def format_exc(e: Exception):
+    logging.error(e)
+    if isinstance(e, errors.RPCError):
+        return (
+            f"<b>Telegram API error!</b>\n"
+            f"<code>[{e.CODE} {e.ID or e.NAME}] - {e.MESSAGE}</code>"
+        )
+    else:
+        return f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>"
+
+
+def with_reply(func):
+    async def wrapped(client: Client, message: Message):
+        if not message.reply_to_message:
+            await message.edit("<b>Reply to message is required</b>")
+        else:
+            return await func(client, message)
+
+    return wrapped
+
+
+def format_module_help(module_name: str):
+    commands = modules_help[module_name]
+
+    help_text = f"<b>Help for |{module_name}|\n\n" f"Usage:</b>\n"
+
+    for name, desc in commands.items():
+        help_text += f"<code>{prefix}{name}</code> — <i>{desc}</i>\n"
+
+    return help_text

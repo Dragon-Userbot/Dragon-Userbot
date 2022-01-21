@@ -19,17 +19,19 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command(["leave_chat", "lc"], prefix) & filters.me)
-async def leave_chat(client: Client, message: Message):
-    if message.chat.type in ["group", "supergroup"]:
-        await message.edit("<code>Goodbye...</code>")
+async def leave_chat(_, message: Message):
+    if message.chat.type != "private":
+        await message.edit("<b>Goodbye...</b>")
         await asyncio.sleep(3)
-        await client.leave_chat(chat_id=message.chat.id)
+        await message.chat.leave()
     else:
-        await message.edit("This is not a group/suppergroup")
+        await message.edit("<b>Not supported in private chats</b>")
 
 
-modules_help.append({"leave_chat": [{"leave_chat": "Quit chat"}]})
+modules_help["leave_chat"] = {
+    "leave_chat": "Quit chat",
+}

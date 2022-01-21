@@ -23,11 +23,13 @@ from pyrogram.types import (
     InputMediaDocument,
 )
 
-from .utils.db import db
-from .utils.utils import modules_help, prefix
+from utils.db import db
+from utils.misc import modules_help, prefix
+from utils.scripts import with_reply
 
 
 @Client.on_message(filters.command(["save"], prefix) & filters.me)
+@with_reply
 async def save_note(client: Client, message: Message):
     await message.edit("<code>Loading...</code>")
 
@@ -228,3 +230,10 @@ modules_help.append(
         ]
     }
 )
+
+modules_help["notes"] = {
+    "save [name]*": "Save note",
+    "note [name]*": "Get saved note",
+    "notes": "Get note list",
+    "clear [name]*": "Delete note",
+}

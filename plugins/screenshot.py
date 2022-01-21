@@ -20,17 +20,16 @@ from pyrogram import Client, filters
 from pyrogram.raw import functions
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(
     filters.command(["scr", "screenshot"], prefix) & filters.private & filters.me
 )
 async def screenshot(client: Client, message: Message):
-    quantity = int(message.command[1])
+    amount = int(message.command[1]) if len(message.command) > 1 else 1
     await message.delete()
-    for _ in range(quantity):
-        await asyncio.sleep(0.1)
+    for _ in range(amount):
         await client.send(
             functions.messages.SendScreenshotNotification(
                 peer=await client.resolve_peer(message.chat.id),
@@ -38,14 +37,9 @@ async def screenshot(client: Client, message: Message):
                 random_id=client.rnd_id(),
             )
         )
+        await asyncio.sleep(0.1)
 
 
-modules_help.append(
-    {
-        "screenshot": [
-            {
-                "scr [amount of screenshots]": "Take a screenshot\nThis only works in private messages!"
-            }
-        ]
-    }
-)
+modules_help["screenshot"] = {
+    "scr [amount]": 'Send "You took a screenshot" message. Works only in PM'
+}

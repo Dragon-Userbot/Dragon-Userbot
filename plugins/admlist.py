@@ -23,11 +23,48 @@ from pyrogram.errors.exceptions.flood_420 import FloodWait
 from pyrogram.raw.functions.messages.get_all_chats import GetAllChats
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
+from utils.scripts import format_exc
+
+
+@Client.on_message(filters.command("admcount", prefix) & filters.me)
+async def admcount(client: Client, message: Message):
+    await message.edit("<b>Retrieving information... (it'll take some time)</b>")
+
+    start = perf_counter()
+    try:
+        response = await client.send(GetAllChats(except_ids=[]))
+        chats = response["chats"]
+
+        adminned_chats = 0
+        owned_chats = 0
+        owned_usernamed_chats = 0
+
+        for chat in chats:
+            if chat.creator and hasattr(chat, "username"):
+                owned_usernamed_chats += 1
+            elif chat.creator:
+                owned_chats += 1
+            elif hasattr(chat, "admin_rights") and chat.admin_rights:
+                adminned_chats += 1
+    except Exception as e:
+        await message.edit(format_exc(e))
+        return
+
+    stop = perf_counter()
+
+    await message.edit(
+        f"<b><u>Total:</u></b> {adminned_chats + owned_chats + owned_usernamed_chats}"
+        f"\n<b><u>Adminned chats:</u></b> {adminned_chats}\n"
+        f"<b><u>Owned chats:</u></b> {owned_chats}\n"
+        f"<b><u>Owned chats with username:</u></b> {owned_usernamed_chats}\n\n"
+        f"Done at {round(stop - start, 3)} seconds.\n\n"
+        f"<b>Get full list: </b><code>{prefix}admlist</code>"
+    )
 
 
 @Client.on_message(filters.command("admlist", prefix) & filters.me)
-async def ownlist(client: Client, message: Message):
+async def admlist(client: Client, message: Message):
     tstart = perf_counter()
     await message.edit("<code>Retrieving information... (it'll take some time)</code>")
     chatlist = []
@@ -89,4 +126,7 @@ async def ownlist(client: Client, message: Message):
         )
 
 
-modules_help.append({"admlist": [{"admlist": "Get adminned and owned chats"}]})
+modules_help["admlist"] = {
+    "admcount": "Get count of adminned and owned chats",
+    "admlist": "Get list of adminned and owned chats",
+}

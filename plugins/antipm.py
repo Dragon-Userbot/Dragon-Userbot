@@ -15,76 +15,121 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from pyrogram import Client, filters
-from pyrogram.handlers import MessageHandler
 from pyrogram.raw import functions
 from pyrogram.types import Message
 
-from .utils.db import db
-from .utils.utils import modules_help, prefix
+from utils.db import db
+from utils.misc import modules_help, prefix
+
+anti_pm_enabled = filters.create(
+    lambda _, __, ___: db.get("core.antipm", "status", False)
+)
 
 
+@Client.on_message(
+    ~filters.contact & filters.private & ~filters.me & ~filters.bot & anti_pm_enabled
+)
 async def anti_pm_handler(client: Client, message: Message):
-    status = db.get("core.antipm", "status", False)
-    if (
-        status
-        and message.chat.type in ["private"]
-        and (
-            not message.from_user.is_contact
-            and not message.from_user.is_bot
-            and not message.from_user.is_self
-        )
-    ):
-        await client.read_history(message.chat.id)
-        user_info = await client.resolve_peer(message.chat.id)
-        await message.delete()
-        if db.get("core.antipm", "spamrep", False):
-            await client.send(functions.messages.ReportSpam(peer=(user_info)))
-        await client.send(
-            functions.messages.DeleteHistory(peer=(user_info), max_id=0, revoke=True)
-        )
+    await client.read_history(message.chat.id)
+    user_info = await client.resolve_peer(message.chat.id)
+    if db.get("core.antipm", "spamrep", False):
+        await client.send(functions.messages.ReportSpam(peer=user_info))
+    if db.get("core.antipm", "block", False):
+        await client.send(functions.contacts.Block(id=user_info))
+    await client.send(
+        functions.messages.DeleteHistory(peer=user_info, max_id=0, revoke=True)
+    )
 
 
-@Client.on_message(filters.command(["anti_pm"], prefix) & filters.me)
-async def anti_pm(client: Client, message: Message):
-    status = db.get("core.antipm", "status", False)
-    if status:
-        await message.edit("Anti-pm enabled")
-        my_handler = MessageHandler(anti_pm_handler, filters.private)
-        client.add_handler(my_handler)
-    else:
+@Client.on_message(filters.command(["antipm", "anti_pm"], prefix) & filters.me)
+async def anti_pm(_, message: Message):
+    if len(message.command) == 1:
+        if db.get("core.antipm", "status", False):
+            await message.edit(
+                "Anti-PM status: <b>enabled</b>\n"
+                f"Disable with: <code>{prefix}antipm disable</code>"
+            )
+        else:
+            await message.edit(
+                "Anti-PM status: <b>disabled</b>\n"
+                f"Enable with: <code>{prefix}antipm enable</code>"
+            )
+    elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
         db.set("core.antipm", "status", True)
-        my_handler = MessageHandler(anti_pm_handler, filters.private)
-        client.add_handler(my_handler)
-        await message.edit("Anti-pm enabled")
+        await message.edit("<b>Anti-PM enabled!</b>")
+    elif message.command[1] in ["disable", "off", "0", "no", "false"]:
+        db.set("core.antipm", "status", False)
+        await message.edit("<b>Anti-PM disabled!</b>")
+    else:
+        await message.edit(f"<b>Usage: {prefix}antipm [enable|disable]</b>")
+
+
+@Client.on_message(filters.command(["antipm_report"], prefix) & filters.me)
+async def antipm_report(_, message: Message):
+    if len(message.command) == 1:
+        if db.get("core.antipm", "spamrep", False):
+            await message.edit(
+                "<b>Spam-reporting enabled.\n"
+                f"Disable with: </b><code>{prefix}antipm_report disable</code>"
+            )
+        else:
+            await message.edit(
+                "<b>Spam-reporting disabled.\n"
+                f"Enable with: </b><code>{prefix}antipm_report enable</code>"
+            )
+    elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
+        db.set("core.antipm", "spamrep", True)
+        await message.edit("<b>Spam-reporting enabled!</b>")
+    elif message.command[1] in ["disable", "off", "0", "no", "false"]:
+        db.set("core.antipm", "spamrep", False)
+        await message.edit("<b>Spam-reporting disabled!</b>")
+    else:
+        await message.edit(f"<b>Usage: {prefix}antipm_report [enable|disable]</b>")
+
+
+@Client.on_message(filters.command(["antipm_block"], prefix) & filters.me)
+async def antipm_report(_, message: Message):
+    if len(message.command) == 1:
+        if db.get("core.antipm", "block", False):
+            await message.edit(
+                "<b>Blocking users enabled.\n"
+                f"Disable with: </b><code>{prefix}antipm_block disable</code>"
+            )
+        else:
+            await message.edit(
+                "<b>Blocking users disabled.\n"
+                f"Enable with: </b><code>{prefix}antipm_block enable</code>"
+            )
+    elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
+        db.set("core.antipm", "block", True)
+        await message.edit("<b>Blocking users enabled!</b>")
+    elif message.command[1] in ["disable", "off", "0", "no", "false"]:
+        db.set("core.antipm", "block", False)
+        await message.edit("<b>Blocking users disabled!</b>")
+    else:
+        await message.edit(f"<b>Usage: {prefix}antipm_block [enable|disable]</b>")
 
 
 @Client.on_message(filters.command(["disable_anti_pm"], prefix) & filters.me)
-async def disable_anti_pm(client: Client, message: Message):
+async def disable_anti_pm(_, message: Message):
     db.set("core.antipm", "status", False)
-    await message.edit("Anti-pm disabled")
+    await message.edit("<b>Anti-PM disabled!</b>")
 
 
 @Client.on_message(filters.command(["esr"], prefix) & filters.me)
-async def esr(client: Client, message: Message):
+async def esr(_, message: Message):
     db.set("core.antipm", "spamrep", True)
     await message.edit("Spam-reporting enabled")
 
 
 @Client.on_message(filters.command(["dsr"], prefix) & filters.me)
-async def dsr(client: Client, message: Message):
+async def dsr(_, message: Message):
     db.set("core.antipm", "spamrep", False)
     await message.edit("Spam-reporting disabled")
 
 
-modules_help.append(
-    {
-        "antipm": [
-            {
-                "anti_pm": "Delete all messages from users who are not in the contact book"
-            },
-            {"disable_anti_pm": "Disable"},
-            {"esr": "Enable spam report"},
-            {"dsr": "Disable spam report"},
-        ]
-    }
-)
+modules_help["antipm"] = {
+    "antipm [enable|disable]": "When enabled, deletes all messages from users who are not in the contact book",
+    "antipm_report [enable|disable]": "Enable spam reporting",
+    "antipm_block [enable|disable]": "Enable user blocking",
+}

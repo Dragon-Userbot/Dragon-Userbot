@@ -19,16 +19,17 @@ from time import perf_counter
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command(["ping", "p"], prefix) & filters.me)
-async def ping(client: Client, message: Message):
+async def ping(_, message: Message):
     start = perf_counter()
-    await message.edit("Pong")
+    await message.edit("<b>Pong!</b>")
     end = perf_counter()
-    ping = end - start
-    await message.edit(f"<b>Ping</b><code> {round(ping, 3)}s</code>")
+    await message.edit(f"<b>Pong! {round(end - start, 3)}s</b>")
 
 
-modules_help.append({"ping": [{"ping": "To find out the ping"}]})
+modules_help["ping"] = {
+    "ping": "Check ping to Telegram servers",
+}

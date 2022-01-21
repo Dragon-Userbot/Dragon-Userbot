@@ -14,44 +14,61 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import sys
 from io import StringIO
+from contextlib import redirect_stdout
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from .utils.utils import modules_help, prefix
+from utils.misc import modules_help, prefix
+from utils.scripts import format_exc
 
 
-@Client.on_message(filters.command(["ex", "py"], prefix) & filters.me)
+@Client.on_message(filters.command(["ex", "exec", "py"], prefix) & filters.me)
 def user_exec(client: Client, message: Message):
-    reply = message.reply_to_message
-    code = ""
+    if len(message.command) == 1:
+        message.edit("<b>Code to execute isn't provided</b>")
+        return
+
+    code = message.text.split(maxsplit=1)[1]
+    stdout = StringIO()
+
+    message.edit("<b>Executing...</b>")
+
     try:
-        code = message.text.split(" ", maxsplit=1)[1]
-    except IndexError:
-        try:
-            code = message.text.split(" \n", maxsplit=1)[1]
-        except IndexError:
-            pass
+        with redirect_stdout(stdout):
+            exec(code)
+        message.edit(
+            "<b>Code:</b>\n"
+            f"<code>{code}</code>\n\n"
+            "<b>Result</b>:\n"
+            f"<code>{stdout.getvalue()}</code>"
+        )
+    except Exception as e:
+        message.edit(format_exc(e))
 
-    result = sys.stdout = StringIO()
+
+@Client.on_message(filters.command(["eval"], prefix) & filters.me)
+def user_eval(client: Client, message: Message):
+    if len(message.command) == 1:
+        message.edit("<b>Code to eval isn't provided</b>")
+        return
+
+    code = message.text.split(maxsplit=1)[1]
+
     try:
-        exec(code)
-
+        result = eval(code)
         message.edit(
-            f"<b>Code:</b>\n"
+            "<b>Code:</b>\n"
             f"<code>{code}</code>\n\n"
-            f"<b>Result</b>:\n"
-            f"<code>{result.getvalue()}</code>"
+            "<b>Result</b>:\n"
+            f"<code>{result}</code>"
         )
-    except:
-        message.edit(
-            f"<b>Code:</b>\n"
-            f"<code>{code}</code>\n\n"
-            f"<b>Result</b>:\n"
-            f"<code>{sys.exc_info()[0].__name__}: {sys.exc_info()[1]}</code>"
-        )
+    except Exception as e:
+        message.edit(format_exc(e))
 
 
-modules_help.append({"python": [{"ex [python code]*": "Python code execution"}]})
+modules_help["python"] = {
+    "ex [python code]": "Execute Python code",
+    "eval [python code": "Eval Python code",
+}

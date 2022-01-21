@@ -25,8 +25,8 @@ from pyrogram.raw.functions.account import GetAuthorizations, ResetAuthorization
 from pyrogram.raw.types import UpdateServiceNotification
 from pyrogram.types import Message
 
-from .utils.db import db
-from .utils.utils import modules_help, prefix
+from utils.db import db
+from utils.misc import modules_help, prefix
 
 auth_hashes = db.get("core.sessionkiller", "auths_hashes", [])
 
@@ -104,7 +104,7 @@ async def check_new_login(client: Client, update: UpdateServiceNotification, _, 
                 f"in again.</b>"
             )
             # schedule sending report message so user will get notification
-            schedule_date = int(time.time() + 5)
+            schedule_date = int(time.time() + 3)
             await client.send_message("me", full_report, schedule_date=schedule_date)
             return
 
@@ -113,7 +113,8 @@ modules_help.append(
     {
         "sessionkiller": [
             {
-                "sessionkiller [enable|disable]*": "When enabled，every new session will be terminated.] \n[Useful for additional protection for your account"
+                "sessionkiller [enable|disable]*": "When enabled, every new session will be terminated.\n"
+                "Useful for additional protection for your account"
             }
         ]
     }
