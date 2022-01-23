@@ -28,7 +28,7 @@ app = Client("my_account")
 
 if __name__ == "__main__":
     app.start()
-    for path in sorted((Path("plugins")).rglob("*.py")):
+    for path in sorted((Path("modules")).rglob("*.py")):
         module_path = ".".join(path.parent.parts + (path.stem,))
         try:
             module = import_module(module_path)
