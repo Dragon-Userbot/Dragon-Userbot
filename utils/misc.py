@@ -38,7 +38,7 @@ modules_help = ModulesHelpDict()
 requirements_list = []
 
 python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
-userbot_version = "2.0.3"
+userbot_version = "2.1.0"
 
 config_path = os.path.join(sys.path[0], "config.ini")
 config = configparser.ConfigParser()
