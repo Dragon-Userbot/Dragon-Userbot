@@ -47,17 +47,6 @@ def format_exc(e: Exception, hint: str = None):
             f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>" + hint_text
         )
 
-
-def with_reply(func):
-    async def wrapped(client: Client, message: Message):
-        if not message.reply_to_message:
-            await message.edit("<b>Reply to message is required</b>")
-        else:
-            return await func(client, message)
-
-    return wrapped
-
-
 def format_module_help(module_name: str):
     commands = modules_help[module_name]
 
