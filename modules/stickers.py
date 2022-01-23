@@ -141,3 +141,7 @@ def resize_image(img, size, dest):
     finally:
         im.close()
         del im
+
+modules_help["stickers"] = {
+    "kang [reply*] [pack*] [emoji]": 'Add sticker to defined pack'
+}
