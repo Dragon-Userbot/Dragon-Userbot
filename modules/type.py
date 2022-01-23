@@ -25,33 +25,19 @@ from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command("type", prefix) & filters.me)
-async def type(client: Client, message: Message):
-    orig_text = " ".join(message.command[1:])
-    text = orig_text
-    tbp = ""
+async def type_cmd(_, message: Message):
+    text = message.text.split(maxsplit=1)[1]
+    typed = ""
     typing_symbol = "▒"
 
-    while text: # while the text string is not empty
-        try:
-            await message.edit(tbp + typing_symbol)
-            await asyncio.sleep(0.1)
-
-            tbp += text[0]
-            text = text[1:]
-
-            await message.edit(tbp)
-            await asyncio.sleep(0.1)
-
-        except FloodWait as e:
-            time.sleep(e.x)
+    for char in text:
+        await message.edit(typed + typing_symbol)
+        await asyncio.sleep(0.1)
+        typed += char
+        await message.edit(typed)
+        await asyncio.sleep(0.1)
 
 
-modules_help.append(
-    {
-        "type": [
-            {
-                "type [text]*": "Typing emulation\nDon't use for a lot of characters. Your account may be banned!"
-            }
-        ]
-    }
-)
+modules_help["type"] = {
+    "type [text]*": "Typing emulation. Don't use a lot of characters, you can receive a lot of floodwaits!"
+}

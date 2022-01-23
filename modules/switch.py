@@ -14,41 +14,38 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import asyncio
-
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
 
-
-@Client.on_message(filters.command("sw", prefix) & filters.me)
-async def switch(client: Client, message: Message):
-    text = " ".join(message.command[1:])
-    ru_keys = """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,"""
-    en_keys = """`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?"""
-    if text == "":
-        if message.reply_to_message:
-            reply_text = message.reply_to_message.text
-            change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
-            reply_text = str.translate(reply_text, change)
-            await message.edit(reply_text)
-        else:
-            await message.edit("No text for switch")
-            await asyncio.sleep(3)
-            await message.delete()
-    else:
-        change = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
-        text = str.translate(text, change)
-        await message.edit(text)
-
-
-modules_help.append(
-    {
-        "switch": [
-            {
-                "sw [reply]/[text for switch]*": "This is useful if you forgot to change the keyboard layout"
-            }
-        ]
-    }
+ru_keys = (
+    """ёйцукенгшщзхъфывапролджэячсмитьбю.Ё"№;%:?ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,"""
 )
+en_keys = (
+    """`qwertyuiop[]asdfghjkl;'zxcvbnm,./~@#$%^&QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?"""
+)
+table = str.maketrans(ru_keys + en_keys, en_keys + ru_keys)
+
+
+@Client.on_message(filters.command(["switch", "sw", "tr"], prefix) & filters.me)
+async def switch(client: Client, message: Message):
+    if len(message.command) == 1:
+        if message.reply_to_message:
+            text = message.reply_to_message.text
+        else:
+            history = await client.get_history(message.chat.id, limit=2)
+            if history and history[1].from_user.is_self and history[1].text:
+                text = history[1].text
+            else:
+                await message.edit("<b>Text to switch not found</b>")
+                return
+    else:
+        text = message.text.split(maxsplit=1)[1]
+
+    await message.edit(str.translate(text, table))
+
+
+modules_help["switch"] = {
+    "sw [reply/text for switch]*": "Useful when tou forgot to change the keyboard layout",
+}

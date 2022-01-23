@@ -25,7 +25,7 @@ from utils.misc import requirements_list
 @Client.on_message(filters.command("covid", prefix) & filters.me)
 async def covid_local(_, message: Message):
     region = " ".join(message.command[1:])
-    await message.edit("<code>Data retrieval...</code>")
+    await message.edit("<b>Data retrieval...</b>")
     covid = Covid(source="worldometers")
     try:
         local_status = covid.get_status_by_country_name(region)
@@ -43,30 +43,23 @@ async def covid_local(_, message: Message):
             + f"<b>🚑 Recovered</b>: <code>{local_status['recovered']}</code>\n"
         )
     except ValueError:
-        await message.edit(f'<code>There is no region called "{region}"</code>')
+        await message.edit(f"<b>There is no region called {region}</b>")
 
 
 @Client.on_message(filters.command("regions", prefix) & filters.me)
-async def regions(client: Client, message: Message):
-    countr = ""
-    await message.edit("<code>Data retrieval...</code>")
+async def regions_cmd(_, message: Message):
+    countries = ""
+    await message.edit("<b>Data retrieval...</b>")
     covid = Covid(source="worldometers")
-    regions = covid.list_countries()
-    for region in regions:
-        region = f"{region}\n"
-        countr += region
-    await message.edit(f"<code>{countr}</code>")
+    for region in covid.list_countries():
+        countries += f"<code>{region}</code>\n"
+    await message.edit(countries)
 
 
-modules_help.append(
-    {
-        "covidinfo": [
-            {"covid [region]*": "Status by region"},
-            {
-                "regions": "Available regions]\n=======================\n[Worldometer.info statistics are used"
-            },
-        ]
-    }
-)
+modules_help["covidinfo"] = {
+    "covid [region]*": "COVID-19 status by region",
+    "regions": "Available regions</i>\n\n"
+    "<b>Worldometer.info statistics are used</b><i>",
+}
 
 requirements_list.append("covid")

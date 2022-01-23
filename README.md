@@ -89,9 +89,17 @@ async def example_send(client: Client, message: Message):
 
 
 # This adds instructions for your module
-modules_help.append(
-    {"example": [{"example_send": "example send"}, {"example_edit": "example edit"}]}
-)
+modules_help["example"] = {
+    "example_send": "Example send",
+    "example_edit": "Example edit",
+}
+
+# modules_help["example"] = { "example_send [text]": "example send" }
+#                  |            |              |        |
+#                  |            |              |        └─ command description
+#           module_name         command_name   └─ optional command arguments
+#        (only snake_case)   (only snake_case too)
+
 
 # If your custom module requires packages from PyPI, write the names of the packages in these functions
 # requirements_list.append('example_1')

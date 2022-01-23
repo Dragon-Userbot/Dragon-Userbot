@@ -33,5 +33,5 @@ async def manul(client: Client, message: Message):
 
 
 modules_help["manul"] = {
-    "manul [amount]": "Release manuls",
+    "manul [amount]*": "Release manuls",
 }

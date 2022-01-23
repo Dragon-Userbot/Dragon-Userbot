@@ -220,17 +220,6 @@ async def clear_note(client: Client, message: Message):
         await message.edit(f"Example: <code>{prefix}clear name note</code>")
 
 
-modules_help.append(
-    {
-        "notes": [
-            {"save [name note]*": "Reply on user message"},
-            {"note [name note]*": "Cheking note"},
-            {"notes": "Cheking notes"},
-            {"clear [name note]*": "Delete note"},
-        ]
-    }
-)
-
 modules_help["notes"] = {
     "save [name]*": "Save note",
     "note [name]*": "Get saved note",

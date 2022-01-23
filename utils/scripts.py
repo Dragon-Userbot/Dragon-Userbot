@@ -16,54 +16,36 @@
 
 import os
 
-from pyrogram import Client, filters, errors
-from pyrogram.types import Message, ChatPermissions
-import logging
+from pyrogram import Client, errors
+from pyrogram.types import Message
+import traceback
 
 from .misc import modules_help, prefix
 
-date_dict = {}
 
-
-@Client.on_message(filters.chat("@creationdatebot"), group=-1)
-async def get_date(client: Client, message: Message):
-    await client.read_history("@creationdatebot")
-    date_dict.update({"date": message.text})
-
-
-async def text(_, message: Message):
+async def text(message: Message):
     return message.text if message.text else message.caption
-
-
-async def chat_permissions(_, message: Message):
-    return ChatPermissions(
-        can_send_messages=message.chat.permissions.can_send_messages,
-        can_send_media_messages=message.chat.permissions.can_send_media_messages,
-        can_send_stickers=message.chat.permissions.can_send_stickers,
-        can_send_animations=message.chat.permissions.can_send_animations,
-        can_send_games=message.chat.permissions.can_send_games,
-        can_use_inline_bots=message.chat.permissions.can_use_inline_bots,
-        can_add_web_page_previews=message.chat.permissions.can_add_web_page_previews,
-        can_send_polls=message.chat.permissions.can_send_polls,
-        can_change_info=message.chat.permissions.can_change_info,
-        can_invite_users=message.chat.permissions.can_invite_users,
-        can_pin_messages=message.chat.permissions.can_pin_messages,
-    )
 
 
 async def restart():
     await os.execvp("python3", ["python3", "main.py"])
 
 
-def format_exc(e: Exception):
-    logging.error(e)
+def format_exc(e: Exception, hint: str = None):
+    traceback.print_exc()
     if isinstance(e, errors.RPCError):
         return (
             f"<b>Telegram API error!</b>\n"
             f"<code>[{e.CODE} {e.ID or e.NAME}] - {e.MESSAGE}</code>"
         )
     else:
-        return f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>"
+        if hint:
+            hint_text = f"\n\n<b>Hint: {hint}</b>"
+        else:
+            hint_text = ""
+        return (
+            f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>" + hint_text
+        )
 
 
 def with_reply(func):

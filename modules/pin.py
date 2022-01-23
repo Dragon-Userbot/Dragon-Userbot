@@ -41,11 +41,7 @@ async def unpin(_, message: Message):
         await message.edit(format_exc(e))
 
 
-modules_help.append(
-    {
-        "pin": [
-            {"pin": "Pin replied message"},
-            {"unpin": "Unpin replied message"},
-        ]
-    }
-)
+modules_help["pin"] = {
+    "pin": "Pin replied message",
+    "unpin": "Unpin replied message",
+}

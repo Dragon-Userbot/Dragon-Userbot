@@ -58,11 +58,7 @@ async def version(client: Client, message: Message):
     )
 
 
-modules_help.append(
-    {
-        "support": [
-            {"support": "Information about userbot"},
-            {"version": "Check userbot version"},
-        ]
-    }
-)
+modules_help["support"] = {
+    "support": "Information about userbot",
+    "version": "Check userbot version",
+}

@@ -42,12 +42,6 @@ async def webshot(client: Client, message: Message):
         )
 
 
-modules_help.append(
-    {
-        "google": [
-            {
-                "google [request]": "To teach the interlocutor to use Google. Request isn't required."
-            }
-        ]
-    }
-)
+modules_help["google"] = {
+    "google [request]": "To teach the interlocutor to use Google. Request isn't required."
+}

@@ -22,13 +22,12 @@ import requests
 from pyrogram import Client, filters, errors, types
 
 from utils.misc import modules_help, prefix
+from utils.scripts import with_reply, format_exc
 
 
 @Client.on_message(filters.command(["q", "quote"], prefix) & filters.me)
+@with_reply
 async def quote_cmd(client: Client, message: types.Message):
-    if not message.reply_to_message:
-        return await message.edit("<b>Specify message(s) for quote</b>")
-
     if len(message.command) > 1 and message.command[1].isdigit():
         count = int(message.command[1])
         if count < 1:
@@ -88,16 +87,14 @@ async def quote_cmd(client: Client, message: types.Message):
         chat_id = "me" if send_for_me else message.chat.id
         await func(chat_id, file_io)
     except errors.RPCError as e:  # no rights to send stickers, etc
-        await message.edit(f"<b>Telegram API error!</b>\n" f"<code>{e}</code>")
+        await message.edit(format_exc(e))
     else:
         await message.delete()
 
 
 @Client.on_message(filters.command(["fq", "fakequote"], prefix) & filters.me)
+@with_reply
 async def fake_quote_cmd(client: Client, message: types.Message):
-    if not message.reply_to_message:
-        return await message.edit("<b>Specify message for fake quote</b>")
-
     is_png = "!png" in message.command or "!file" in message.command
     send_for_me = "!me" in message.command or "!ls" in message.command
     no_reply = "!noreply" in message.command or "!nr" in message.command
@@ -149,7 +146,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         chat_id = "me" if send_for_me else message.chat.id
         await func(chat_id, file_io)
     except errors.RPCError as e:  # no rights to send stickers, etc
-        await message.edit(f"<b>Telegram API error!</b>\n" f"<code>{e}</code>")
+        await message.edit(format_exc(e))
     else:
         await message.delete()
 
@@ -381,13 +378,9 @@ def get_full_name(user: types.User) -> str:
     return name
 
 
-modules_help.append(
-    {
-        "squotes": [
-            {
-                "q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send a quote as png; !me — send a quote to saved messages; !noreply - make a quote without reply message"
-            },
-            {"fq [reply]* [args] [text]": "Generate a fake quote"},
-        ]
-    }
-)
+modules_help["squotes"] = {
+    "q [reply]* [count 1-15] [!png] [!me] [!noreply]": "Generate a quote\n"
+    "Available options: !png — send as PNG, !me — send quote to"
+    "saved messages, !noreply — generate quote without reply",
+    "fq [reply]* [!png] [!me] [!noreply] [text]*": "Generate a fake quote",
+}

@@ -129,7 +129,7 @@ async def dsr(_, message: Message):
 
 
 modules_help["antipm"] = {
-    "antipm [enable|disable]": "When enabled, deletes all messages from users who are not in the contact book",
-    "antipm_report [enable|disable]": "Enable spam reporting",
-    "antipm_block [enable|disable]": "Enable user blocking",
+    "antipm [enable|disable]*": "When enabled, deletes all messages from users who are not in the contact book",
+    "antipm_report [enable|disable]*": "Enable spam reporting",
+    "antipm_block [enable|disable]*": "Enable user blocking",
 }

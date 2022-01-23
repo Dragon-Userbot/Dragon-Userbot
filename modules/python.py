@@ -48,7 +48,7 @@ def user_exec(client: Client, message: Message):
         message.edit(format_exc(e))
 
 
-@Client.on_message(filters.command(["eval"], prefix) & filters.me)
+@Client.on_message(filters.command(["ev", "eval"], prefix) & filters.me)
 def user_eval(client: Client, message: Message):
     if len(message.command) == 1:
         message.edit("<b>Code to eval isn't provided</b>")

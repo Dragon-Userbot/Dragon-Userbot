@@ -16,12 +16,17 @@
 
 import os
 import subprocess
+import pathlib
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix, requirements_list
 from utils.scripts import format_exc
+
+
+HOME_FILE_PATH = pathlib.Path.home() / "dragon-userbot-config.ini"
+CURRENT_FILE_PATH = pathlib.Path.cwd() / "config.ini"
 
 
 async def restart(message: Message, restart_type):
@@ -49,8 +54,11 @@ async def update(_, message: Message):
     try:
         await message.edit("<b>Updating: 1/4 (updating pip)</b>")
         subprocess.run(["python3", "-m", "pip", "install", "-U", "pip"])
-        # await message.edit("<b>Updating: 2/4 (git pull)</b>")
-        # subprocess.run(["git", "pull"])
+        await message.edit("<b>Updating: 2/4 (git pull)</b>")
+        CURRENT_FILE_PATH.replace(HOME_FILE_PATH)
+        subprocess.run(["git", "restore", "config.ini"])
+        subprocess.run(["git", "pull"])
+        HOME_FILE_PATH.replace(CURRENT_FILE_PATH)
         await message.edit("<b>Updating: 3/4 (updating libs from requirements.txt)</b>")
         subprocess.run(
             ["python3", "-m", "pip", "install", "-U", "-r", "requirements.txt"]

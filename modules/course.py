@@ -30,10 +30,14 @@ headers = {
 
 @Client.on_message(filters.command("course", prefix) & filters.me)
 async def convert(_, message: Message):
-    try:
-        await message.edit("<code>Data retrieval...</code>")
-        name = message.command[1]
+    if len(message.command) == 1:
+        await message.edit("<b>Enter currency name</b>")
+        return
 
+    name = message.command[1]
+    await message.edit("<b>Data retrieval...</b>")
+
+    try:
         if name == "btc":
             name = "1₿"
             link = "https://ru.investing.com/crypto/bitcoin"

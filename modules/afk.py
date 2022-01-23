@@ -65,8 +65,4 @@ async def unafk(_, message):
         await message.edit("<b>You weren't afk</b>")
 
 
-modules_help.append(
-    {"afk": [{"afk [reason]": "Go to afk"}, {"unafk": "Get out of AFK"}]}
-)
-
 modules_help["afk"] = {"afk [reason]": "Go to afk", "unafk": "Get out of AFK"}
