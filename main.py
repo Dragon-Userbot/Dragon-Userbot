@@ -22,7 +22,7 @@ from pyrogram.raw.functions.account import GetAuthorizations
 from pathlib import Path
 from importlib import import_module
 
-from plugins.utils.db import db
+from utils.db import db
 
 app = Client("my_account")
 
