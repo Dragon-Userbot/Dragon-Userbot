@@ -17,6 +17,8 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
+import asyncio
+
 from utils.misc import modules_help, prefix
 from utils.scripts import with_reply
 
@@ -28,19 +30,21 @@ async def del_msg(_, message: Message):
 
 
 @Client.on_message(filters.command("purge", prefix) & filters.me)
-@with_reply
 async def purge(client: Client, message: Message):
-    chunk = []
-    async for msg in client.iter_history(
-        chat_id=message.chat.id,
-        offset_id=message.reply_to_message.message_id,
-        reverse=True,
-    ):
-        chunk.append(msg)
-        if len(chunk) >= 100:
-            await client.delete_messages(message.chat.id, chunk)
-            chunk = []
-
+    messages_to_purge = []
+    if message.reply_to_message:
+        async for msg in client.iter_history(
+            chat_id=message.chat.id,
+            offset_id=message.reply_to_message.message_id,
+            reverse=True,
+        ):
+            messages_to_purge.append(msg.message_id)
+    not_deleted_messages = []
+    for msgs in [
+        messages_to_purge[i : i + 100] for i in range(0, len(messages_to_purge), 100)
+    ]:
+        res = await client.delete_messages(message.chat.id, msgs)
+        await asyncio.sleep(1)
 
 modules_help["purge"] = {
     "purge [reply]": "Purge (delete all messages) chat from replied message to last",
