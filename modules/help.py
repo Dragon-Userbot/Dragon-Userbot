@@ -57,7 +57,7 @@ async def help_cmd(_, message: Message):
         else:
             await message.edit(text, disable_web_page_preview=True)
     else:
-        module_name = message.text.split(maxsplit=1)[1]
+        module_name = message.text.split(maxsplit=1)[1].lower()
         if module_name in modules_help:
             await message.edit(format_module_help(module_name))
         else:
