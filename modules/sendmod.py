@@ -28,20 +28,21 @@ from utils.scripts import format_exc, format_module_help
 async def sendmod(client: Client, message: Message):
     if len(message.command) == 1:
         await message.edit("<b>Module name to send is not provided</b>")
+        return
 
     await message.edit("<b>Dispatching...</b>")
     try:
         module_name = message.command[1].lower()
         if module_name in modules_help:
             text = format_module_help(module_name)
-            if os.path.isfile(f"plugins/{module_name}.py"):
+            if os.path.isfile(f"modules/{module_name}.py"):
                 await client.send_document(
-                    message.chat.id, f"plugins/{module_name}.py", caption=text
+                    message.chat.id, f"modules/{module_name}.py", caption=text
                 )
-            elif os.path.isfile(f"plugins/custom_modules/{module_name.lower()}.py"):
+            elif os.path.isfile(f"modules/custom_modules/{module_name.lower()}.py"):
                 await client.send_document(
                     message.chat.id,
-                    f"plugins/custom_modules/{module_name}.py",
+                    f"modules/custom_modules/{module_name}.py",
                     caption=text,
                 )
             await message.delete()

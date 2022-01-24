@@ -87,10 +87,10 @@ async def loadmod(_, message: Message):
         await message.edit(f"<b>Module <code>{module_name}</code> is not found</b>")
         return
 
-    if not os.path.exists(f"{BASE_PATH}/plugins/custom_modules"):
-        os.mkdir(f"{BASE_PATH}/plugins/custom_modules")
+    if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
+        os.mkdir(f"{BASE_PATH}/modules/custom_modules")
 
-    with open(f"./plugins/custom_modules/{module_name}", "wb") as f:
+    with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
         f.write(resp.content)
 
     await message.edit(f"<b>The module <code>{module_name}</code> is loaded!</b>")
@@ -109,11 +109,11 @@ async def unload_mods(_, message: Message):
     ):
         module_name = module_name.split("/")[-1].split(".")[0]
 
-    if os.path.exists(f"{BASE_PATH}/plugins/custom_modules/{module_name}.py"):
-        os.remove(f"{BASE_PATH}/plugins/custom_modules/{module_name}.py")
+    if os.path.exists(f"{BASE_PATH}/modules/custom_modules/{module_name}.py"):
+        os.remove(f"{BASE_PATH}/modules/custom_modules/{module_name}.py")
         await message.edit(f"<b>The module <code>{module_name}</code> removed!</b>")
         await restart()
-    elif os.path.exists(f"{BASE_PATH}/plugins/{module_name}.py"):
+    elif os.path.exists(f"{BASE_PATH}/modules/{module_name}.py"):
         await message.edit(
             "<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>"
         )
@@ -125,8 +125,8 @@ async def unload_mods(_, message: Message):
 async def load_all_mods(_, message: Message):
     await message.edit("<b>Fetching info...</b>")
 
-    if not os.path.exists(f"{BASE_PATH}/plugins/custom_modules"):
-        os.mkdir(f"{BASE_PATH}/plugins/custom_modules")
+    if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
+        os.mkdir(f"{BASE_PATH}/modules/custom_modules")
 
     modules_list = requests.get(
         "https://api.github.com/repos/Dragon-Userbot/custom_modules/contents/"
@@ -136,7 +136,7 @@ async def load_all_mods(_, message: Message):
     for module_info in modules_list:
         if not module_info["name"].endswith(".py"):
             continue
-        if os.path.exists(f'{BASE_PATH}/plugins/custom_modules/{module_info["name"]}'):
+        if os.path.exists(f'{BASE_PATH}/modules/custom_modules/{module_info["name"]}'):
             continue
         new_modules[module_info["name"][:-3]] = module_info["download_url"]
     if not new_modules:
@@ -144,7 +144,7 @@ async def load_all_mods(_, message: Message):
 
     await message.edit(f'<b>Loading new modules: {" ".join(new_modules.keys())}</b>')
     for name, url in new_modules.items():
-        with open(f"./plugins/custom_modules/{name}.py", "wb") as f:
+        with open(f"./modules/custom_modules/{name}.py", "wb") as f:
             f.write(requests.get(url).content)
 
     await message.edit(
