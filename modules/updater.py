@@ -55,10 +55,10 @@ async def update(_, message: Message):
         await message.edit("<b>Updating: 1/4 (updating pip)</b>")
         subprocess.run(["python3", "-m", "pip", "install", "-U", "pip"])
         await message.edit("<b>Updating: 2/4 (git pull)</b>")
-        CURRENT_FILE_PATH.replace(HOME_FILE_PATH)
-        subprocess.run(["git", "restore", "config.ini"])
+        # CURRENT_FILE_PATH.replace(HOME_FILE_PATH)
+        # subprocess.run(["git", "restore", "config.ini"])
         subprocess.run(["git", "pull"])
-        HOME_FILE_PATH.replace(CURRENT_FILE_PATH)
+        # HOME_FILE_PATH.replace(CURRENT_FILE_PATH)
         await message.edit("<b>Updating: 3/4 (updating libs from requirements.txt)</b>")
         subprocess.run(
             ["python3", "-m", "pip", "install", "-U", "-r", "requirements.txt"]
