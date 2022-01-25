@@ -36,13 +36,13 @@ async def sessionkiller(_, message: Message):
     if len(message.command) == 1:
         if db.get("core.sessionkiller", "enabled", False):
             await message.edit(
-                "Sessionkiller status: <b>enabled</b>\n"
-                f"You can disable it with <code>{prefix}sessionkiller disable</code>"
+                "<b>Sessionkiller status: enabled\n"
+                f"<b>You can disable it with <code>{prefix}sessionkiller disable</code></b>"
             )
         else:
             await message.edit(
-                "Sessionkiller status: <b>disabled</b>\n"
-                f"You can enable it with <code>{prefix}sessionkiller enable</code>"
+                "<b>Sessionkiller status: disabled\n"
+                f"You can enable it with <code>{prefix}sessionkiller enable</code></b>"
             )
     elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
         db.set("core.sessionkiller", "enabled", True)

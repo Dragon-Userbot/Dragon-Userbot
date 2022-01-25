@@ -14,7 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from pyrogram import Client, filters
+from pyrogram import Client, filters, errors
 from pyrogram.types import (
     Message,
     InputMediaPhoto,
@@ -31,72 +31,99 @@ from utils.scripts import with_reply
 @Client.on_message(filters.command(["save"], prefix) & filters.me)
 @with_reply
 async def save_note(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
+    await message.edit("<b>Loading...</b>")
 
-    async def chat_id():
-        cid = db.get("core.notes", "chat_id")
-        if cid is not None:
-            return cid
+    try:
+        chat = await client.get_chat(db.get("core.notes", "chat_id", 0))
+    except errors.RPCError:
+        # group is not accessible or isn't created
         chat = await client.create_supergroup(
             "Dragon_Userbot_Notes_Filters", "Don't touch this group, please"
         )
-
         db.set("core.notes", "chat_id", chat.id)
-        return chat.id
+
+    chat_id = chat.id
 
     if message.reply_to_message and len(message.text.split()) >= 2:
-        note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
+        note_name = message.text.split(maxsplit=1)[1]
         if message.reply_to_message.media_group_id:
-            cheking_note = db.get("core.notes", f"note{note_name}", False)
-            if not cheking_note:
+            checking_note = db.get("core.notes", f"note{note_name}", False)
+            if not checking_note:
                 get_media_group = [
                     _.message_id
                     for _ in await client.get_media_group(
                         message.chat.id, message.reply_to_message.message_id
                     )
                 ]
-                message_id = await client.forward_messages(
-                    await chat_id(), message.chat.id, get_media_group
-                )
+                try:
+                    message_id = await client.forward_messages(
+                        chat_id, message.chat.id, get_media_group
+                    )
+                except errors.ChatForwardsRestricted:
+                    await message.edit(
+                        "<b>Forwarding messages is restricted by chat admins</b>"
+                    )
+                    return
                 note = {
-                    "MESSAGE_ID": f"{message_id[1].message_id}",
+                    "MESSAGE_ID": str(message_id[1].message_id),
                     "MEDIA_GROUP": True,
-                    "CHAT_ID": f"{await chat_id()}",
+                    "CHAT_ID": str(chat_id),
                 }
                 db.set("core.notes", f"note{note_name}", note)
-                await message.edit(
-                    f"Note {message.text.split(' ', maxsplit=1)[1]} saved"
-                )
+                await message.edit(f"<b>Note {note_name} saved</b>")
             else:
-                await message.edit("This note already exists")
+                await message.edit("<b>This note already exists</b>")
         else:
-            cheking_note = db.get("core.notes", f"note{note_name}", False)
-            if not cheking_note:
-                message_id = await message.reply_to_message.forward(await chat_id())
+            checking_note = db.get("core.notes", f"note{note_name}", False)
+            if not checking_note:
+                try:
+                    message_id = await message.reply_to_message.forward(chat_id)
+                except errors.ChatForwardsRestricted:
+                    if message.reply_to_message.text:
+                        # manual copy
+                        message_id = await client.send_message(
+                            chat_id, message.reply_to_message.text
+                        )
+                    else:
+                        await message.edit(
+                            "<b>Forwarding messages is restricted by chat admins</b>"
+                        )
+                        return
                 note = {
                     "MEDIA_GROUP": False,
-                    "MESSAGE_ID": f"{message_id.message_id}",
-                    "CHAT_ID": f"{await chat_id()}",
+                    "MESSAGE_ID": str(message_id.message_id),
+                    "CHAT_ID": str(chat_id),
                 }
                 db.set("core.notes", f"note{note_name}", note)
-                await message.edit(
-                    f"Note {message.text.split(' ', maxsplit=1)[1]} saved"
-                )
+                await message.edit(f"<b>Note {note_name} saved</b>")
             else:
-                await message.edit("This note already exists")
+                await message.edit("<b>This note already exists</b>")
     else:
         await message.edit(
-            f"Example: <code>{prefix}save name note</code> Reply on user message"
+            f"<b>Example: <code>{prefix}save note_name</code> (reply to message is required)</b>"
         )
 
 
 @Client.on_message(filters.command(["note"], prefix) & filters.me)
 async def note_send(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
     if len(message.text.split()) >= 2:
-        note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
+        await message.edit("<b>Loading...</b>")
+
+        note_name = f"{message.text.split(maxsplit=1)[1]}"
         find_note = db.get("core.notes", f"note{note_name}", False)
         if find_note:
+            try:
+                await client.get_messages(
+                    int(find_note["CHAT_ID"]), int(find_note["MESSAGE_ID"])
+                )
+            except errors.RPCError:
+                await message.edit(
+                    "<b>Sorry, but this note is unavaliable.\n\n"
+                    f"You can delete this note with "
+                    f"<code>{prefix}clear {note_name}</code></b>"
+                )
+                return
+
             if find_note.get("MEDIA_GROUP"):
                 messages_grouped = await client.get_media_group(
                     int(find_note["CHAT_ID"]), int(find_note["MESSAGE_ID"])
@@ -188,17 +215,17 @@ async def note_send(client: Client, message: Message):
                 )
             await message.delete()
         else:
-            await message.edit("There is no such note")
+            await message.edit("<b>There is no such note</b>")
     else:
-        await message.edit(f"Example: <code>{prefix}note name note</code>")
+        await message.edit(f"<b>Example: <code>{prefix}note note_name</code></b>")
 
 
 @Client.on_message(filters.command(["notes"], prefix) & filters.me)
-async def notes(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
-    text = "Available notes\n\n"
-    clct = db.get_collection("core.notes")
-    for note in clct:
+async def notes(_, message: Message):
+    await message.edit("<b>Loading...</b>")
+    text = "Available notes:\n\n"
+    collection = db.get_collection("core.notes")
+    for note in collection:
         note = list(note.keys())[0]
         if note[:4] == "note":
             text += f"<code>{note[4:]}</code>\n"
@@ -206,18 +233,17 @@ async def notes(client: Client, message: Message):
 
 
 @Client.on_message(filters.command(["clear"], prefix) & filters.me)
-async def clear_note(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
+async def clear_note(_, message: Message):
     if len(message.text.split()) >= 2:
-        note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
+        note_name = message.text.split(maxsplit=1)[1]
         find_note = db.get("core.notes", f"note{note_name}", False)
         if find_note:
             db.remove("core.notes", f"note{note_name}")
-            await message.edit(f"Note {note_name} deleted")
+            await message.edit(f"<b>Note {note_name} deleted</b>")
         else:
-            await message.edit("There is no such note")
+            await message.edit("<b>There is no such note</b>")
     else:
-        await message.edit(f"Example: <code>{prefix}clear name note</code>")
+        await message.edit(f"<b>Example: <code>{prefix}clear note_name</code></b>")
 
 
 modules_help["notes"] = {

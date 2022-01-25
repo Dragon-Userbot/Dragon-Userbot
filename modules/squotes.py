@@ -78,7 +78,9 @@ async def quote_cmd(client: Client, message: types.Message):
             f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>"
         )
 
-    resized = resize_image(BytesIO(response.content), img_type="PNG" if is_png else "WEBP")
+    resized = resize_image(
+        BytesIO(response.content), img_type="PNG" if is_png else "WEBP"
+    )
     await message.edit("<b>Sending...</b>")
 
     try:
@@ -136,7 +138,9 @@ async def fake_quote_cmd(client: Client, message: types.Message):
             f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>"
         )
 
-    resized = resize_image(BytesIO(response.content), img_type="PNG" if is_png else "WEBP")
+    resized = resize_image(
+        BytesIO(response.content), img_type="PNG" if is_png else "WEBP"
+    )
     await message.edit("<b>Sending...</b>")
 
     try:
@@ -209,14 +213,16 @@ async def render_message(app: Client, message: types.Message) -> dict:
 
     # author
     author = {}
-    if message.from_user:
-        author["id"] = message.from_user.id
-        author["name"] = get_full_name(message.from_user)
-        if message.chat.type != "supergroup" or message.from_user.id == 0:
+    if message.from_user and message.from_user.id != 0:
+        from_user = message.from_user
+
+        author["id"] = from_user.id
+        author["name"] = get_full_name(from_user)
+        if message.chat.type != "supergroup":
             author["rank"] = ""
         else:
             try:
-                member = await message.chat.get_member(message.from_user.id)
+                member = await message.chat.get_member(from_user.id)
             except errors.UserNotParticipant:
                 author["rank"] = ""
             else:
@@ -228,10 +234,34 @@ async def render_message(app: Client, message: types.Message) -> dict:
                     else ""
                 )
 
-        if message.from_user.id == 0 or not message.from_user.photo:
-            author["avatar"] = ""
+        if from_user.photo:
+            author["avatar"] = await get_file(from_user.photo.big_file_id)
+        elif (
+            not from_user.photo
+            and from_user.status == "long_time_ago"
+            and from_user.username
+        ):
+            # may be user blocked us, we will try to get avatar via t.me
+            t_me_page = requests.get(f"https://t.me/{from_user.username}").text
+            sub = '<meta property="og:image" content='
+            index = t_me_page.find(sub)
+            if index != -1:
+                link = t_me_page[index + 35 :].split('"')
+                if (
+                    len(link) > 0
+                    and link[0]
+                    and link[0] != "https://telegram.org/img/t_logo.png"
+                ):
+                    # found valid link
+                    avatar = requests.get(link[0]).content
+                    author["avatar"] = base64.b64encode(avatar).decode()
+                else:
+                    author["avatar"] = ""
+            else:
+                author["avatar"] = ""
         else:
-            author["avatar"] = await get_file(message.from_user.photo.big_file_id)
+            author["avatar"] = ""
+
     else:
         author["id"] = message.sender_chat.id
         author["name"] = message.sender_chat.title

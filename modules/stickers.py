@@ -20,7 +20,13 @@ from io import BytesIO
 from pyrogram import Client, filters, types
 
 from utils.misc import modules_help, prefix
-from utils.scripts import with_reply, interact_with, interact_with_to_delete, format_exc, resize_image
+from utils.scripts import (
+    with_reply,
+    interact_with,
+    interact_with_to_delete,
+    format_exc,
+    resize_image,
+)
 
 
 @Client.on_message(filters.command("kang", prefix) & filters.me)
@@ -29,8 +35,10 @@ async def kang(client: Client, message: types.Message):
     await message.edit("<b>Please wait...</b>")
 
     if len(message.command) < 2:
-        await message.edit("<b>No arguments provided</b>\n"
-                           f"Usage: {prefix}kang [pack]* [emoji]")
+        await message.edit(
+            "<b>No arguments provided\n"
+            f"Usage: <code>{prefix}kang [pack]* [emoji]</code></b>"
+        )
         return
 
     pack = message.command[1]
@@ -56,7 +64,9 @@ async def kang(client: Client, message: types.Message):
     try:
         path = await message.reply_to_message.download()
     except ValueError:
-        await message.edit("<b>Replied message doesn't contain any downloadable media</b>")
+        await message.edit(
+            "<b>Replied message doesn't contain any downloadable media</b>"
+        )
         return
 
     resized = resize_image(path)
@@ -83,12 +93,12 @@ async def stick2png(client: Client, message: types.Message):
         await message.edit("<b>Downloading...</b>")
 
         path = await message.reply_to_message.download()
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             content = f.read()
         os.remove(path)
 
         file_io = BytesIO(content)
-        file_io.name = 'sticker.png'
+        file_io.name = "sticker.png"
 
         await client.send_document(message.chat.id, file_io)
     except Exception as e:
@@ -118,5 +128,5 @@ async def resize_cmd(client: Client, message: types.Message):
 modules_help["stickers"] = {
     "kang [reply]* [pack]* [emoji]": "Add sticker to defined pack",
     "stp [reply]*": "Convert replied sticker to PNG",
-    "resize [reply]*": "Resize replied image to 512xN format"
+    "resize [reply]*": "Resize replied image to 512xN format",
 }
