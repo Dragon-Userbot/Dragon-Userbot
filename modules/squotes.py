@@ -22,7 +22,7 @@ import requests
 from pyrogram import Client, filters, errors, types
 
 from utils.misc import modules_help, prefix
-from utils.scripts import with_reply, format_exc
+from utils.scripts import with_reply, format_exc, resize_image
 
 
 @Client.on_message(filters.command(["q", "quote"], prefix) & filters.me)
@@ -78,14 +78,13 @@ async def quote_cmd(client: Client, message: types.Message):
             f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>"
         )
 
-    file_io = BytesIO(response.content)
-    file_io.name = "sticker.png" if is_png else "sticker.webp"
+    resized = resize_image(BytesIO(response.content), img_type="PNG" if is_png else "WEBP")
     await message.edit("<b>Sending...</b>")
 
     try:
         func = client.send_document if is_png else client.send_sticker
         chat_id = "me" if send_for_me else message.chat.id
-        await func(chat_id, file_io)
+        await func(chat_id, resized)
     except errors.RPCError as e:  # no rights to send stickers, etc
         await message.edit(format_exc(e))
     else:
@@ -137,14 +136,13 @@ async def fake_quote_cmd(client: Client, message: types.Message):
             f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>"
         )
 
-    file_io = BytesIO(response.content)
-    file_io.name = "sticker.png" if is_png else "sticker.webp"
+    resized = resize_image(BytesIO(response.content), img_type="PNG" if is_png else "WEBP")
     await message.edit("<b>Sending...</b>")
 
     try:
         func = client.send_document if is_png else client.send_sticker
         chat_id = "me" if send_for_me else message.chat.id
-        await func(chat_id, file_io)
+        await func(chat_id, resized)
     except errors.RPCError as e:  # no rights to send stickers, etc
         await message.edit(format_exc(e))
     else:

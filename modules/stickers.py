@@ -14,134 +14,109 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import datetime
 import os
+from io import BytesIO
 
 from pyrogram import Client, filters, types
-from PIL import Image
-import asyncio
 
 from utils.misc import modules_help, prefix
+from utils.scripts import with_reply, interact_with, interact_with_to_delete, format_exc, resize_image
 
 
 @Client.on_message(filters.command("kang", prefix) & filters.me)
+@with_reply
 async def kang(client: Client, message: types.Message):
     await message.edit("<b>Please wait...</b>")
-    try:
-        args = message.text.split(" ")
-        if len(args) > 1:
-            args.pop(0)
-            pack = args[0]
-            try:
-                emoji = args[1]
-            except:
-                emoji = "🤔"
-        else:
-            await message.edit(
-                "<b>No arguments provided</b>\nUsage:"
-                + f"<code>{prefix}kang [pack*] [emoji]</code>"
-            )
-            return
-    except:
-        await message.edit("<b>No reply found</b>")
+
+    if len(message.command) < 2:
+        await message.edit("<b>No arguments provided</b>\n"
+                           f"Usage: {prefix}kang [pack]* [emoji]")
         return
-    if message.reply_to_message:
-        s = message.reply_to_message
+
+    pack = message.command[1]
+    if len(message.command) >= 3:
+        emoji = message.command[2]
     else:
-        await message.edit("<b>No reply found</b>")
+        emoji = "🤔"
+
+    await client.unblock_user("@stickers")
+    await interact_with(await client.send_message("@stickers", "/cancel"))
+    await interact_with(await client.send_message("@stickers", "/addsticker"))
+
+    result = await interact_with(await client.send_message("@stickers", pack))
+    if ".TGS" in result.text:
+        await message.edit("<b>Animated packs aren't supported</b>")
         return
-    if not (s.sticker or s.photo):
-        await message.edit("<b>Photo / sticker not found</b>")
-    to_del = []
-    to_del.append((await client.send_message("@stickers", "/cancel")))
-    bot_msg = (await client.get_history("@stickers", limit=1))[0]
-    while bot_msg.from_user.is_self:
-        await asyncio.sleep(1)
-        bot_msg = (await client.get_history("@stickers", limit=1))[0]
-    to_del.append(bot_msg)
-    to_del.append((await client.send_message("@stickers", "/addsticker")))
-    bot_msg = (await client.get_history("@stickers", limit=1))[0]
-    while bot_msg.from_user.is_self:
-        await asyncio.sleep(1)
-        bot_msg = (await client.get_history("@stickers", limit=1))[0]
-    to_del.append(bot_msg)
-    to_del.append((await client.send_message("@stickers", pack)))
-    bot_msg = (await client.get_history("@stickers", limit=1))[0]
-    while bot_msg.from_user.is_self:
-        await asyncio.sleep(1)
-        bot_msg = (await client.get_history("@stickers", limit=1))[0]
-    to_del.append(bot_msg)
-    if ".TGS" in bot_msg.text:
-        await message.edit("<b>Animated packs aren't supported.</b>")
-        return
-    if bot_msg.text.split()[0] == "Alright!":
-        path = await s.download()
-        if path:
-            p2 = "stik" + datetime.datetime.now().isoformat() + ".png"
-            resize_image(path, (512, 512), p2)
-            to_del.append((await client.send_document("@stickers", p2)))
-            bot_msg = (await client.get_history("@stickers", limit=1))[0]
-            while bot_msg.from_user.is_self:
-                await asyncio.sleep(1)
-                bot_msg = (await client.get_history("@stickers", limit=1))[0]
-            to_del.append(bot_msg)
-            os.remove(path)
-            os.remove(p2)
-            bot_msg = (await client.get_history("@stickers", limit=1))[0]
-            while bot_msg.from_user.is_self:
-                await asyncio.sleep(1)
-                bot_msg = (await client.get_history("@stickers", limit=1))[0]
-            to_del.append(bot_msg)
-            to_del.append((await client.send_message("@stickers", emoji)))
-            bot_msg = (await client.get_history("@stickers", limit=1))[0]
-            while bot_msg.from_user.is_self:
-                await asyncio.sleep(1)
-                bot_msg = (await client.get_history("@stickers", limit=1))[0]
-            to_del.append(bot_msg)
-            if "added your sticker" in bot_msg.text:
-                to_del.append((await client.send_message("@stickers", "/done")))
-                bot_msg = (await client.get_history("@stickers", limit=1))[0]
-                while bot_msg.from_user.is_self:
-                    await asyncio.sleep(1)
-                    bot_msg = (await client.get_history("@stickers", limit=1))[0]
-                to_del.append(bot_msg)
-                await message.edit(
-                    f'<b>Sticker added to <a href="https://t.me/addstickers/{pack}">pack</a></b>'
-                )
-                await client.delete_messages(
-                    "@stickers", [msg.message_id for msg in to_del]
-                )
-            else:
-                await message.edit("<b>Something went wrong</b>")
-        else:
-            await message.edit("<b>Unknown error occured</b>")
-            await client.delete_messages(
-                "@stickers", [msg.message_id for msg in to_del]
-            )
-    else:
-        await client.delete_messages("@stickers", [msg.message_id for msg in to_del])
+    if "https://telegram.org/img/StickerExample.psd" not in result.text:
         await message.edit(
             "<b>Stickerpack doesn't exitst. Create it using @Stickers bot (via /newpack command)</b>"
         )
+        return
 
-
-def resize_image(img, size, dest):
-    # Wrapper for asyncio purposes
     try:
-        im = Image.open(img)
-        # We used to use thumbnail(size) here, but it returns with a *max* dimension of 512,512
-        # rather than making one side exactly 512 so we have to calculate dimensions manually :(
-        if im.width == im.height:
-            size = (512, 512)
-        elif im.width < im.height:
-            size = (int(512 * im.width / im.height), 512)
-        else:
-            size = (512, int(512 * im.height / im.width))
-        im.resize(size).save(dest, "PNG")
-    finally:
-        im.close()
-        del im
+        path = await message.reply_to_message.download()
+    except ValueError:
+        await message.edit("<b>Replied message doesn't contain any downloadable media</b>")
+        return
+
+    resized = resize_image(path)
+    os.remove(path)
+
+    await interact_with(await client.send_document("@stickers", resized))
+    response = await interact_with(await client.send_message("@stickers", emoji))
+    if "/done" in response.text:
+        # ok
+        await interact_with(await client.send_message("@stickers", "/done"))
+        await client.delete_messages("@stickers", interact_with_to_delete)
+        await message.edit(
+            f"<b>Sticker added to <a href=https://t.me/addstickers/{pack}>pack</a></b>"
+        )
+    else:
+        await message.edit("<b>Something went wrong. Check history with @stickers</b>")
+    interact_with_to_delete.clear()
+
+
+@Client.on_message(filters.command(["stp", "s2p", "stick2png"], prefix))
+@with_reply
+async def stick2png(client: Client, message: types.Message):
+    try:
+        await message.edit("<b>Downloading...</b>")
+
+        path = await message.reply_to_message.download()
+        with open(path, 'rb') as f:
+            content = f.read()
+        os.remove(path)
+
+        file_io = BytesIO(content)
+        file_io.name = 'sticker.png'
+
+        await client.send_document(message.chat.id, file_io)
+    except Exception as e:
+        await message.edit(format_exc(e))
+    else:
+        await message.delete()
+
+
+@Client.on_message(filters.command(["resize"], prefix))
+@with_reply
+async def resize_cmd(client: Client, message: types.Message):
+    try:
+        await message.edit("<b>Downloading...</b>")
+
+        path = await message.reply_to_message.download()
+        resized = resize_image(path)
+        resized.name = "image.png"
+        os.remove(path)
+
+        await client.send_document(message.chat.id, resized)
+    except Exception as e:
+        await message.edit(format_exc(e))
+    else:
+        await message.delete()
+
 
 modules_help["stickers"] = {
-    "kang [reply*] [pack*] [emoji]": 'Add sticker to defined pack'
+    "kang [reply]* [pack]* [emoji]": "Add sticker to defined pack",
+    "stp [reply]*": "Convert replied sticker to PNG",
+    "resize [reply]*": "Resize replied image to 512xN format"
 }

@@ -14,14 +14,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import asyncio
-
 from pyrogram import Client, filters
 from pyrogram.raw import functions
 from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
-from utils.scripts import format_exc
+from utils.scripts import format_exc, interact_with, interact_with_to_delete
 
 
 @Client.on_message(filters.command("inf", prefix) & filters.me)
@@ -73,9 +71,16 @@ async def get_full_user_inf(client: Client, message: Message):
         full_user = response.full_user
 
         await client.unblock_user("@creationdatebot")
-        await client.send_message("@creationdatebot", f"/id {user.id}")
-        await asyncio.sleep(1.5)
-        creation_date = (await client.get_history("@creationdatebot", limit=1))[0].text
+        try:
+            response = await interact_with(
+                await client.send_message("creationdatebot", f"/id {user.id}")
+            )
+        except RuntimeError:
+            creation_date = "None"
+        else:
+            creation_date = response.text
+        # await client.delete_messages("@creationdatebot", interact_with_to_delete)
+        interact_with_to_delete.clear()
 
         if user.username is None:
             username = "None"
