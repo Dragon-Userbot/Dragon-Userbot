@@ -336,15 +336,19 @@ async def tmute_command(client: Client, message: Message):
             try:
                 if await check_username_or_id(cause.split(" ")[1]) == "channel":
                     user_to_tmute = await client.get_chat(cause.split(" ")[1])
-                    name = user_to_tmute.title
                 elif await check_username_or_id(cause.split(" ")[1]) == "user":
                     user_to_tmute = await client.get_users(cause.split(" ")[1])
-                    name = user_to_tmute.first_name
                     if user_to_tmute.is_self:
                         return await message.edit("<b>Not on yourself</b>")
                 else:
                     await message.edit("<b>Invalid user type</b>")
                     return
+
+                name = (
+                    user_to_tmute.first_name
+                    if getattr(user_to_tmute, "first_name", None)
+                    else user_to_tmute.title
+                )
 
                 tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
                 if user_to_tmute.id not in tmuted_users:
@@ -398,15 +402,19 @@ async def tunmute_command(client: Client, message: Message):
             try:
                 if await check_username_or_id(cause.split(" ")[1]) == "channel":
                     user_to_tunmute = await client.get_chat(cause.split(" ")[1])
-                    name = user_to_tunmute.title
                 elif await check_username_or_id(cause.split(" ")[1]) == "user":
                     user_to_tunmute = await client.get_users(cause.split(" ")[1])
-                    name = user_to_tunmute.first_name
                     if user_to_tunmute.is_self:
                         return await message.edit("<b>Not on yourself</b>")
                 else:
                     await message.edit("<b>Invalid user type</b>")
                     return
+
+                name = (
+                    user_to_tunmute.first_name
+                    if getattr(user_to_tunmute, "first_name", None)
+                    else user_to_tunmute.title
+                )
 
                 tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
                 if user_to_tunmute.id not in tmuted_users:
