@@ -55,7 +55,7 @@ async def kang(client: Client, message: types.Message):
     if ".TGS" in result.text:
         await message.edit("<b>Animated packs aren't supported</b>")
         return
-    if "https://telegram.org/img/StickerExample.psd" not in result.text:
+    if "StickerExample.psd" not in result.text:
         await message.edit(
             "<b>Stickerpack doesn't exitst. Create it using @Stickers bot (via /newpack command)</b>"
         )

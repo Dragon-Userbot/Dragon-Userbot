@@ -236,11 +236,7 @@ async def render_message(app: Client, message: types.Message) -> dict:
 
         if from_user.photo:
             author["avatar"] = await get_file(from_user.photo.big_file_id)
-        elif (
-            not from_user.photo
-            and from_user.status == "long_time_ago"
-            and from_user.username
-        ):
+        elif not from_user.photo and from_user.username:
             # may be user blocked us, we will try to get avatar via t.me
             t_me_page = requests.get(f"https://t.me/{from_user.username}").text
             sub = '<meta property="og:image" content='
