@@ -13,7 +13,9 @@
 
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+import sqlite3
+import subprocess
+import os
 import sys
 from pyrogram import Client, idle, errors
 from pyrogram.raw.functions.account import GetAuthorizations
@@ -22,10 +24,23 @@ from importlib import import_module
 
 from utils.db import db
 
-app = Client("my_account")
+app = Client("my_account", hide_password=True)
 
 if __name__ == "__main__":
-    app.start()
+    try:
+        app.start()
+    except sqlite3.OperationalError as e:
+        if str(e) == "database is locked" and os.name == "posix":
+            output = subprocess.run(
+                ["fuser", "my_account.session"], capture_output=True
+            ).stdout.decode()
+            pid = output.split()[0]
+            subprocess.run(["kill", pid])
+            os.execvp("python3", ["python3", "main.py"])
+        raise
+    except (errors.NotAcceptable, errors.Unauthorized):
+        os.rename("./my_account.session", "./my_account.session-old")
+        os.execvp("python3", ["python3", "main.py"])
 
     success_handlers = 0
     failed_handlers = 0

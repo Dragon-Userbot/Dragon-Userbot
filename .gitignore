@@ -5,6 +5,7 @@
 /modules/__pycache__/
 __pycache__/
 *.session
+*.session-old
 *.session-journal
 /venv/
 /downloads/
