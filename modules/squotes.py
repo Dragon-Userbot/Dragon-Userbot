@@ -41,21 +41,22 @@ async def quote_cmd(client: Client, message: types.Message):
     send_for_me = "!me" in message.command or "!ls" in message.command
     no_reply = "!noreply" in message.command or "!nr" in message.command
 
-    messages = list(
-        filter(
-            lambda x: x.message_id < message.message_id,
-            await client.get_messages(
-                message.chat.id,
-                range(
-                    message.reply_to_message.message_id,
-                    message.reply_to_message.message_id + count,
-                ),
-            ),
-        )
-    )
+    messages = []
 
-    if no_reply:
-        messages[0].reply_to_message = None
+    async for msg in client.iter_history(
+        message.chat.id, offset_id=message.reply_to_message.message_id, reverse=True
+    ):
+        if message.empty:
+            continue
+        if msg.message_id >= message.message_id:
+            break
+        if no_reply:
+            msg.reply_to_message = None
+
+        messages.append(msg)
+
+        if len(messages) >= count:
+            break
 
     if send_for_me:
         await message.delete()
@@ -202,12 +203,13 @@ async def render_message(app: Client, message: types.Message) -> dict:
     def move_forwards(msg: types.Message):
         if msg.forward_from:
             msg.from_user = msg.forward_from
-        elif msg.forward_sender_name:
+        if msg.forward_sender_name:
             msg.from_user.id = 0
             msg.from_user.first_name = msg.forward_sender_name
             msg.from_user.last_name = ""
-        elif msg.forward_from_chat:
+        if msg.forward_from_chat:
             msg.sender_chat = msg.forward_from_chat
+            msg.from_user.id = 0
 
     move_forwards(message)
 
@@ -257,7 +259,10 @@ async def render_message(app: Client, message: types.Message) -> dict:
                 author["avatar"] = ""
         else:
             author["avatar"] = ""
-
+    elif message.from_user.id == 0:
+        author["id"] = 0
+        author["name"] = message.from_user.first_name
+        author["rank"] = ""
     else:
         author["id"] = message.sender_chat.id
         author["name"] = message.sender_chat.title

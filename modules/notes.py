@@ -225,8 +225,7 @@ async def notes(_, message: Message):
     await message.edit("<b>Loading...</b>")
     text = "Available notes:\n\n"
     collection = db.get_collection("core.notes")
-    for note in collection:
-        note = list(note.keys())[0]
+    for note in collection.keys():
         if note[:4] == "note":
             text += f"<code>{note[4:]}</code>\n"
     await message.edit(text)

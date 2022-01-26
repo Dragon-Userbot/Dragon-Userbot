@@ -136,9 +136,9 @@ def resize_image(input_img, output=None, img_type="PNG"):
         if img.width == img.height:
             size = (512, 512)
         elif img.width < img.height:
-            size = ((512 * img.width // img.height), 512)
+            size = (max(512 * img.width // img.height, 1), 512)
         else:
-            size = (512, (512 * img.height // img.width))
+            size = (512, max(512 * img.height // img.width, 1))
 
         img.resize(size).save(output, img_type)
 

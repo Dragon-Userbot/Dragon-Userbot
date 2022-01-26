@@ -36,8 +36,33 @@ from pyrogram.utils import (
 )
 
 from utils.db import db
-from utils.scripts import text, format_exc
+from utils.scripts import text, format_exc, with_reply
 from utils.misc import modules_help, prefix
+
+
+db_cache: dict = db.get_collection("core.ats")
+
+
+@Client.on_message(filters.group)
+async def admintool_handler(_, message: Message):
+    tmuted_users = db_cache.get(f"c{message.chat.id}", [])
+
+    if message.sender_chat and db_cache.get(f"antich{message.chat.id}", False):
+        try:
+            await message.delete()
+            await message.chat.ban_member(message.sender_chat.id)
+        except ChatAdminRequired:
+            pass
+
+    if (
+        message.from_user
+        and message.from_user.id in tmuted_users
+        or message.sender_chat
+        and message.sender_chat.id in tmuted_users
+    ):
+        await message.delete()
+
+    raise ContinuePropagation
 
 
 async def check_username_or_id(data: Union[str, int]) -> str:
@@ -77,20 +102,6 @@ async def get_user_and_name(message):
         )
 
 
-@Client.on_message()
-async def restrict_users_in_tmute(client: Client, message: Message):
-    tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-    if (
-        message.from_user
-        and message.from_user.id in tmuted_users
-        or not message.from_user
-        and message.sender_chat
-        and message.sender_chat.id in tmuted_users
-    ):
-        await message.delete()
-    raise ContinuePropagation
-
-
 @Client.on_message(filters.command(["ban"], prefix) & filters.me)
 async def ban_command(client: Client, message: Message):
     cause = await text(message)
@@ -100,7 +111,7 @@ async def ban_command(client: Client, message: Message):
             await client.ban_chat_member(message.chat.id, user_for_ban)
             channel = await client.resolve_peer(message.chat.id)
             user_id = await client.resolve_peer(user_for_ban)
-            if "report_spam" in cause.lower().split() and message.reply_to_message:
+            if "report_spam" in cause.lower().split():
                 await client.send(
                     functions.channels.ReportSpam(
                         channel=channel,
@@ -138,19 +149,49 @@ async def ban_command(client: Client, message: Message):
             try:
                 if await check_username_or_id(cause.split(" ")[1]) == "channel":
                     user_to_ban = await client.get_chat(cause.split(" ")[1])
-                    name = user_to_ban.title
                 elif await check_username_or_id(cause.split(" ")[1]) == "user":
                     user_to_ban = await client.get_users(cause.split(" ")[1])
-                    name = user_to_ban.first_name
                 else:
                     await message.edit("<b>Invalid user type</b>")
                     return
 
+                name = (
+                    user_to_ban.first_name
+                    if getattr(user_to_ban, "first_name", None)
+                    else user_to_ban.title
+                )
+
                 try:
+                    channel = await client.resolve_peer(message.chat.id)
+                    user_id = await client.resolve_peer(user_to_ban.id)
+                    if (
+                        "report_spam" in cause.lower().split()
+                        and message.reply_to_message
+                    ):
+                        await client.send(
+                            functions.channels.ReportSpam(
+                                channel=channel,
+                                participant=user_id,
+                                id=[message.reply_to_message.message_id],
+                            )
+                        )
+                    if "delete_history" in cause.lower().split():
+                        await client.send(
+                            functions.channels.DeleteParticipantHistory(
+                                channel=channel, participant=user_id
+                            )
+                        )
+
+                    text_c = "".join(
+                        f" {_}"
+                        for _ in cause.split()
+                        if _.lower() not in ["delete_history", "report_spam"]
+                    )
+
                     await client.ban_chat_member(message.chat.id, user_to_ban.id)
                     await message.edit(
                         f"<b>{name}</b> <code>banned!</code>"
-                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        + f"\n{'<b>Cause:</b> <i>' + text_c.split(' ', maxsplit=2)[2] + '</i>' if len(text_c.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
                     await message.edit("<b>No rights</b>")
@@ -196,13 +237,17 @@ async def unban_command(client: Client, message: Message):
             try:
                 if await check_username_or_id(cause.split(" ")[1]) == "channel":
                     user_to_unban = await client.get_chat(cause.split(" ")[1])
-                    name = user_to_unban.title
                 elif await check_username_or_id(cause.split(" ")[1]) == "user":
                     user_to_unban = await client.get_users(cause.split(" ")[1])
-                    name = user_to_unban.first_name
                 else:
                     await message.edit("<b>Invalid user type</b>")
                     return
+
+                name = (
+                    user_to_unban.first_name
+                    if getattr(user_to_unban, "first_name", None)
+                    else user_to_unban.title
+                )
 
                 try:
                     await client.unban_chat_member(message.chat.id, user_to_unban.id)
@@ -235,10 +280,9 @@ async def kick_command(client: Client, message: Message):
         if message.reply_to_message.from_user:
             try:
                 await client.ban_chat_member(
-                    message.chat.id, message.reply_to_message.from_user.id
-                )
-                await client.unban_chat_member(
-                    message.chat.id, message.reply_to_message.from_user.id
+                    message.chat.id,
+                    message.reply_to_message.from_user.id,
+                    int(time() + 60),
                 )
                 channel = await client.resolve_peer(message.chat.id)
                 user_id = await client.resolve_peer(
@@ -284,11 +328,38 @@ async def kick_command(client: Client, message: Message):
             try:
                 user_to_ban = await client.get_users(cause.split(" ")[1])
                 try:
-                    await client.ban_chat_member(message.chat.id, user_to_ban.id)
-                    await client.unban_chat_member(message.chat.id, user_to_ban.id)
+                    channel = await client.resolve_peer(message.chat.id)
+                    user_id = await client.resolve_peer(user_to_ban.id)
+                    if (
+                        "report_spam" in cause.lower().split()
+                        and message.reply_to_message
+                    ):
+                        await client.send(
+                            functions.channels.ReportSpam(
+                                channel=channel,
+                                participant=user_id,
+                                id=[message.reply_to_message.message_id],
+                            )
+                        )
+                    if "delete_history" in cause.lower().split():
+                        await client.send(
+                            functions.channels.DeleteParticipantHistory(
+                                channel=channel, participant=user_id
+                            )
+                        )
+
+                    text_c = "".join(
+                        f" {_}"
+                        for _ in cause.split()
+                        if _.lower() not in ["delete_history", "report_spam"]
+                    )
+
+                    await client.ban_chat_member(
+                        message.chat.id, user_to_ban.id, int(time() + 60)
+                    )
                     await message.edit(
                         f"<b>{user_to_ban.first_name}</b> <code>kicked!</code>"
-                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        + f"\n{'<b>Cause:</b> <i>' + text_c.split(' ', maxsplit=2)[2] + '</i>' if len(text_c.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
                     await message.edit("<b>No rights</b>")
@@ -314,7 +385,10 @@ async def tmute_command(client: Client, message: Message):
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         user_for_tmute, name = await get_user_and_name(message)
 
-        if message.reply_to_message.from_user.is_self:
+        if (
+            message.reply_to_message.from_user
+            and message.reply_to_message.from_user.is_self
+        ):
             return await message.edit("<b>Not on yourself</b>")
 
         tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
@@ -372,16 +446,14 @@ async def tmute_command(client: Client, message: Message):
     else:
         await message.edit("<b>Unsupported</b>")
 
+    db_cache.update(db.get_collection("core.ats"))
+
 
 @Client.on_message(filters.command(["tunmute"], prefix) & filters.me)
 async def tunmute_command(client: Client, message: Message):
     cause = await text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
-
         user_for_tunmute, name = await get_user_and_name(message)
-
-        if message.reply_to_message.from_user.is_self:
-            return await message.edit("<b>Not on yourself</b>")
 
         tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
         if user_for_tunmute not in tmuted_users:
@@ -436,6 +508,8 @@ async def tunmute_command(client: Client, message: Message):
             await message.edit("<b>user_id or username</b>")
     else:
         await message.edit("<b>Unsupported</b>")
+
+    db_cache.update(db.get_collection("core.ats"))
 
 
 @Client.on_message(filters.command(["tmute_users"], prefix) & filters.me)
@@ -839,9 +913,136 @@ async def promote_command(client: Client, message: Message):
         await message.edit("<b>Unsupported</b>")
 
 
+@Client.on_message(filters.command(["antich"], prefix))
+async def anti_channels(_, message: Message):
+    if message.chat.type != "supergroup":
+        await message.edit("<b>Not supported in non-supergroup chats</b>")
+        return
+
+    if len(message.command) == 1:
+        if db.get("core.ats", f"antich{message.chat.id}", False):
+            await message.edit(
+                "<b>Blocking channels in this chat is enabled.\n"
+                f"Disable with: </b><code>{prefix}antich disable</code>"
+            )
+        else:
+            await message.edit(
+                "<b>Blocking channels in this chat is disabled.\n"
+                f"Enable with: </b><code>{prefix}antich enable</code>"
+            )
+    elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
+        db.set("core.ats", f"antich{message.chat.id}", True)
+        await message.edit("<b>Blocking channels in this chat enabled.</b>")
+    elif message.command[1] in ["disable", "off", "0", "no", "false"]:
+        db.set("core.ats", f"antich{message.chat.id}", False)
+        await message.edit("<b>Blocking channels in this chat disabled.</b>")
+    else:
+        await message.edit(f"<b>Usage: {prefix}antich [enable|disable]</b>")
+
+    db_cache.update(db.get_collection("core.ats"))
+
+
+@Client.on_message(filters.command(["delete_history", "dh"], prefix))
+async def delete_history(client: Client, message: Message):
+    cause = await text(message)
+    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+        if message.reply_to_message.from_user:
+            try:
+                user_for_delete, name = await get_user_and_name(message)
+                channel = await client.resolve_peer(message.chat.id)
+                user_id = await client.resolve_peer(user_for_delete)
+                await client.send(
+                    functions.channels.DeleteParticipantHistory(
+                        channel=channel, participant=user_id
+                    )
+                )
+
+                await message.edit(
+                    f"<code>History from <b>{name}</b> was deleted!</code>"
+                    + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
+                )
+            except UserAdminInvalid:
+                await message.edit("<b>No rights</b>")
+            except ChatAdminRequired:
+                await message.edit("<b>No rights</b>")
+            except Exception as e:
+                await message.edit(format_exc(e))
+        else:
+            await message.edit("<b>Reply on user msg</b>")
+    elif not message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
+        if len(cause.split()) > 1:
+            try:
+                if await check_username_or_id(cause.split(" ")[1]) == "channel":
+                    user_to_delete = await client.get_chat(cause.split(" ")[1])
+                elif await check_username_or_id(cause.split(" ")[1]) == "user":
+                    user_to_delete = await client.get_users(cause.split(" ")[1])
+                else:
+                    await message.edit("<b>Invalid user type</b>")
+                    return
+
+                name = (
+                    user_to_delete.first_name
+                    if getattr(user_to_delete, "first_name", None)
+                    else user_to_delete.title
+                )
+
+                try:
+                    channel = await client.resolve_peer(message.chat.id)
+                    user_id = await client.resolve_peer(user_to_delete.id)
+                    await client.send(
+                        functions.channels.DeleteParticipantHistory(
+                            channel=channel, participant=user_id
+                        )
+                    )
+                    await message.edit(
+                        f"<code>History from </code><b>{name}</b><code> was deleted!</code>"
+                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                    )
+                except UserAdminInvalid:
+                    await message.edit("<b>No rights</b>")
+                except ChatAdminRequired:
+                    await message.edit("<b>No rights</b>")
+                except Exception as e:
+                    await message.edit(format_exc(e))
+            except PeerIdInvalid:
+                await message.edit("<b>User is not found</b>")
+            except UsernameInvalid:
+                await message.edit("<b>User is not found</b>")
+            except IndexError:
+                await message.edit("<b>User is not found</b>")
+        else:
+            await message.edit("<b>user_id or username</b>")
+    else:
+        await message.edit("<b>Unsupported</b>")
+
+
+@Client.on_message(filters.command(["report_spam", "rs"], prefix))
+@with_reply
+async def report_spam(client: Client, message: Message):
+    try:
+        channel = await client.resolve_peer(message.chat.id)
+
+        user_id, name = await get_user_and_name(message)
+        peer = await client.resolve_peer(user_id)
+        await client.send(
+            functions.channels.ReportSpam(
+                channel=channel,
+                participant=peer,
+                id=[message.reply_to_message.message_id],
+            )
+        )
+    except Exception as e:
+        await message.edit(format_exc(e))
+    else:
+        await message.edit(f"<b>Message</a> from {name} was reported</b>")
+
+
 modules_help["admintool"] = {
     "ban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "ban user in chat",
-    "unban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "unban user in chat",
+    "unban [reply]/[username/id]* [reason]": "unban user in chat",
     "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "kick user out of chat",
     "mute [reply]/[userid]* [reason] [1m]/[1h]/[1d]/[1w]": "mute user in chat",
     "unmute [reply]/[userid]* [reason]": "unmute user in chat",
@@ -850,4 +1051,10 @@ modules_help["admintool"] = {
     "tmute [reply]/[username/id]* [reason]": "delete all new messages from user in chat",
     "tunmute [reply]/[username/id]* [reason]": "stop deleting all messages from user in chat",
     "tmute_users": "list of tmuted (.tmute) users",
+    "antich [enable/disable]": "turn on/off blocking channels in this chat",
+    "delete_history [reply]/[username/id]* [reason]": "delete history from member in chat",
+    "report_spam [reply]*": "report spam message in chat",
+    # "ro": "enable read-only mode",
+    # "unro": "disable read-only mode",
+    # "antiraid [enable|disable]": "when enabled, anyone who writes a message will be blocked. Useful in raids"
 }
