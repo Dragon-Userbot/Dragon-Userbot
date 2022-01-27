@@ -125,7 +125,6 @@ def import_library(library_name: str, package_name: str = None):
 
 
 def resize_image(input_img, output=None, img_type="PNG"):
-    # downloads is an unindexed directory created by pyrogram when downloading
     if output is None:
         output = BytesIO()
         output.name = f"sticker.{img_type.lower()}"

@@ -22,9 +22,12 @@ from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
 from utils.scripts import format_exc
+from utils.db import db
 
 
-@Client.on_message(filters.command(["ex", "exec", "py"], prefix) & filters.me)
+@Client.on_message(
+    filters.command(["ex", "exec", "py", "exnoedit"], prefix) & filters.me
+)
 def user_exec(client: Client, message: Message):
     if len(message.command) == 1:
         message.edit("<b>Code to execute isn't provided</b>")
@@ -38,12 +41,16 @@ def user_exec(client: Client, message: Message):
     try:
         with redirect_stdout(stdout):
             exec(code)
-        message.edit(
+        text = (
             "<b>Code:</b>\n"
             f"<code>{code}</code>\n\n"
             "<b>Result</b>:\n"
             f"<code>{stdout.getvalue()}</code>"
         )
+        if message.command[0] == "exnoedit":
+            message.reply(text)
+        else:
+            message.edit(text)
     except Exception as e:
         message.edit(format_exc(e))
 
@@ -70,5 +77,6 @@ def user_eval(client: Client, message: Message):
 
 modules_help["python"] = {
     "ex [python code]": "Execute Python code",
+    "exnoedit [python code": "Execute Python code and return result with reply",
     "eval [python code": "Eval Python code",
 }

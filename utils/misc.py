@@ -14,9 +14,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import configparser
-import os
-import sys
 from sys import version_info
 from .db import db
 
@@ -40,13 +37,4 @@ requirements_list = []
 python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
 userbot_version = "3.0.0"
 
-config_path = os.path.join(sys.path[0], "config.ini")
-config = configparser.ConfigParser()
-config.read(config_path)
-
-pr = db.get("core.main", "prefix")
-if pr is None:
-    db.set("core.main", "prefix", ".")
-    prefix = "."
-else:
-    prefix = pr
+prefix = db.get("core.main", "prefix", ".")

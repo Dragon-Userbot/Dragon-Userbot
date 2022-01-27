@@ -27,7 +27,7 @@ afk_info = db.get(
     "core.afk",
     "afk_info",
     {
-        "start": datetime.datetime.now(),  # dummy value
+        "start": 0,
         "is_afk": False,
         "reason": "",
     },
@@ -44,8 +44,9 @@ is_afk = filters.create(lambda _, __, ___: afk_info["is_afk"])
     & ~filters.bot
 )
 async def afk_handler(_, message: types.Message):
+    start = datetime.datetime.fromtimestamp(afk_info["start"])
     end = datetime.datetime.now().replace(microsecond=0)
-    afk_time = end - afk_info["start"]
+    afk_time = end - start
     await message.reply(
         f"<b>I'm AFK {afk_time}\n" f"Reason:</b> <i>{afk_info['reason']}</i>"
     )
@@ -58,7 +59,7 @@ async def afk(_, message):
     else:
         reason = "None"
 
-    afk_info["start"] = datetime.datetime.now().replace(microsecond=0)
+    afk_info["start"] = int(datetime.datetime.now().timestamp())
     afk_info["is_afk"] = True
     afk_info["reason"] = reason
 
@@ -70,8 +71,9 @@ async def afk(_, message):
 @Client.on_message(filters.command("unafk", prefix) & filters.me)
 async def unafk(_, message):
     if afk_info["is_afk"]:
+        start = datetime.datetime.fromtimestamp(afk_info["start"])
         end = datetime.datetime.now().replace(microsecond=0)
-        afk_time = end - afk_info["start"]
+        afk_time = end - start
         await message.edit(f"<b>I'm not AFK anymore.\n" f"I was afk {afk_time}</b>")
         afk_info["is_afk"] = False
     else:

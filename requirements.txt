@@ -14,3 +14,4 @@ click
 pymongo[srv]
 dnspython
 requests
+environs

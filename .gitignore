@@ -6,10 +6,13 @@
 __pycache__/
 *.session
 *.session-old
-*.session-journal
+*.db
+*.sqlite3
+*-journal
 /venv/
 /downloads/
 /modules/custom_modules
 .idea
 config.ini
 unknown_errors.txt
+.env

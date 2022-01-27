@@ -56,7 +56,7 @@ async def urldl(client: Client, message: Message):
         resp = requests.get(link)
         resp.raise_for_status()
 
-        with open(file_name, "wb") as f:
+        with open("downloads/" + file_name, "wb") as f:
             for chunk in resp.iter_content(chunk_size=8192):
                 f.write(chunk)
 

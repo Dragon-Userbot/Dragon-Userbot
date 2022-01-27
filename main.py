@@ -21,24 +21,69 @@ from pyrogram import Client, idle, errors
 from pyrogram.raw.functions.account import GetAuthorizations
 from pathlib import Path
 from importlib import import_module
+import logging
 
-from utils.db import db
+logging.basicConfig(level=logging.INFO)
 
-app = Client("my_account", hide_password=True)
 
 if __name__ == "__main__":
+    script_path = os.path.dirname(os.path.realpath(__file__))
+    if script_path != os.getcwd():
+        os.chdir(script_path)
+
+    if os.path.exists("./config.ini.old") and not os.path.exists("./.env"):
+        logging.warning("Old config.ini file detected! Converting to .env...")
+        import configparser
+
+        parser = configparser.ConfigParser()
+        parser.read("./config.ini.old")
+        db_url = parser.get("pyrogram", "db_url")
+        db_name = parser.get("db", "db_name")
+
+        with open(".env.dist") as f:
+            env_text = f.read().format(
+                db_url=db_url,
+                db_name=db_name,
+                db_type="mongodb",
+            )
+
+        with open(".env", "w") as f:
+            f.write(env_text)
+
+        os.remove("./config.ini.old")
+
+        logging.warning("Old config file has been successfully converted")
+
+    from utils.db import db
+    from utils import config
+
+    app = Client(
+        "my_account",
+        api_id=config.api_id,
+        api_hash=config.api_hash,
+        hide_password=True,
+        workdir=script_path,
+    )
+
     try:
         app.start()
     except sqlite3.OperationalError as e:
         if str(e) == "database is locked" and os.name == "posix":
+            logging.warning(
+                "Session file is locked. Trying to kill blocking process..."
+            )
             output = subprocess.run(
                 ["fuser", "my_account.session"], capture_output=True
             ).stdout.decode()
             pid = output.split()[0]
             subprocess.run(["kill", pid])
             os.execvp("python3", ["python3", "main.py"])
-        raise
-    except (errors.NotAcceptable, errors.Unauthorized):
+        raise e from None
+    except (errors.NotAcceptable, errors.Unauthorized) as e:
+        logging.error(
+            f"{e.__class__.__name__}: {e}\n"
+            f"Moving session file to my_account.session-old..."
+        )
         os.rename("./my_account.session", "./my_account.session-old")
         os.execvp("python3", ["python3", "main.py"])
 
@@ -59,20 +104,24 @@ if __name__ == "__main__":
                         success_handlers += 1
                     except Exception as e:
                         failed_handlers += 1
-                        print(
+                        logging.warning(
                             f"Can't add {module_path}.{name}.{handler.__name__}: {e.__class__.__name__}: {e}"
                         )
         except Exception as e:
-            print(f"Can't import module {module_path}: {e.__class__.__name__}: {e}")
+            logging.warning(
+                f"Can't import module {module_path}: {e.__class__.__name__}: {e}"
+            )
             failed_modules += 1
         else:
             success_modules += 1
 
-    print(f"Imported {success_handlers} handlers from {success_modules} modules.")
+    logging.info(
+        f"Imported {success_handlers} handlers from {success_modules} modules."
+    )
     if failed_modules:
-        print(f"Failed to import {failed_modules} modules")
+        logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
-        print(f"Failed to add {failed_handlers} to handlers")
+        logging.warning(f"Failed to add {failed_handlers} to handlers")
 
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
@@ -92,6 +141,6 @@ if __name__ == "__main__":
     auth_hashes = [auth["hash"] for auth in auths]
     db.set("core.sessionkiller", "auths_hashes", auth_hashes)
 
-    print("Dragon-Userbot started!")
+    logging.info("Dragon-Userbot started!")
 
     idle()

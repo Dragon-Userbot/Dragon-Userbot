@@ -16,12 +16,16 @@
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
+import random
 
 from utils.misc import modules_help, prefix, userbot_version, python_version
 
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
 async def support(_, message: Message):
+    devs = ["@john_phonk", "@fuccsoc", "@nalinor"]
+    random.shuffle(devs)
+
     await message.edit(
         f"<b>Dragon-Userbot\n"
         "GitHub: <a href=https://github.com/Dragon-Userbot/Dragon-Userbot>Dragon-Userbot/Dragon-Userbot</a>\n"
@@ -32,7 +36,7 @@ async def support(_, message: Message):
         "Custom modules: @Dragon_Userbot_modules\n"
         "Chat [RU]: @Dragon_Userbot_chat\n"
         "Chat [EN]: @Dragon_Userbot_chat_en\n"
-        "Main developers: @john_phonk, @thefsch, @nalinor\n\n"
+        f"Main developers: {', '.join(devs)}\n\n"
         f"Python version: {python_version}\n"
         f"Modules count: {len(modules_help) / 1}\n</b>",
         disable_web_page_preview=True,

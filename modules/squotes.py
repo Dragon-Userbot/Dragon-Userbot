@@ -220,7 +220,7 @@ async def render_message(app: Client, message: types.Message) -> dict:
 
         author["id"] = from_user.id
         author["name"] = get_full_name(from_user)
-        if message.chat.type != "supergroup":
+        if message.chat.type != "supergroup" or message.forward_date:
             author["rank"] = ""
         else:
             try:
@@ -259,7 +259,7 @@ async def render_message(app: Client, message: types.Message) -> dict:
                 author["avatar"] = ""
         else:
             author["avatar"] = ""
-    elif message.from_user.id == 0:
+    elif message.from_user and message.from_user.id == 0:
         author["id"] = 0
         author["name"] = message.from_user.first_name
         author["rank"] = ""
