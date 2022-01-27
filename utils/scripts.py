@@ -15,7 +15,6 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import asyncio
 import os
-import time
 from io import BytesIO
 
 from PIL import Image
@@ -24,7 +23,7 @@ import subprocess
 
 from pyrogram import Client, errors, types
 import traceback
-from .misc import modules_help, prefix
+from .misc import modules_help, prefix, requirements_list
 
 
 async def text(message: types.Message):
@@ -114,11 +113,13 @@ def import_library(library_name: str, package_name: str = None):
     :param package_name: package name in PyPi (pip install example)
     :return: loaded module
     """
+    if package_name is None:
+        package_name = library_name
+    requirements_list.append(package_name)
+
     try:
         return importlib.import_module(library_name)
     except ImportError:
-        if package_name is None:
-            package_name = library_name
         completed = subprocess.run(["python3", "-m", "pip", "install", package_name])
         assert completed.returncode == 0, "library install failed"
         return importlib.import_module(library_name)
