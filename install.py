@@ -33,7 +33,7 @@ if __name__ == "__main__":
         "Channel: @Dragon_Userbot\n"
         "Custom modules: @Dragon_Userbot_modules\n"
         "Chat [RU]: @Dragon_Userbot_chat\n"
-        "Chat [EN]: @Dragon_Userbot_chat_en\n\n",
+        "Chat [EN]: @Dragon_Userbot_chat_en\n\n"
         f"For restart, enter:</b> \n"
         f"<code>cd Dragon-Userbot/ && python main.py</code>",
     )

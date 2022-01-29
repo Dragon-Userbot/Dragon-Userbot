@@ -55,14 +55,16 @@ case $db_type in
     db_name=Dragon_Userbot
     ;;
   2)
-    wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
-    source /etc/os-release
-    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
-    apt update
-    apt install mongodb -y
-    systemctl daemon-reload
-    systemctl start mongod
-    systemctl enable mongod
+    if ! command -v mongo && ! command -v mongosh; then
+      wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
+      source /etc/os-release
+      echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+      apt update
+      apt install mongodb -y
+      systemctl daemon-reload
+      systemctl start mongod
+      systemctl enable mongod
+    fi
     db_url=mongodb://localhost:27017
     db_name=Dragon_Userbot
     ;;
@@ -90,7 +92,6 @@ DATABASE_NAME=${db_name}
 DATABASE_URL=${db_url}
 EOL
 
-chown -R $SUDO_USER .
 su -c "python3 install.py" $SUDO_USER
 
 if ! command -v termux-setup-storage; then
@@ -105,13 +106,15 @@ fi
 
 case $install_type in
   1)
-    curl -fsSL https://deb.nodesource.com/setup_17.x | bash
-    apt install nodejs -y
-    su -c "npm install pm2 -g" $SUDO_USER
+    if ! command -v pm2; then
+      curl -fsSL https://deb.nodesource.com/setup_17.x | bash
+      apt install nodejs -y
+      npm install pm2 -g
+      su -c "pm2 startup" $SUDO_USER
+      env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $SUDO_USER --hp /home/$SUDO_USER
+    fi
     su -c "pm2 start main.py --name dragon --interpreter python3" $SUDO_USER
     su -c "pm2 save" $SUDO_USER
-    su -c "pm2 startup" $SUDO_USER
-    env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $SUDO_USER --hp /home/$SUDO_USER
 
     echo
     echo "============================"
@@ -158,3 +161,5 @@ EOL
     echo
     ;;
 esac
+
+chown -R $SUDO_USER .
