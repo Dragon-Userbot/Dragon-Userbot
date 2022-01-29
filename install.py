@@ -14,24 +14,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import configparser
 import datetime
-import os
-import sys
-
 from pyrogram import Client
+from utils import config
 
-if len(sys.argv) == 2:
-    arg = sys.argv[1]
-    config_path = os.path.join(sys.path[0], "config.ini")
-    config = configparser.ConfigParser()
-    config.read(config_path)
+if __name__ == "__main__":
+    app = Client(
+        "my_account",
+        api_id=config.api_id,
+        api_hash=config.api_hash,
+        hide_password=True,
+    )
 
-    config.set("pyrogram", "db_url", arg)
-    with open(config_path, "w") as config_file:
-        config.write(config_file)
-
-    app = Client("my_account")
     app.start()
     app.send_message(
         "me",
@@ -43,7 +37,4 @@ if len(sys.argv) == 2:
         f"For restart, enter:</b> \n"
         f"<code>cd Dragon-Userbot/ && python main.py</code>",
     )
-
     app.stop()
-
-    print("Account is successfully linked, for run use: python main.py")

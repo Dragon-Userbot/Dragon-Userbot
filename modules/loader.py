@@ -47,51 +47,82 @@ async def get_mod_hash(_, message: Message):
 
 @Client.on_message(filters.command(["loadmod", "lm"], prefix) & filters.me)
 async def loadmod(_, message: Message):
-    if len(message.command) == 1:
+    if (
+        not (
+            message.reply_to_message
+            and message.reply_to_message.document
+            and message.reply_to_message.document.file_name.endswith(".py")
+        )
+        and len(message.command) == 1
+    ):
         await message.edit("<b>Specify module to download</b>")
         return
 
-    url = message.command[1].lower()
+    if len(message.command) > 1:
+        url = message.command[1].lower()
 
-    if url.startswith(
-        "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
-    ):
-        module_name = url.split("/")[-1].split(".")[0]
-    elif "/" not in url and "." not in url:
-        module_name = url.lower()
-        url = f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}.py"
+        if url.startswith(
+            "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
+        ):
+            module_name = url.split("/")[-1].split(".")[0]
+        elif "/" not in url and "." not in url:
+            module_name = url.lower()
+            url = f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}.py"
+        else:
+            modules_hashes = requests.get(
+                "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/modules_hashes.txt"
+            ).text
+            resp = requests.get(url)
+
+            if not resp.ok:
+                await message.edit(
+                    f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
+                )
+                return
+
+            if hashlib.sha256(resp.content).hexdigest() not in modules_hashes:
+                return await message.edit(
+                    "<b>Only <a href=https://github.com/Dragon-Userbot/custom_modules/tree/main/modules_hashes.txt>"
+                    "verified</a> modules or from the official "
+                    "<a href=https://github.com/Dragon-Userbot/custom_modules>"
+                    "custom_modules</a> repository are supported!</b>",
+                    disable_web_page_preview=True,
+                )
+
+            module_name = url.split("/")[-1].split(".")[0]
+
+        resp = requests.get(url)
+        if not resp.ok:
+            await message.edit(f"<b>Module <code>{module_name}</code> is not found</b>")
+            return
+
+        if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
+            os.mkdir(f"{BASE_PATH}/modules/custom_modules")
+
+        with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
+            f.write(resp.content)
     else:
+        file_name = await message.reply_to_message.download()
+        module_name = message.reply_to_message.document.file_name[:-3]
+
+        with open(file_name, "rb") as f:
+            content = f.read()
+
         modules_hashes = requests.get(
             "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/modules_hashes.txt"
         ).text
-        resp = requests.get(url)
 
-        if not resp.ok:
-            await message.edit(
-                f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
-            )
-            return
-
-        if hashlib.sha256(resp.content).hexdigest() not in modules_hashes:
-            await message.edit(
+        if hashlib.sha256(content).hexdigest() not in modules_hashes:
+            os.remove(file_name)
+            return await message.edit(
                 "<b>Only <a href=https://github.com/Dragon-Userbot/custom_modules/tree/main/modules_hashes.txt>"
-                "verified</a> modules or from the official <a href=https://github.com/Dragon-Userbot/custom_modules>"
+                "verified</a> modules or from the official "
+                "<a href=https://github.com/Dragon-Userbot/custom_modules>"
                 "custom_modules</a> repository are supported!</b>",
                 disable_web_page_preview=True,
             )
-
-        module_name = url.split("/")[-1].split(".")[0]
-
-    resp = requests.get(url)
-    if not resp.ok:
-        await message.edit(f"<b>Module <code>{module_name}</code> is not found</b>")
-        return
-
-    if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
-        os.mkdir(f"{BASE_PATH}/modules/custom_modules")
-
-    with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
-        f.write(resp.content)
+        else:
+            os.rename(file_name, f"./modules/custom_modules/{module_name}.py")
 
     await message.edit(f"<b>The module <code>{module_name}</code> is loaded!</b>")
     await restart()
@@ -153,6 +184,35 @@ async def load_all_mods(_, message: Message):
     await restart()
 
 
+@Client.on_message(filters.command(["updateallmods"], prefix) & filters.me)
+async def updateallmods(_, message: Message):
+    await message.edit("<b>Updating modules...</b>")
+
+    if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
+        os.mkdir(f"{BASE_PATH}/modules/custom_modules")
+
+    modules_installed = list(os.walk("modules/custom_modules"))[0][2]
+
+    if not modules_installed:
+        return await message.edit("<b>You don't have any modules installed</b>")
+
+    for module_name in modules_installed:
+        if not module_name.endswith(".py"):
+            continue
+
+        resp = requests.get(
+            f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}"
+        )
+        if not resp.ok:
+            modules_installed.remove(module_name)
+            continue
+
+        with open(f"./modules/custom_modules/{module_name}", "wb") as f:
+            f.write(resp.content)
+
+    await message.edit(f"<b>Successfully updated {len(modules_installed)} modules</b>")
+
+
 modules_help["loader"] = {
     "loadmod [module_name]*": "Download module.\n"
     "Only modules from the official custom_modules repository and proven "
@@ -160,4 +220,5 @@ modules_help["loader"] = {
     "unloadmod [module_name]*": "Delete module",
     "modhash [link]*": "Get module hash by link",
     "loadallmods": "Load all custom modules (use it at your own risk)",
+    "updateallmods": "Update all custom modules",
 }

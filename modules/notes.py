@@ -35,7 +35,7 @@ async def save_note(client: Client, message: Message):
 
     try:
         chat = await client.get_chat(db.get("core.notes", "chat_id", 0))
-    except errors.RPCError:
+    except (errors.RPCError, ValueError, KeyError):
         # group is not accessible or isn't created
         chat = await client.create_supergroup(
             "Dragon_Userbot_Notes_Filters", "Don't touch this group, please"
