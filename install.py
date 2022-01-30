@@ -15,7 +15,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import datetime
+import sys
+
 from pyrogram import Client
+
 from utils import config
 
 if __name__ == "__main__":
@@ -26,6 +29,24 @@ if __name__ == "__main__":
         hide_password=True,
     )
 
+    if config.db_type in ["mongo", "mongodb"]:
+        from pymongo import MongoClient, errors
+        db = MongoClient(config.db_url)
+        try:
+            db.server_info()
+        except errors.ConnectionFailure as e:
+            raise RuntimeError("MongoDB server isn't available! "
+                               f"Provided url: {config.db_url}. "
+                               "Enter valid URL and restart installation") from e
+
+    install_type = sys.argv[1] if len(sys.argv) > 1 else "3"
+    if install_type == "1":
+        restart = "pm2 restart dragon"
+    elif install_type == "2":
+        restart = "sudo systemctl restart dragon"
+    else:
+        restart = "cd Dragon-Userbot/ && python main.py"
+
     app.start()
     app.send_message(
         "me",
@@ -34,7 +55,7 @@ if __name__ == "__main__":
         "Custom modules: @Dragon_Userbot_modules\n"
         "Chat [RU]: @Dragon_Userbot_chat\n"
         "Chat [EN]: @Dragon_Userbot_chat_en\n\n"
-        f"For restart, enter:</b> \n"
-        f"<code>cd Dragon-Userbot/ && python main.py</code>",
+        f"For restart, enter:</b>\n"
+        f"<code>{restart}</code>",
     )
     app.stop()

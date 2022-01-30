@@ -49,16 +49,17 @@ case $db_type in
     db_type=mongodb
     ;;
   2)
-    if ! command -v mongo && ! command -v mongosh; then
+    if systemctl --all --type service | grep mongodb; then
       wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
       source /etc/os-release
       echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
       apt update
       apt install mongodb -y
       systemctl daemon-reload
-      systemctl start mongodb
       systemctl enable mongodb
     fi
+    systemctl start mongodb
+
     db_url=mongodb://localhost:27017
     db_name=Dragon_Userbot
     db_type=mongodb
@@ -83,7 +84,7 @@ DATABASE_URL=${db_url}
 EOL
 
 chown -R $SUDO_USER .
-su -c "python3 install.py" $SUDO_USER
+su -c "python3 install.py ${install_type}" $SUDO_USER || exit 3
 
 echo
 echo "Choose installation type:"

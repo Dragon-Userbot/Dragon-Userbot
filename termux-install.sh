@@ -56,7 +56,7 @@ DATABASE_NAME=${db_name}
 DATABASE_URL=${db_url}
 EOL
 
-python3 install.py
+python3 install.py || exit 3
 
 echo
 echo "============================"
