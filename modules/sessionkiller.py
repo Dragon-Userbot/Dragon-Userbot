@@ -37,7 +37,7 @@ async def sessionkiller(client: Client, message: Message):
         if db.get("core.sessionkiller", "enabled", False):
             await message.edit(
                 "<b>Sessionkiller status: enabled\n"
-                f"<b>You can disable it with <code>{prefix}sessionkiller disable</code></b>"
+                f"You can disable it with <code>{prefix}sessionkiller disable</code></b>"
             )
         else:
             await message.edit(
@@ -51,7 +51,7 @@ async def sessionkiller(client: Client, message: Message):
         db.set(
             "core.sessionkiller",
             "auths_hashes",
-            [auth["hash"] for auth in app.send(GetAuthorizations())["authorizations"]],
+            [auth["hash"] for auth in (await client.send(GetAuthorizations()))["authorizations"]],
         )
     elif message.command[1] in ["disable", "off", "0", "no", "false"]:
         db.set("core.sessionkiller", "enabled", False)
