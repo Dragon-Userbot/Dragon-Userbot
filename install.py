@@ -31,13 +31,16 @@ if __name__ == "__main__":
 
     if config.db_type in ["mongo", "mongodb"]:
         from pymongo import MongoClient, errors
+
         db = MongoClient(config.db_url)
         try:
             db.server_info()
         except errors.ConnectionFailure as e:
-            raise RuntimeError("MongoDB server isn't available! "
-                               f"Provided url: {config.db_url}. "
-                               "Enter valid URL and restart installation") from e
+            raise RuntimeError(
+                "MongoDB server isn't available! "
+                f"Provided url: {config.db_url}. "
+                "Enter valid URL and restart installation"
+            ) from e
 
     install_type = sys.argv[1] if len(sys.argv) > 1 else "3"
     if install_type == "1":
