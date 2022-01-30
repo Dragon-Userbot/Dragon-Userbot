@@ -13,6 +13,7 @@
 
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import sqlite3
 import subprocess
 import os
@@ -21,10 +22,15 @@ from pyrogram import Client, idle, errors
 from pyrogram.raw.functions.account import GetAuthorizations
 from pathlib import Path
 from importlib import import_module
+from utils.scripts import import_library
 import logging
+import datetime
 
 logging.basicConfig(level=logging.INFO)
+git = import_library("git", "GitPython")
+from git import Repo
 
+gitrepo = Repo(".")
 
 if __name__ == "__main__":
     script_path = os.path.dirname(os.path.realpath(__file__))
@@ -63,6 +69,9 @@ if __name__ == "__main__":
         api_hash=config.api_hash,
         hide_password=True,
         workdir=script_path,
+        app_version=gitrepo.head.commit.hexsha[:7],
+        device_model=f"Dragon-Userbot ({gitrepo.active_branch})",
+        system_version="3.0.0"
     )
 
     try:

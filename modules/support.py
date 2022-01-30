@@ -17,9 +17,15 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 import random
+import datetime
 
 from utils.misc import modules_help, prefix, userbot_version, python_version
+from utils.scripts import import_library
 
+git = import_library("git", "GitPython")
+from git import Repo
+
+gitrepo = Repo(".")
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
 async def support(_, message: Message):
@@ -27,7 +33,10 @@ async def support(_, message: Message):
     random.shuffle(devs)
 
     await message.edit(
-        f"<b>Dragon-Userbot\n"
+        f"<b>Dragon-Userbot\n\n"
+        f"Branch: <code>{gitrepo.active_branch}</code>\n"
+        f"Commit: <code>{gitrepo.head.commit.hexsha[:7]}</code> by {gitrepo.head.commit.author.name} <i><{gitrepo.head.commit.author.email}></i>\n"
+        f"Commit date: <b>{datetime.datetime.fromtimestamp(gitrepo.head.commit.committed_date).isoformat()}</b>\n\n"
         "GitHub: <a href=https://github.com/Dragon-Userbot/Dragon-Userbot>Dragon-Userbot/Dragon-Userbot</a>\n"
         "Custom modules repository: <a href=https://github.com/Dragon-Userbot/custom_modules>"
         "Dragon-Userbot/custom_modules</a>\n"
