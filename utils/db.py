@@ -87,7 +87,9 @@ class SqliteDatabase(Database):
 
     @staticmethod
     def _parse_row(row: sqlite3.Row):
-        if row["type"] == "int":
+        if row["type"] == "bool":
+            return row["val"] == "1"
+        elif row["type"] == "int":
             return int(row["val"])
         elif row["type"] == "str":
             return row["val"]
@@ -131,7 +133,10 @@ class SqliteDatabase(Database):
         UPDATE SET val=:val, type=:type WHERE var=:var
         """
 
-        if isinstance(value, str):
+        if isinstance(value, bool):
+            val = "1" if value else "0"
+            typ = "bool"
+        elif isinstance(value, str):
             val = value
             typ = "str"
         elif isinstance(value, int):
