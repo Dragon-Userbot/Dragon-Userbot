@@ -13,30 +13,21 @@
 
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 from pyrogram import Client, filters
 from pyrogram.types import Message
 import random
 import datetime
 
-from utils.misc import modules_help, prefix, userbot_version, python_version
-from utils.scripts import import_library
+from utils.misc import modules_help, prefix, userbot_version, python_version, gitrepo
 
-git = import_library("git", "GitPython")
-from git import Repo
-
-gitrepo = Repo(".")
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
 async def support(_, message: Message):
-    devs = ["@john_phonk", "@fuccsoc", "@nalinor"]
+    devs = ["@john_phonk", "@thefsch", "@nalinor"]
     random.shuffle(devs)
 
     await message.edit(
         f"<b>Dragon-Userbot\n\n"
-        f"Branch: <code>{gitrepo.active_branch}</code>\n"
-        f"Commit: <code>{gitrepo.head.commit.hexsha[:7]}</code> by {gitrepo.head.commit.author.name} <i><{gitrepo.head.commit.author.email}></i>\n"
-        f"Commit date: <b>{datetime.datetime.fromtimestamp(gitrepo.head.commit.committed_date).isoformat()}</b>\n\n"
         "GitHub: <a href=https://github.com/Dragon-Userbot/Dragon-Userbot>Dragon-Userbot/Dragon-Userbot</a>\n"
         "Custom modules repository: <a href=https://github.com/Dragon-Userbot/custom_modules>"
         "Dragon-Userbot/custom_modules</a>\n"
@@ -60,6 +51,14 @@ async def version(client: Client, message: Message):
             changelog = m.message_id
 
     await message.delete()
+
+    remote_url = list(gitrepo.remote().urls)[0]
+    commit_time = (
+        datetime.datetime.fromtimestamp(gitrepo.head.commit.committed_date)
+        .astimezone(datetime.timezone.utc)
+        .strftime("%Y-%m-%d %H:%M:%S %Z")
+    )
+
     await message.reply(
         f"<b>Dragon Userbot version: {userbot_version}\n"
         f"Changelog </b><i><a href=https://t.me/dRaGoN_uB_cHaNgElOg/{changelog}>in channel</a></i>.<b>\n"
@@ -67,7 +66,11 @@ async def version(client: Client, message: Message):
         f"<a href=tg://user?id=318865588>\u2060</a>"
         f"<a href=tg://user?id=293490416>♿️</a>"
         f"<a href=https://t.me/LKRinternationalrunetcomphinc>asphuy</a>"
-        f"<a href=https://t.me/artemjj2>♿️</a></i>",
+        f"<a href=https://t.me/artemjj2>♿️</a></i>\n\n"
+        f"<b>Branch: <a href={remote_url}/tree/{gitrepo.active_branch}>{gitrepo.active_branch}</a>\n"
+        f"Commit: <a href={remote_url}/commit/{gitrepo.head.commit.hexsha}>"
+        f"{gitrepo.head.commit.hexsha[:7]}</a> by {gitrepo.head.commit.author.name}\n"
+        f"Commit time: {commit_time}</b>",
     )
 
 

@@ -1079,14 +1079,16 @@ async def ro(client: Client, message: Message):
             perms.can_pin_messages,
         ]
         db.set("core.ats", f"ro{message.chat.id}", perms_list)
-        
+
         try:
             await client.set_chat_permissions(message.chat.id, ChatPermissions())
         except (UserAdminInvalid, ChatAdminRequired):
             await message.edit("<b>No rights</b>")
         else:
-            await message.edit("<b>Read-only mode activated!\n"
-                               f"Turn off with:</b><code>{prefix}unro</code>")
+            await message.edit(
+                "<b>Read-only mode activated!\n"
+                f"Turn off with:</b><code>{prefix}unro</code>"
+            )
     except Exception as e:
         await message.edit(format_exc(e))
 
@@ -1096,9 +1098,13 @@ async def unro(client: Client, message: Message):
     if message.chat.type != "supergroup":
         await message.edit("<b>Invalid chat type</b>")
         return
-    
+
     try:
-        perms_list = db.get("core.ats", f"ro{message.chat.id}", [True, True, True, False, False, False, False, False])
+        perms_list = db.get(
+            "core.ats",
+            f"ro{message.chat.id}",
+            [True, True, True, False, False, False, False, False],
+        )
         perms = ChatPermissions(
             can_send_messages=perms_list[0],
             can_send_media_messages=perms_list[1],
@@ -1107,7 +1113,7 @@ async def unro(client: Client, message: Message):
             can_add_web_page_previews=perms_list[4],
             can_change_info=perms_list[5],
             can_invite_users=perms_list[6],
-            can_pin_messages=perms_list[7]
+            can_pin_messages=perms_list[7],
         )
 
         try:
