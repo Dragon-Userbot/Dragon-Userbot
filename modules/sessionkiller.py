@@ -32,7 +32,7 @@ auth_hashes = db.get("core.sessionkiller", "auths_hashes", [])
 
 
 @Client.on_message(filters.command(["sessionkiller", "sk"], prefix) & filters.me)
-async def sessionkiller(_, message: Message):
+async def sessionkiller(client: Client, message: Message):
     if len(message.command) == 1:
         if db.get("core.sessionkiller", "enabled", False):
             await message.edit(
@@ -47,6 +47,12 @@ async def sessionkiller(_, message: Message):
     elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
         db.set("core.sessionkiller", "enabled", True)
         await message.edit("<b>Sessionkiller enabled!</b>")
+
+        db.set(
+            "core.sessionkiller",
+            "auths_hashes",
+            [auth["hash"] for auth in app.send(GetAuthorizations())["authorizations"]],
+        )
     elif message.command[1] in ["disable", "off", "0", "no", "false"]:
         db.set("core.sessionkiller", "enabled", False)
         await message.edit("<b>Sessionkiller disabled!</b>")

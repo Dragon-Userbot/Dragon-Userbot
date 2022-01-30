@@ -1040,6 +1040,86 @@ async def report_spam(client: Client, message: Message):
         await message.edit(f"<b>Message</a> from {name} was reported</b>")
 
 
+@Client.on_message(filters.command("pin", prefix) & filters.me)
+@with_reply
+async def pin(_, message: Message):
+    try:
+        await message.reply_to_message.pin()
+        await message.edit("<b>Pinned!</b>")
+    except Exception as e:
+        await message.edit(format_exc(e))
+
+
+@Client.on_message(filters.command("unpin", prefix) & filters.me)
+@with_reply
+async def unpin(_, message: Message):
+    try:
+        await message.reply_to_message.unpin()
+        await message.edit("<b>Unpinned!</b>")
+    except Exception as e:
+        await message.edit(format_exc(e))
+
+
+@Client.on_message(filters.command("ro", prefix) & filters.me)
+async def ro(client: Client, message: Message):
+    if message.chat.type != "supergroup":
+        await message.edit("<b>Invalid chat type</b>")
+        return
+
+    try:
+        perms = message.chat.permissions
+        perms_list = [
+            perms.can_send_messages,
+            perms.can_send_media_messages,
+            perms.can_send_other_messages,
+            perms.can_send_polls,
+            perms.can_add_web_page_previews,
+            perms.can_change_info,
+            perms.can_invite_users,
+            perms.can_pin_messages,
+        ]
+        db.set("core.ats", f"ro{message.chat.id}", perms_list)
+        
+        try:
+            await client.set_chat_permissions(message.chat.id, ChatPermissions())
+        except (UserAdminInvalid, ChatAdminRequired):
+            await message.edit("<b>No rights</b>")
+        else:
+            await message.edit("<b>Read-only mode activated!\n"
+                               f"Turn off with:</b><code>{prefix}unro</code>")
+    except Exception as e:
+        await message.edit(format_exc(e))
+
+
+@Client.on_message(filters.command("unro", prefix) & filters.me)
+async def unro(client: Client, message: Message):
+    if message.chat.type != "supergroup":
+        await message.edit("<b>Invalid chat type</b>")
+        return
+    
+    try:
+        perms_list = db.get("core.ats", f"ro{message.chat.id}", [True, True, True, False, False, False, False, False])
+        perms = ChatPermissions(
+            can_send_messages=perms_list[0],
+            can_send_media_messages=perms_list[1],
+            can_send_other_messages=perms_list[2],
+            can_send_polls=perms_list[3],
+            can_add_web_page_previews=perms_list[4],
+            can_change_info=perms_list[5],
+            can_invite_users=perms_list[6],
+            can_pin_messages=perms_list[7]
+        )
+
+        try:
+            await client.set_chat_permissions(message.chat.id, perms)
+        except (UserAdminInvalid, ChatAdminRequired):
+            await message.edit("<b>No rights</b>")
+        else:
+            await message.edit("<b>Read-only mode disabled!</b>")
+    except Exception as e:
+        await message.edit(format_exc(e))
+
+
 modules_help["admintool"] = {
     "ban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "ban user in chat",
     "unban [reply]/[username/id]* [reason]": "unban user in chat",
@@ -1054,7 +1134,9 @@ modules_help["admintool"] = {
     "antich [enable/disable]": "turn on/off blocking channels in this chat",
     "delete_history [reply]/[username/id]* [reason]": "delete history from member in chat",
     "report_spam [reply]*": "report spam message in chat",
-    # "ro": "enable read-only mode",
-    # "unro": "disable read-only mode",
+    "pin [reply]*": "Pin replied message",
+    "unpin [reply]*": "Unpin replied message",
+    "ro": "enable read-only mode",
+    "unro": "disable read-only mode",
     # "antiraid [enable|disable]": "when enabled, anyone who writes a message will be blocked. Useful in raids"
 }

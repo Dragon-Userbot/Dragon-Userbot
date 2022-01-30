@@ -1,21 +1,24 @@
 #!/bin/bash
-if [[ $UID != 0 ]] && ! command -v termux-setup-storage; then
+if command -v termux-setup-storage; then
+  echo For termux, please use https://raw.githubusercontent.com/Dragon-Userbot/Dragon-Userbot/main/termux-install.sh
+  exit 1
+fi
+
+if [[ $UID != 0 ]]; then
   echo Please run this script as root
   exit 1
 fi
 
 apt update -y
 apt install python3 python3-pip git clang ffmpeg wget gnupg -y
-if command -v termux-setup-storage; then
-  apt install libjpeg-turbo libcrypt ndk-sysroot zlib -y
-fi
 
-python3 -m pip install -U pip
-LDFLAGS="-L${PREFIX}/lib/" CFLAGS="-I${PREFIX}/include/" python3 -m pip install -U wheel pillow
+su -c "python3 -m pip install -U pip" $SUDO_USER
+su -c "python3 -m pip install -U wheel pillow" $SUDO_USER
 
 git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
 cd Dragon-Userbot
-python3 -m pip install -U -r requirements.txt
+git checkout fs_rewrite_imports
+su -c "python3 -m pip install -U -r requirements.txt" $SUDO_USER
 
 echo
 echo "Enter API_ID and API_HASH"
@@ -30,21 +33,11 @@ else
 fi
 
 echo
-if command -v termux-setup-storage; then
-  echo "Choose database type:"
-  echo "[1] MongoDB (your url)"
-  echo "[2] Sqlite"
-  read -r -p "[1] > " db_type
-  if [[ $db_type = 2 ]]; then
-    db_type=3
-  fi
-else
-  echo "Choose database type:"
-  echo "[1] MongoDB db_url"
-  echo "[2] MongoDB localhost"
-  echo "[3] Sqlite (default)"
-  read -r -p "> " db_type
-fi
+echo "Choose database type:"
+echo "[1] MongoDB db_url"
+echo "[2] MongoDB localhost"
+echo "[3] Sqlite (default)"
+read -r -p "> " db_type
 
 echo
 case $db_type in
@@ -53,6 +46,7 @@ case $db_type in
     echo "You can get it here -> https://telegra.ph/How-to-get-Mongodb-URL-and-login-in-telegram-08-01"
     read -r -p "> " db_url
     db_name=Dragon_Userbot
+    db_type=mongodb
     ;;
   2)
     if ! command -v mongo && ! command -v mongosh; then
@@ -62,29 +56,25 @@ case $db_type in
       apt update
       apt install mongodb -y
       systemctl daemon-reload
-      systemctl start mongod
-      systemctl enable mongod
+      systemctl start mongodb
+      systemctl enable mongodb
     fi
     db_url=mongodb://localhost:27017
     db_name=Dragon_Userbot
+    db_type=mongodb
     ;;
   *)
     db_name=db.sqlite3
+    db_type=sqlite3
     ;;
 esac
-
-if [[ $db_type = 1 ]] || [[ $db_type = 2 ]]; then
-  db_type_named=mongodb
-else
-  db_type_named=sqlite3
-fi
 
 cat > .env << EOL
 API_ID=${api_id}
 API_HASH=${api_hash}
 
 # sqlite/sqlite3 or mongo/mongodb
-DATABASE_TYPE=${db_type_named}
+DATABASE_TYPE=${db_type}
 # file name for sqlite3, database name for mongodb
 DATABASE_NAME=${db_name}
 
@@ -92,17 +82,15 @@ DATABASE_NAME=${db_name}
 DATABASE_URL=${db_url}
 EOL
 
+chown -R $SUDO_USER .
 su -c "python3 install.py" $SUDO_USER
 
-if ! command -v termux-setup-storage; then
-  echo "Choose installation type:"
-  echo "[1] PM2"
-  echo "[2] Systemd service"
-  echo "[3] Custom (default)"
-  read -r -p "> " install_type
-else
-  install_type=3
-fi
+echo
+echo "Choose installation type:"
+echo "[1] PM2"
+echo "[2] Systemd service"
+echo "[3] Custom (default)"
+read -r -p "> " install_type
 
 case $install_type in
   1)
@@ -149,7 +137,6 @@ EOL
     echo "Start with: \"sudo systemctl start dragon\""
     echo "Stop with: \"sudo systemctl stop dragon\""
     echo "============================"
-    echo
     ;;
   *)
     echo
@@ -158,7 +145,6 @@ EOL
     echo "Installation type: Custom"
     echo "Start with: \"python3 main.py\""
     echo "============================"
-    echo
     ;;
 esac
 
