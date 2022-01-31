@@ -26,6 +26,11 @@ async def support(_, message: Message):
     devs = ["@john_phonk", "@thefsch", "@nalinor"]
     random.shuffle(devs)
 
+    commands_count = 0.0
+    for module in modules_help:
+        for cmd in module:
+            commands_count += 1
+
     await message.edit(
         f"<b>Dragon-Userbot\n\n"
         "GitHub: <a href=https://github.com/Dragon-Userbot/Dragon-Userbot>Dragon-Userbot/Dragon-Userbot</a>\n"
@@ -38,7 +43,8 @@ async def support(_, message: Message):
         "Chat [EN]: @Dragon_Userbot_chat_en\n"
         f"Main developers: {', '.join(devs)}\n\n"
         f"Python version: {python_version}\n"
-        f"Modules count: {len(modules_help) / 1}\n</b>",
+        f"Modules count: {len(modules_help) / 1}\n"
+        f"Commands count: {commands_count}</b>",
         disable_web_page_preview=True,
     )
 
