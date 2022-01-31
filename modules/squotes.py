@@ -210,6 +210,8 @@ async def render_message(app: Client, message: types.Message) -> dict:
         if msg.forward_from_chat:
             msg.sender_chat = msg.forward_from_chat
             msg.from_user.id = 0
+        if msg.forward_signature:
+            msg.author_signature = msg.forward_signature
 
     move_forwards(message)
 
@@ -220,7 +222,9 @@ async def render_message(app: Client, message: types.Message) -> dict:
 
         author["id"] = from_user.id
         author["name"] = get_full_name(from_user)
-        if message.chat.type != "supergroup" or message.forward_date:
+        if message.author_signature:
+            author["rank"] = message.author_signature
+        elif message.chat.type != "supergroup" or message.forward_date:
             author["rank"] = ""
         else:
             try:

@@ -17,6 +17,7 @@
 import re
 from time import time
 from typing import Dict, Union
+from contextlib import suppress
 
 from pyrogram import Client, ContinuePropagation, filters
 from pyrogram.errors import (
@@ -24,6 +25,7 @@ from pyrogram.errors import (
     ChatAdminRequired,
     PeerIdInvalid,
     UsernameInvalid,
+    RPCError,
 )
 from pyrogram.raw import functions, types
 from pyrogram.types import Message, ChatPermissions
@@ -43,24 +45,37 @@ from utils.misc import modules_help, prefix
 db_cache: dict = db.get_collection("core.ats")
 
 
-@Client.on_message(filters.group)
+@Client.on_message(filters.group & ~filters.edited & ~filters.me)
 async def admintool_handler(_, message: Message):
-    tmuted_users = db_cache.get(f"c{message.chat.id}", [])
+    if message.sender_chat:
+        if (
+            message.sender_chat.type == "supergroup"
+            or message.sender_chat.id == db_cache.get(f"linked{message.chat.id}", 0)
+        ):
+            raise ContinuePropagation
 
     if message.sender_chat and db_cache.get(f"antich{message.chat.id}", False):
-        try:
+        with suppress(RPCError):
             await message.delete()
             await message.chat.ban_member(message.sender_chat.id)
-        except ChatAdminRequired:
-            pass
 
+    tmuted_users = db_cache.get(f"c{message.chat.id}", [])
     if (
         message.from_user
         and message.from_user.id in tmuted_users
         or message.sender_chat
         and message.sender_chat.id in tmuted_users
     ):
-        await message.delete()
+        with suppress(RPCError):
+            await message.delete()
+
+    if db_cache.get(f"antiraid{message.chat.id}", False):
+        with suppress(RPCError):
+            await message.delete()
+            if message.from_user:
+                await message.chat.ban_member(message.from_user.id)
+            elif message.sender_chat:
+                await message.chat.ban_member(message.sender_chat.id)
 
     raise ContinuePropagation
 
@@ -914,7 +929,7 @@ async def promote_command(client: Client, message: Message):
 
 
 @Client.on_message(filters.command(["antich"], prefix))
-async def anti_channels(_, message: Message):
+async def anti_channels(client: Client, message: Message):
     if message.chat.type != "supergroup":
         await message.edit("<b>Not supported in non-supergroup chats</b>")
         return
@@ -932,6 +947,11 @@ async def anti_channels(_, message: Message):
             )
     elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
         db.set("core.ats", f"antich{message.chat.id}", True)
+        group = await client.get_chat(message.chat.id)
+        if group.linked_chat:
+            db.set("core.ats", f"linked{message.chat.id}", group.linked_chat.id)
+        else:
+            db.set("core.ats", f"linked{message.chat.id}", 0)
         await message.edit("<b>Blocking channels in this chat enabled.</b>")
     elif message.command[1] in ["disable", "off", "0", "no", "false"]:
         db.set("core.ats", f"antich{message.chat.id}", False)
@@ -1126,6 +1146,46 @@ async def unro(client: Client, message: Message):
         await message.edit(format_exc(e))
 
 
+@Client.on_message(filters.command("antiraid", prefix) & filters.me)
+async def antiraid(client: Client, message: Message):
+    if message.chat.type != "supergroup":
+        await message.edit("<b>Not supported in non-supergroup chats</b>")
+        return
+
+    if len(message.command) > 1 and message.command[1] == "on":
+        db.set("core.ats", f"antiraid{message.chat.id}", True)
+        group = await client.get_chat(message.chat.id)
+        if group.linked_chat:
+            db.set("core.ats", f"linked{message.chat.id}", group.linked_chat.id)
+        else:
+            db.set("core.ats", f"linked{message.chat.id}", 0)
+        await message.edit(
+            "<b>Anti-raid mode enabled!\n"
+            f"Disable with: </b><code>{prefix}antiraid off</code>"
+        )
+    elif len(message.command) > 1 and message.command[1] == "off":
+        db.set("core.ats", f"antiraid{message.chat.id}", False)
+        await message.edit("<b>Anti-raid mode disabled</b>")
+    else:
+        # toggle
+        if db.get("core.ats", f"antiraid{message.chat.id}", False):
+            db.set("core.ats", f"antiraid{message.chat.id}", False)
+            await message.edit("<b>Anti-raid mode disabled</b>")
+        else:
+            db.set("core.ats", f"antiraid{message.chat.id}", True)
+            group = await client.get_chat(message.chat.id)
+            if group.linked_chat:
+                db.set("core.ats", f"linked{message.chat.id}", group.linked_chat.id)
+            else:
+                db.set("core.ats", f"linked{message.chat.id}", 0)
+            await message.edit(
+                "<b>Anti-raid mode enabled!\n"
+                f"Disable with: </b><code>{prefix}antiraid off</code>"
+            )
+
+    db_cache.update(db.get_collection("core.ats"))
+
+
 modules_help["admintool"] = {
     "ban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "ban user in chat",
     "unban [reply]/[username/id]* [reason]": "unban user in chat",
@@ -1144,5 +1204,6 @@ modules_help["admintool"] = {
     "unpin [reply]*": "Unpin replied message",
     "ro": "enable read-only mode",
     "unro": "disable read-only mode",
-    # "antiraid [enable|disable]": "when enabled, anyone who writes a message will be blocked. Useful in raids"
+    "antiraid [on|off]": "when enabled, anyone who writes message will be blocked. Useful in raids. "
+    "Running without arguments equals to toggling state",
 }

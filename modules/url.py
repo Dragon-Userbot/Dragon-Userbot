@@ -50,16 +50,17 @@ async def urldl(client: Client, message: Message):
         return
 
     await message.edit("<b>Downloading...</b>")
-    file_name = link.split("/")[-1]
+    file_name = "downloads/" + link.split("/")[-1]
 
     try:
         resp = requests.get(link)
         resp.raise_for_status()
 
-        with open("downloads/" + file_name, "wb") as f:
+        with open(file_name, "wb") as f:
             for chunk in resp.iter_content(chunk_size=8192):
                 f.write(chunk)
 
+        await message.edit("<b>Uploading...</b>")
         await client.send_document(message.chat.id, file_name)
         await message.delete()
     except Exception as e:
@@ -68,7 +69,59 @@ async def urldl(client: Client, message: Message):
         os.remove(file_name)
 
 
+@Client.on_message(filters.command("upload", prefix) & filters.me)
+async def upload_cmd(_, message: Message):
+    max_size = 512 * 1024 * 1024
+    max_size_mb = 512
+
+    min_file_age = 31
+    max_file_age = 180
+
+    await message.edit("<b>Downloading...</b>")
+
+    try:
+        file_name = await message.download()
+    except ValueError:
+        try:
+            file_name = await message.reply_to_message.download()
+        except ValueError:
+            await message.edit("<b>File to upload not found</b>")
+            return
+
+    if os.path.getsize(file_name) > max_size:
+        await message.edit(f"<b>Files longer than {max_size_mb}MB isn't supported</b>")
+        os.remove(file_name)
+        return
+
+    await message.edit("<b>Uploading...</b>")
+    with open(file_name, "rb") as f:
+        response = requests.post(
+            "https://x0.at",
+            files={"file": f},
+        )
+
+    if response.ok:
+        file_size_mb = os.path.getsize(file_name) / 1024 / 1024
+        file_age = int(
+            min_file_age
+            + (max_file_age - min_file_age)
+            * (1 - (file_size_mb / max_size_mb))
+            * (1 - (file_size_mb / max_size_mb))
+            # ^ isn't a good variant, because it doesn't work at float values
+        )
+        url = response.text.replace("https://", "")
+        await message.edit(
+            f"<b>Your URL: {url}\nYour file will live {file_age} days</b>",
+            disable_web_page_preview=True,
+        )
+    else:
+        await message.edit(f"<b>API returned an error!\n" f"{response.text}</b>")
+
+    os.remove(file_name)
+
+
 modules_help["url"] = {
     "short [url]*": "short url",
     "urldl [url]*": "download url content",
+    "upload [file|reply]*": "upload file to internet",
 }

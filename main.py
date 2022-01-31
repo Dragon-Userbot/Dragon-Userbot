@@ -69,6 +69,7 @@ if __name__ == "__main__":
         app_version=userbot_version,
         device_model=f"Dragon-Userbot @ {gitrepo.head.commit.hexsha[:7]}",
         system_version=platform.version() + " " + platform.machine(),
+        sleep_threshold=30,
     )
 
     try:
