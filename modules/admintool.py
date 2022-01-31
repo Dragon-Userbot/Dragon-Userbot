@@ -77,6 +77,12 @@ async def admintool_handler(_, message: Message):
             elif message.sender_chat:
                 await message.chat.ban_member(message.sender_chat.id)
 
+    if message.new_chat_members:
+        welcome = db_cache.get(f"welcome{message.chat.id}")
+        if welcome:
+            if welcome["status"] in ["enable", "on", "1", "yes", "true"]:
+                await message.reply(welcome["text"])
+
     raise ContinuePropagation
 
 
@@ -461,6 +467,7 @@ async def tmute_command(client: Client, message: Message):
     else:
         await message.edit("<b>Unsupported</b>")
 
+    db_cache.clear()
     db_cache.update(db.get_collection("core.ats"))
 
 
@@ -524,6 +531,7 @@ async def tunmute_command(client: Client, message: Message):
     else:
         await message.edit("<b>Unsupported</b>")
 
+    db_cache.clear()
     db_cache.update(db.get_collection("core.ats"))
 
 
@@ -959,6 +967,7 @@ async def anti_channels(client: Client, message: Message):
     else:
         await message.edit(f"<b>Usage: {prefix}antich [enable|disable]</b>")
 
+    db_cache.clear()
     db_cache.update(db.get_collection("core.ats"))
 
 
@@ -1183,6 +1192,34 @@ async def antiraid(client: Client, message: Message):
                 f"Disable with: </b><code>{prefix}antiraid off</code>"
             )
 
+    db_cache.clear()
+    db_cache.update(db.get_collection("core.ats"))
+
+
+@Client.on_message(filters.command(["welcome", "wc"], prefix) & filters.me)
+async def welcome(client: Client, message: Message):
+    if message.chat.type in ["private", "channel"]:
+        return await message.edit("Greeting does not work in this type of chats")
+    err_text = f"<b>You didn't provide any arguments\nUse <code>{prefix}help welcome</code> to find out the required arguments</b>"
+    if len(message.command) == 1:
+        return await message.edit(err_text)
+    if message.command[1] in ["enable", "on", "1", "yes", "true"]:
+        data = {
+            "text": " ".join(message.command[2:]),
+            "status": message.command[1],
+        }
+
+        db.set("core.ats", f"welcome{message.chat.id}", data)
+
+        await message.edit(
+            f"<b>Welcome enabled in this chat</b>\n<b>Text:</b><code> {' '.join(message.command[2:])}</code>"
+        )
+    elif message.command[1] in ["disable", "off", "0", "no", "false"]:
+        db.remove("core.ats", f"welcome{message.chat.id}")
+        await message.edit("<b>Welcome disabled in this chat</b>")
+    else:
+        await message.edit(err_text)
+    db_cache.clear()
     db_cache.update(db.get_collection("core.ats"))
 
 
@@ -1206,4 +1243,5 @@ modules_help["admintool"] = {
     "unro": "disable read-only mode",
     "antiraid [on|off]": "when enabled, anyone who writes message will be blocked. Useful in raids. "
     "Running without arguments equals to toggling state",
+    "welcome [enable/disable]* [welcome text]": "Welcome for new members",
 }
