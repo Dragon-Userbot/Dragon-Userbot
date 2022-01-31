@@ -10,15 +10,15 @@ if [[ $UID != 0 ]]; then
 fi
 
 apt update -y
-apt install python3 python3-pip git clang ffmpeg wget gnupg -y
+apt install python3 python3-pip git clang ffmpeg wget gnupg -y || exit 2
 
 su -c "python3 -m pip install -U pip" $SUDO_USER
 su -c "python3 -m pip install -U wheel pillow" $SUDO_USER
 
 git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
-cd Dragon-Userbot
+cd Dragon-Userbot || exit 2
 git checkout fs_rewrite_imports
-su -c "python3 -m pip install -U -r requirements.txt" $SUDO_USER
+su -c "python3 -m pip install -U -r requirements.txt" $SUDO_USER || exit 2
 
 echo
 echo "Enter API_ID and API_HASH"

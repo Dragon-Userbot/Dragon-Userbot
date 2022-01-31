@@ -6,13 +6,14 @@ fi
 termux-wake-lock
 
 apt update -y
-apt install python3 python3-pip git clang ffmpeg wget libjpeg-turbo libcrypt ndk-sysroot zlib -y
+apt install python3 git clang ffmpeg wget libjpeg-turbo libcrypt ndk-sysroot zlib -y || exit 2
 
 python3 -m pip install -U pip
 LDFLAGS="-L${PREFIX}/lib/" CFLAGS="-I${PREFIX}/include/" pip3 install --upgrade wheel pillow
 
 git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
-cd Dragon-Userbot
+cd Dragon-Userbot || exit 2
+git checkout fs_rewrite_imports
 python3 -m pip install -U -r requirements.txt
 
 echo
@@ -56,7 +57,7 @@ DATABASE_NAME=${db_name}
 DATABASE_URL=${db_url}
 EOL
 
-python3 install.py || exit 3
+python3 install.py 3 || exit 3
 
 echo
 echo "============================"
