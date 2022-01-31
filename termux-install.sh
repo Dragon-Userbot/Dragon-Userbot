@@ -14,13 +14,14 @@ LDFLAGS="-L${PREFIX}/lib/" CFLAGS="-I${PREFIX}/include/" pip3 install --upgrade 
 git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
 cd Dragon-Userbot || exit 2
 git checkout fs_rewrite_imports
-python3 -m pip install -U -r requirements.txt
+python3 -m pip install -U -r requirements.txt || exit 2
 
 echo
 echo "Enter API_ID and API_HASH"
 echo "You can get it here -> https://my.telegram.org/apps"
 echo "Leave empty to use defaults"
 read -r -p "API_ID > " api_id
+
 if [[ $api_id = "" ]]; then
   api_id=2040
   api_hash=b18441a1ff607e10a989891a5462e627

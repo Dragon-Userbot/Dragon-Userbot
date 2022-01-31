@@ -120,8 +120,20 @@ async def upload_cmd(_, message: Message):
     os.remove(file_name)
 
 
+@Client.on_message(filters.command("webshot", prefix) & filters.me)
+async def webshot(client: Client, message: Message):
+    try:
+        user_link = message.command[1]
+        await message.delete()
+        full_link = f"https://webshot.deam.io/{user_link}/?delay=2000"
+        await client.send_document(message.chat.id, full_link, caption=f"{user_link}")
+    except Exception as e:
+        await message.edit(format_exc(e))
+
+
 modules_help["url"] = {
     "short [url]*": "short url",
     "urldl [url]*": "download url content",
     "upload [file|reply]*": "upload file to internet",
+    "webshot [link]*": "Screenshot of web page",
 }

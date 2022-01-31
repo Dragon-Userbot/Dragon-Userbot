@@ -1,13 +1,9 @@
 pyrogram
 tgcrypto
-wikipedia
-covid
 wheel
-gTTS
 pygments
 ffmpeg-python
 pymongo
-motor
 Pillow>=9.0.0
 pytube
 click
