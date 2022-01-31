@@ -79,9 +79,8 @@ async def admintool_handler(_, message: Message):
 
     if message.new_chat_members:
         welcome = db_cache.get(f"welcome{message.chat.id}")
-        if welcome:
-            if welcome["status"] in ["enable", "on", "1", "yes", "true"]:
-                await message.reply(welcome["text"])
+        if welcome and welcome["status"]:
+            await message.reply(welcome["text"])
 
     raise ContinuePropagation
 
@@ -1206,11 +1205,9 @@ async def welcome(client: Client, message: Message):
     if message.command[1] in ["enable", "on", "1", "yes", "true"]:
         data = {
             "text": " ".join(message.command[2:]),
-            "status": message.command[1],
+            "status": True,
         }
-
         db.set("core.ats", f"welcome{message.chat.id}", data)
-
         await message.edit(
             f"<b>Welcome enabled in this chat</b>\n<b>Text:</b><code> {' '.join(message.command[2:])}</code>"
         )
