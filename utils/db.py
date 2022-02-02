@@ -49,33 +49,28 @@ class MongoDatabase(Database):
 
     def set(self, module: str, variable: str, value):
         modcollection = self._DB[module]
-        doc = modcollection.find_one({"var": variable})
-        if doc is None:
-            modcollection.insert_one({"var": variable, "val": value})
-        else:
-            modcollection.replace_one(doc, {"var": variable, "val": value})
-        return True
+        modcollection.replace_one(
+            {"var": variable}, {"var": variable, "val": value}, upsert=True
+        )
 
     def get(self, module: str, variable: str, expected_value=None):
         modcollection = self._DB[module]
         doc = modcollection.find_one({"var": variable})
         if doc is None:
             return expected_value
-        else:
-            return doc["val"]
+        return doc["val"]
 
     def get_collection(self, module: str):
         modcollection = self._DB[module]
-        return {_["var"]: _["val"] for _ in modcollection.find()}
+        return {item["var"]: item["val"] for item in modcollection.find()}
 
     def remove(self, module: str, variable: str):
         modcollection = self._DB[module]
         doc = modcollection.find_one({"var": variable})
-        if doc != None:
+        if doc:
             modcollection.delete_one(doc)
             return True
-        else:
-            return False
+        return False
 
 
 class SqliteDatabase(Database):

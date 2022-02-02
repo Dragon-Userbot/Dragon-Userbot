@@ -15,9 +15,21 @@ apt install python3 python3-pip git clang ffmpeg wget gnupg -y || exit 2
 su -c "python3 -m pip install -U pip" $SUDO_USER
 su -c "python3 -m pip install -U wheel pillow" $SUDO_USER
 
-git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
-cd Dragon-Userbot || exit 2
-git checkout fs_rewrite_imports
+if [[ -d "Dragon-Userbot" ]]; then
+  cd Dragon-Userbot
+elif [[ -f ".env.dist" ]] && [[ -f "main.py" ]] && [[ -d "modules" ]]; then
+  :
+else
+  git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
+  cd Dragon-Userbot || exit 2
+  git checkout fs_rewrite_imports
+fi
+
+if [[ -f ".env" ]] && [[ -f "my_account.session" ]]; then
+  echo "It seems that Dragon-Userbot is already installed. Exiting..."
+  exit
+fi
+
 su -c "python3 -m pip install -U -r requirements.txt" $SUDO_USER || exit 2
 
 echo
@@ -25,9 +37,10 @@ echo "Enter API_ID and API_HASH"
 echo "You can get it here -> https://my.telegram.org/apps"
 echo "Leave empty to use defaults"
 read -r -p "API_ID > " api_id
+
 if [[ $api_id = "" ]]; then
-  api_id=2040
-  api_hash=b18441a1ff607e10a989891a5462e627
+  api_id="2040"
+  api_hash="b18441a1ff607e10a989891a5462e627"
 else
   read -r -p "API_HASH > " api_hash
 fi
@@ -49,10 +62,10 @@ case $db_type in
     db_type=mongodb
     ;;
   2)
-    if systemctl --all --type service | grep mongodb; then
+    if systemctl status mongodb; then
       wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
       source /etc/os-release
-      echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+      echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/5.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-5.0.list
       apt update
       apt install mongodb -y
       systemctl daemon-reload
@@ -83,8 +96,7 @@ DATABASE_NAME=${db_name}
 DATABASE_URL=${db_url}
 EOL
 
-chown -R $SUDO_USER .
-su -c "python3 install.py ${install_type}" $SUDO_USER || exit 3
+chown -R $SUDO_USER:$SUDO_USER .
 
 echo
 echo "Choose installation type:"
@@ -92,6 +104,8 @@ echo "[1] PM2"
 echo "[2] Systemd service"
 echo "[3] Custom (default)"
 read -r -p "> " install_type
+
+su -c "python3 install.py ${install_type}" $SUDO_USER || exit 3
 
 case $install_type in
   1)
@@ -112,6 +126,7 @@ case $install_type in
     echo "Start with: \"pm2 start dragon\""
     echo "Stop with: \"pm2 stop dragon\""
     echo "Process name: dragon"
+    echo "============================"
     ;;
   2)
     cat > /etc/systemd/system/dragon.service << EOL
@@ -123,6 +138,8 @@ Type=simple
 ExecStart=$(which python3) ${PWD}/main.py
 WorkingDirectory=${PWD}
 Restart=always
+User=${SUDO_USER}
+Group=${SUDO_USER}
 
 [Install]
 WantedBy=multi-user.target
@@ -149,4 +166,4 @@ EOL
     ;;
 esac
 
-chown -R $SUDO_USER .
+chown -R $SUDO_USER:$SUDO_USER .

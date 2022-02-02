@@ -70,6 +70,7 @@ if __name__ == "__main__":
         device_model=f"Dragon-Userbot @ {gitrepo.head.commit.hexsha[:7]}",
         system_version=platform.version() + " " + platform.machine(),
         sleep_threshold=30,
+        test_mode=config.test_server,
     )
 
     try:

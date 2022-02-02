@@ -11,9 +11,21 @@ apt install python3 git clang ffmpeg wget libjpeg-turbo libcrypt ndk-sysroot zli
 python3 -m pip install -U pip
 LDFLAGS="-L${PREFIX}/lib/" CFLAGS="-I${PREFIX}/include/" pip3 install --upgrade wheel pillow
 
-git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
-cd Dragon-Userbot || exit 2
-git checkout fs_rewrite_imports
+if [[ -d "Dragon-Userbot" ]]; then
+  cd Dragon-Userbot
+elif [[ -f ".env.dist" ]] && [[ -f "main.py" ]] && [[ -d "modules" ]]; then
+  :
+else
+  git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
+  cd Dragon-Userbot || exit 2
+  git checkout fs_rewrite_imports
+fi
+
+if [[ -f ".env" ]] && [[ -f "my_account.session" ]]; then
+  echo "It seems that Dragon-Userbot is already installed. Exiting..."
+  exit
+fi
+
 python3 -m pip install -U -r requirements.txt || exit 2
 
 echo
@@ -23,8 +35,8 @@ echo "Leave empty to use defaults"
 read -r -p "API_ID > " api_id
 
 if [[ $api_id = "" ]]; then
-  api_id=2040
-  api_hash=b18441a1ff607e10a989891a5462e627
+  api_id="2040"
+  api_hash="b18441a1ff607e10a989891a5462e627"
 else
   read -r -p "API_HASH > " api_hash
 fi
