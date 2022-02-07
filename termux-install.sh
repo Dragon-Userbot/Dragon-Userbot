@@ -72,6 +72,8 @@ EOL
 
 python3 install.py 3 || exit 3
 
+cd Dragon-Userbot
+
 echo
 echo "============================"
 echo "Great! Dragon-Userbot installed successfully!"
