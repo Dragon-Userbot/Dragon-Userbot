@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import asyncio
 import os
+import sys
 from io import BytesIO
 
 from PIL import Image
@@ -31,7 +32,7 @@ async def text(message: types.Message):
 
 
 async def restart():
-    await os.execvp("python3", ["python3", "main.py"])
+    os.execvp(sys.executable, [sys.executable, "main.py"])
 
 
 def format_exc(e: Exception, hint: str = None):

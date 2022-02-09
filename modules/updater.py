@@ -15,8 +15,8 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
+import sys
 import subprocess
-import pathlib
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
@@ -27,10 +27,10 @@ from utils.scripts import format_exc
 
 async def restart(message: Message, restart_type):
     text = "1" if restart_type == "update" else "2"
-    await os.execvp(
-        "python3",
+    os.execvp(
+        sys.executable,
         [
-            "python3",
+            sys.executable,
             "main.py",
             f"{message.chat.id}",
             f" {message.message_id}",

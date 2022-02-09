@@ -31,7 +31,6 @@ async def shell(_, message: Message):
     cmd_text = message.text.split(maxsplit=1)[1]
     cmd_obj = Popen(
         cmd_text,
-        executable="/usr/bin/bash",
         shell=True,
         stdout=PIPE,
         stderr=PIPE,
