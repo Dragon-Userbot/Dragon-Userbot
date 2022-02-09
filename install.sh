@@ -10,7 +10,7 @@ if [[ $UID != 0 ]]; then
 fi
 
 apt update -y
-apt install python3 python3-pip git clang ffmpeg wget gnupg -y || exit 2
+apt install python3 python3-pip git ffmpeg wget gnupg -y || exit 2
 
 su -c "python3 -m pip install -U pip" $SUDO_USER
 su -c "python3 -m pip install -U wheel pillow" $SUDO_USER
