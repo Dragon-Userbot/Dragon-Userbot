@@ -22,7 +22,6 @@ elif [[ -f ".env.dist" ]] && [[ -f "main.py" ]] && [[ -d "modules" ]]; then
 else
   git clone https://github.com/Dragon-Userbot/Dragon-Userbot || exit 2
   cd Dragon-Userbot || exit 2
-  git checkout fs_rewrite_imports
 fi
 
 if [[ -f ".env" ]] && [[ -f "my_account.session" ]]; then
