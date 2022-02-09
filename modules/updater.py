@@ -25,7 +25,7 @@ from utils.misc import modules_help, prefix, requirements_list
 from utils.scripts import format_exc
 
 
-async def restart(message: Message, restart_type):
+def restart(message: Message, restart_type):
     text = "1" if restart_type == "update" else "2"
     os.execvp(
         sys.executable,
@@ -42,29 +42,29 @@ async def restart(message: Message, restart_type):
 @Client.on_message(filters.command("restart", prefix) & filters.me)
 async def restart_cmd(_, message: Message):
     await message.edit("<b>Restarting...</b>")
-    await restart(message, "restart")
+    restart(message, "restart")
 
 
 @Client.on_message(filters.command("update", prefix) & filters.me)
 async def update(_, message: Message):
     try:
         await message.edit("<b>Updating: 1/4 (updating pip)</b>")
-        subprocess.run(["python3", "-m", "pip", "install", "-U", "pip"])
+        subprocess.run([sys.executable, "-m", "pip", "install", "-U", "pip"])
         await message.edit("<b>Updating: 2/4 (git pull)</b>")
         subprocess.run(["git", "pull"])
         await message.edit("<b>Updating: 3/4 (updating libs from requirements.txt)</b>")
         subprocess.run(
-            ["python3", "-m", "pip", "install", "-U", "-r", "requirements.txt"]
+            [sys.executable, "-m", "pip", "install", "-U", "-r", "requirements.txt"]
         )
         await message.edit(
             "<b>Updating: 4/4 (updating libs from requirements_list)</b>"
         )
-        subprocess.run(["python3", "-m", "pip", "install", "-U", *requirements_list])
+        subprocess.run([sys.executable, "-m", "pip", "install", "-U", *requirements_list])
         await message.edit("<b>Updating: done! Restarting...</b>")
     except Exception as e:
         await message.edit(format_exc(e))
     else:
-        await restart(message, "update")
+        restart(message, "update")
 
 
 modules_help["updater"] = {

@@ -27,11 +27,11 @@ import traceback
 from .misc import modules_help, prefix, requirements_list
 
 
-async def text(message: types.Message):
+def text(message: types.Message):
     return message.text if message.text else message.caption
 
 
-async def restart():
+def restart():
     os.execvp(sys.executable, [sys.executable, "main.py"])
 
 

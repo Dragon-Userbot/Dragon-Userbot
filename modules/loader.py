@@ -125,7 +125,7 @@ async def loadmod(_, message: Message):
             os.rename(file_name, f"./modules/custom_modules/{module_name}.py")
 
     await message.edit(f"<b>The module <code>{module_name}</code> is loaded!</b>")
-    await restart()
+    restart()
 
 
 @Client.on_message(filters.command(["unloadmod", "ulm"], prefix) & filters.me)
@@ -143,7 +143,7 @@ async def unload_mods(_, message: Message):
     if os.path.exists(f"{BASE_PATH}/modules/custom_modules/{module_name}.py"):
         os.remove(f"{BASE_PATH}/modules/custom_modules/{module_name}.py")
         await message.edit(f"<b>The module <code>{module_name}</code> removed!</b>")
-        await restart()
+        restart()
     elif os.path.exists(f"{BASE_PATH}/modules/{module_name}.py"):
         await message.edit(
             "<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>"
@@ -181,7 +181,7 @@ async def load_all_mods(_, message: Message):
     await message.edit(
         f'<b>Successfully loaded new modules: {" ".join(new_modules.keys())}</b>'
     )
-    await restart()
+    restart()
 
 
 @Client.on_message(filters.command(["updateallmods"], prefix) & filters.me)

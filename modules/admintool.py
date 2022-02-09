@@ -128,7 +128,7 @@ async def get_user_and_name(message):
 
 @Client.on_message(filters.command(["ban"], prefix) & filters.me)
 async def ban_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         user_for_ban, name = await get_user_and_name(message)
         try:
@@ -237,7 +237,7 @@ async def ban_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["unban"], prefix) & filters.me)
 async def unban_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         user_for_unban, name = await get_user_and_name(message)
         try:
@@ -299,7 +299,7 @@ async def unban_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["kick"], prefix) & filters.me)
 async def kick_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
             try:
@@ -405,7 +405,7 @@ async def kick_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["tmute"], prefix) & filters.me)
 async def tmute_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         user_for_tmute, name = await get_user_and_name(message)
 
@@ -475,7 +475,7 @@ async def tmute_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["tunmute"], prefix) & filters.me)
 async def tunmute_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         user_for_tunmute, name = await get_user_and_name(message)
 
@@ -578,7 +578,7 @@ async def tunmute_users_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["unmute"], prefix) & filters.me)
 async def unmute_command(client, message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         u_p = message.chat.permissions
         if message.reply_to_message.from_user:
@@ -637,7 +637,7 @@ async def unmute_command(client, message):
 
 @Client.on_message(filters.command(["mute"], prefix) & filters.me)
 async def mute_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         mute_seconds: int = 0
         for character in "mhdw":
@@ -789,7 +789,7 @@ async def mute_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["demote"], prefix) & filters.me)
 async def demote_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
             try:
@@ -865,7 +865,7 @@ async def demote_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["promote"], prefix) & filters.me)
 async def promote_command(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
             try:
@@ -973,7 +973,7 @@ async def anti_channels(client: Client, message: Message):
 
 @Client.on_message(filters.command(["delete_history", "dh"], prefix))
 async def delete_history(client: Client, message: Message):
-    cause = await text(message)
+    cause = text(message)
     if message.reply_to_message and message.chat.type not in ["private", "channel"]:
         if message.reply_to_message.from_user:
             try:
