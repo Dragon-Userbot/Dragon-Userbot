@@ -15,31 +15,33 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import configparser
-import datetime
 import os
 import sys
+from sys import version_info
 
-from pyrogram import Client
+from .db import db
 
-if len(sys.argv) == 2:
-    arg = sys.argv[1]
-    config_path = os.path.join(sys.path[0], "config.ini")
-    config = configparser.ConfigParser()
-    config.read(config_path)
+modules_help = []
+requirements_list = []
 
-    config.set("pyrogram", "db_url", arg)
-    with open(config_path, "w") as config_file:
-        config.write(config_file)
+github = "<a href=https://github.com/Dragon-Userbot/Dragon-Userbot> github</a>"
+license = (
+    "<a href=https://github.com/Dragon-Userbot/Dragon-Userbot/blob/master/LICENSE> GNU"
+    " General Public License v3.0</a>"
+)
+copyright = (
+    "© <a href=https://github.com/Dragon-Userbot>Dragon-Userbot company</a>, 2021"
+)
+python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
+version = "2.0.3"
 
-    app = Client("my_account")
-    app.start()
-    app.send_message(
-        "me",
-        f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched! \n"
-        f"For restart, enter:</b> \n"
-        f"<code>cd Dragon-Userbot/ && python main.py</code>",
-    )
+config_path = os.path.join(sys.path[0], "config.ini")
+config = configparser.ConfigParser()
+config.read(config_path)
 
-    app.stop()
-
-    print("Account is successfully linked, for run use: python main.py")
+pr = db.get("core.main", "prefix")
+if pr is None:
+    db.set("core.main", "prefix", ".")
+    prefix = "."
+else:
+    prefix = pr

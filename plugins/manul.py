@@ -14,32 +14,22 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import configparser
-import datetime
-import os
-import sys
+import asyncio
 
-from pyrogram import Client
+from pyrogram import Client, filters
+from pyrogram.types import Message
 
-if len(sys.argv) == 2:
-    arg = sys.argv[1]
-    config_path = os.path.join(sys.path[0], "config.ini")
-    config = configparser.ConfigParser()
-    config.read(config_path)
+from .utils.utils import modules_help, prefix
 
-    config.set("pyrogram", "db_url", arg)
-    with open(config_path, "w") as config_file:
-        config.write(config_file)
 
-    app = Client("my_account")
-    app.start()
-    app.send_message(
-        "me",
-        f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched! \n"
-        f"For restart, enter:</b> \n"
-        f"<code>cd Dragon-Userbot/ && python main.py</code>",
-    )
+@Client.on_message(filters.command("manul", prefix) & filters.me)
+async def manul(client: Client, message: Message):
+    quantity = message.command[1]
+    quantity = int(quantity) + 1
+    await message.delete()
+    for i in range(1, quantity):
+        await client.send_message(message.chat.id, f"{i} манула(ов)")
+        await asyncio.sleep(0.2)
 
-    app.stop()
 
-    print("Account is successfully linked, for run use: python main.py")
+modules_help.append({"manul": [{"manul [amount of manul]*": "Release manuls"}]})

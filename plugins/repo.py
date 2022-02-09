@@ -14,32 +14,25 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import configparser
-import datetime
-import os
-import sys
+from pyrogram import Client, filters
+from pyrogram.types import Message
 
-from pyrogram import Client
+from .utils import utils
+from .utils.utils import modules_help, prefix
 
-if len(sys.argv) == 2:
-    arg = sys.argv[1]
-    config_path = os.path.join(sys.path[0], "config.ini")
-    config = configparser.ConfigParser()
-    config.read(config_path)
 
-    config.set("pyrogram", "db_url", arg)
-    with open(config_path, "w") as config_file:
-        config.write(config_file)
-
-    app = Client("my_account")
-    app.start()
-    app.send_message(
-        "me",
-        f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched! \n"
-        f"For restart, enter:</b> \n"
-        f"<code>cd Dragon-Userbot/ && python main.py</code>",
+@Client.on_message(filters.command("repo", prefix) & filters.me)
+async def repo(client: Client, message: Message):
+    await message.edit(
+        f"""<b>---Dragon-Userbot---
+• Userbot on{utils.github}
+• License: {utils.license}
+• Copyright: {utils.copyright}
+• Python version: {utils.python_version}
+• Number of modules: {len(modules_help) / 2}
+• <a href="https://t.me/Dragon_Userbot">Channel</a> and <a href="https://t.me/Dragon_Userbot_chat">chat</a> in telegram</b>""",
+        disable_web_page_preview=True,
     )
 
-    app.stop()
 
-    print("Account is successfully linked, for run use: python main.py")
+utils.modules_help.append({"repo": [{"repo": "Userbot information"}]})
