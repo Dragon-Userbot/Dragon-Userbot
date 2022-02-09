@@ -71,11 +71,18 @@ Subsequent launch:
 ```python3
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from .utils.utils import modules_help, requirements_list, prefix
 
-# packages from PyPI
-# import example_1
-# import example_2
+from utils.misc import modules_help, prefix
+
+
+# if your module has packages from PyPi
+
+# from utils.scripts import import_library
+# example_1 = import_library("example_1")
+# example_2 = import_library("example_2")
+
+# import_library() will automatically install required library
+# if it isn't installed
 
 
 @Client.on_message(filters.command("example_edit", prefix) & filters.me)
@@ -89,14 +96,16 @@ async def example_send(client: Client, message: Message):
 
 
 # This adds instructions for your module
-modules_help.append(
-    {"example": [{"example_send": "example send"}, {"example_edit": "example edit"}]}
-)
+modules_help["example"] = {
+    "example_send": "example send",
+    "example_edit": "example edit",
+}
 
-# If your custom module requires packages from PyPI, write the names of the packages in these functions
-# requirements_list.append('example_1')
-# requirements_list.append('example_2')
-# etc
+# modules_help["example"] = { "example_send [text]": "example send" }
+#                  |            |              |        |
+#                  |            |              |        └─ command description
+#           module_name         command_name   └─ optional command arguments
+#        (only snake_case)   (only snake_case too)
 ```
 
 <h2>Groups and support</h2>

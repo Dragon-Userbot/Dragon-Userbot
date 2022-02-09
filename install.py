@@ -14,32 +14,55 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import configparser
 import datetime
-import os
 import sys
 
 from pyrogram import Client
 
-if len(sys.argv) == 2:
-    arg = sys.argv[1]
-    config_path = os.path.join(sys.path[0], "config.ini")
-    config = configparser.ConfigParser()
-    config.read(config_path)
+from utils import config
 
-    config.set("pyrogram", "db_url", arg)
-    with open(config_path, "w") as config_file:
-        config.write(config_file)
-
-    app = Client("my_account")
-    app.start()
-    app.send_message(
-        "me",
-        f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched! \n"
-        f"For restart, enter:</b> \n"
-        f"<code>cd Dragon-Userbot/ && python main.py</code>",
+if __name__ == "__main__":
+    app = Client(
+        "my_account",
+        api_id=config.api_id,
+        api_hash=config.api_hash,
+        hide_password=True,
+        test_mode=config.test_server,
     )
 
-    app.stop()
+    if config.db_type in ["mongo", "mongodb"]:
+        from pymongo import MongoClient, errors
 
-    print("Account is successfully linked, for run use: python main.py")
+        db = MongoClient(config.db_url)
+        try:
+            db.server_info()
+        except errors.ConnectionFailure as e:
+            raise RuntimeError(
+                "MongoDB server isn't available! "
+                f"Provided url: {config.db_url}. "
+                "Enter valid URL and restart installation"
+            ) from e
+
+    install_type = sys.argv[1] if len(sys.argv) > 1 else "3"
+    if install_type == "1":
+        restart = "pm2 restart dragon"
+    elif install_type == "2":
+        restart = "sudo systemctl restart dragon"
+    else:
+        restart = "cd Dragon-Userbot/ && python main.py"
+
+    app.start()
+    try:
+        app.send_message(
+            "me",
+            f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched! \n"
+            "Channel: @Dragon_Userbot\n"
+            "Custom modules: @Dragon_Userbot_modules\n"
+            "Chat [RU]: @Dragon_Userbot_chat\n"
+            "Chat [EN]: @Dragon_Userbot_chat_en\n\n"
+            f"For restart, enter:</b>\n"
+            f"<code>{restart}</code>",
+        )
+    except:
+        pass
+    app.stop()
