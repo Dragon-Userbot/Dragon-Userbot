@@ -7,7 +7,7 @@ from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command(["clear_@"], prefix) & filters.me)
-async def solo_mention_clear_handler(c: Client, m: Message):
+async def solo_mention_clear(client: Client, message: Message):
     await m.delete()
     peer = await c.resolve_peer(m.chat.id)
     request = functions.messages.ReadMentions(peer=peer)
@@ -15,7 +15,7 @@ async def solo_mention_clear_handler(c: Client, m: Message):
 
 
 @Client.on_message(filters.command(["clear_all_@"], prefix) & filters.me)
-async def global_mention_clear_handler(c: Client, m: Message):
+async def global_mention_clear(client: Client, message: Message):
     request = functions.messages.GetAllChats(except_ids=[])
     try:
         result = await c.send(request)
@@ -35,7 +35,7 @@ async def global_mention_clear_handler(c: Client, m: Message):
         await c.send(request)
 
 @Client.on_message(filters.command(["clear_reacts"], prefix) & filters.me)
-async def solo_reaction_clear_handler(c: Client, m: Message):
+async def solo_reaction_clear(client: Client, message: Message):
     await m.delete()
     peer = await c.resolve_peer(m.chat.id)
     request = functions.messages.ReadReactions(peer=peer)
@@ -43,7 +43,7 @@ async def solo_reaction_clear_handler(c: Client, m: Message):
     
 
 @Client.on_message(filters.command(["clear_all_reacts"], prefix) & filters.me)
-async def global_reaction_clear_handler(c: Client, m: Message):
+async def global_reaction_clear(client: Client, message: Message):
     request = functions.messages.GetAllChats(except_ids=[])
     try:
         result = await c.send(request)
