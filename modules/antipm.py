@@ -27,9 +27,11 @@ anti_pm_enabled = filters.create(
 
 
 @Client.on_message(
-    ~filters.contact & filters.private & ~filters.me & ~filters.bot & anti_pm_enabled
+    filters.private & ~filters.me & ~filters.bot & anti_pm_enabled
 )
 async def anti_pm_handler(client: Client, message: Message):
+    if message.from_user.is_contact:
+        return
     await client.read_history(message.chat.id)
     user_info = await client.resolve_peer(message.chat.id)
     if db.get("core.antipm", "spamrep", False):
