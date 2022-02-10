@@ -84,7 +84,7 @@ async def admintool_handler(_, message: Message):
 
     if message.new_chat_members:
         if db_cache.get(f"welcome_enabled{message.chat.id}", False):
-            await message.reply(db_cache.get(f"welcome_text{message.chat.id}"))
+            await message.reply(db_cache.get(f"welcome_text{message.chat.id}", disable_web_page_preview=True))
 
     raise ContinuePropagation
 
