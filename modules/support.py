@@ -52,7 +52,9 @@ async def support(_, message: Message):
 @Client.on_message(filters.command(["version", "ver"], prefix) & filters.me)
 async def version(client: Client, message: Message):
     changelog = ""
-    async for m in client.search_messages("dRaGoN_uB_cHaNgElOg", query=f"{userbot_version}."):
+    async for m in client.search_messages(
+        "dRaGoN_uB_cHaNgElOg", query=f"{userbot_version}."
+    ):
         if userbot_version in m.text:
             changelog = m.message_id
 

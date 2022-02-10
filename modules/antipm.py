@@ -25,9 +25,7 @@ anti_pm_enabled = filters.create(
     lambda _, __, ___: db.get("core.antipm", "status", False)
 )
 
-in_contact_list = filters.create(
-    lambda _, __, message: message.from_user.is_contact
-)
+in_contact_list = filters.create(lambda _, __, message: message.from_user.is_contact)
 
 
 @Client.on_message(
@@ -50,13 +48,13 @@ async def anti_pm(_, message: Message):
     if len(message.command) == 1:
         if db.get("core.antipm", "status", False):
             await message.edit(
-                "Anti-PM status: <b>enabled</b>\n"
-                f"Disable with: <code>{prefix}antipm disable</code>"
+                "<b>Anti-PM status: enabled\n"
+                f"Disable with: </b><code>{prefix}antipm disable</code>"
             )
         else:
             await message.edit(
-                "Anti-PM status: <b>disabled</b>\n"
-                f"Enable with: <code>{prefix}antipm enable</code>"
+                "<b>Anti-PM status: disabled\n"
+                f"Enable with: </b><code>{prefix}antipm enable</code>"
             )
     elif message.command[1] in ["enable", "on", "1", "yes", "true"]:
         db.set("core.antipm", "status", True)
@@ -92,7 +90,7 @@ async def antipm_report(_, message: Message):
 
 
 @Client.on_message(filters.command(["antipm_block"], prefix) & filters.me)
-async def antipm_report(_, message: Message):
+async def antipm_block(_, message: Message):
     if len(message.command) == 1:
         if db.get("core.antipm", "block", False):
             await message.edit(

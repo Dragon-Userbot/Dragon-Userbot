@@ -59,7 +59,9 @@ async def update(_, message: Message):
         await message.edit(
             "<b>Updating: 4/4 (updating libs from requirements_list)</b>"
         )
-        subprocess.run([sys.executable, "-m", "pip", "install", "-U", *requirements_list])
+        subprocess.run(
+            [sys.executable, "-m", "pip", "install", "-U", *requirements_list]
+        )
         await message.edit("<b>Updating: done! Restarting...</b>")
     except Exception as e:
         await message.edit(format_exc(e))
