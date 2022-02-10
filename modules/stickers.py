@@ -86,7 +86,7 @@ async def kang(client: Client, message: types.Message):
     interact_with_to_delete.clear()
 
 
-@Client.on_message(filters.command(["stp", "s2p", "stick2png"], prefix))
+@Client.on_message(filters.command(["stp", "s2p", "stick2png"], prefix) & filters.me)
 @with_reply
 async def stick2png(client: Client, message: types.Message):
     try:
@@ -107,7 +107,7 @@ async def stick2png(client: Client, message: types.Message):
         await message.delete()
 
 
-@Client.on_message(filters.command(["resize"], prefix))
+@Client.on_message(filters.command(["resize"], prefix) & filters.me)
 @with_reply
 async def resize_cmd(client: Client, message: types.Message):
     try:
