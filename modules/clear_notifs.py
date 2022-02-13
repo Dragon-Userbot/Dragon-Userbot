@@ -34,13 +34,14 @@ async def global_mention_clear(client: Client, message: Message):
         request = functions.messages.ReadMentions(peer=peer)
         await client.send(request)
 
+
 @Client.on_message(filters.command(["clear_reacts"], prefix) & filters.me)
 async def solo_reaction_clear(client: Client, message: Message):
     await message.delete()
     peer = await client.resolve_peer(message.chat.id)
     request = functions.messages.ReadReactions(peer=peer)
     await client.send(request)
-    
+
 
 @Client.on_message(filters.command(["clear_all_reacts"], prefix) & filters.me)
 async def global_reaction_clear(client: Client, message: Message):
@@ -62,10 +63,10 @@ async def global_reaction_clear(client: Client, message: Message):
         request = functions.messages.ReadReactions(peer=peer)
         await client.send(request)
 
-    
+
 modules_help["clear_notifs"] = {
     "clear_@": "clear all mentions in this chat",
     "clear_all_@": "clear all mentions in all chats",
     "clear_reacts": "clear all reactions in this chat",
-    "clear_all_reacts": "clear all reactions in all chats (except private chats)"
+    "clear_all_reacts": "clear all reactions in all chats (except private chats)",
 }

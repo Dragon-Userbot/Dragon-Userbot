@@ -104,10 +104,7 @@ async def upload_cmd(_, message: Message):
         file_size_mb = os.path.getsize(file_name) / 1024 / 1024
         file_age = int(
             min_file_age
-            + (max_file_age - min_file_age)
-            * (1 - (file_size_mb / max_size_mb))
-            * (1 - (file_size_mb / max_size_mb))
-            # ^ isn't a good variant, because it doesn't work at float values
+            + (max_file_age - min_file_age) * ((1 - (file_size_mb / max_size_mb)) ** 2)
         )
         url = response.text.replace("https://", "")
         await message.edit(
