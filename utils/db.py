@@ -17,7 +17,7 @@
 import json
 import threading
 import dns.resolver
-import pymongo as md
+import pymongo
 import sqlite3
 from utils import config
 
@@ -42,35 +42,33 @@ class Database:
         """Get database for selected module"""
         raise NotImplementedError
 
+    def close(self):
+        """Close the database"""
+        raise NotImplementedError
+
 
 class MongoDatabase(Database):
     def __init__(self, url, name):
-        self._DB = md.MongoClient(url)[name]
+        self._client = pymongo.MongoClient(url)
+        self._database = self._client[name]
 
     def set(self, module: str, variable: str, value):
-        modcollection = self._DB[module]
-        modcollection.replace_one(
+        self._database[module].replace_one(
             {"var": variable}, {"var": variable, "val": value}, upsert=True
         )
 
     def get(self, module: str, variable: str, expected_value=None):
-        modcollection = self._DB[module]
-        doc = modcollection.find_one({"var": variable})
-        if doc is None:
-            return expected_value
-        return doc["val"]
+        doc = self._database[module].find_one({"var": variable})
+        return expected_value if doc is not None else doc["val"]
 
     def get_collection(self, module: str):
-        modcollection = self._DB[module]
-        return {item["var"]: item["val"] for item in modcollection.find()}
+        return {item["var"]: item["val"] for item in self._database["module"].find()}
 
     def remove(self, module: str, variable: str):
-        modcollection = self._DB[module]
-        doc = modcollection.find_one({"var": variable})
-        if doc:
-            modcollection.delete_one(doc)
-            return True
-        return False
+        self._database["module"].delete_one({"var": variable})
+
+    def close(self):
+        self._client.close()
 
 
 class SqliteDatabase(Database):
@@ -161,12 +159,12 @@ class SqliteDatabase(Database):
 
         return collection
 
-    def __del__(self):
+    def close(self):
         self._conn.commit()
         self._conn.close()
 
 
 if config.db_type in ["mongo", "mongodb"]:
     db = MongoDatabase(config.db_url, config.db_name)
-elif config.db_type in ["sqlite", "sqlite3"]:
+else:
     db = SqliteDatabase(config.db_name)
