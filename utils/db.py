@@ -59,7 +59,7 @@ class MongoDatabase(Database):
 
     def get(self, module: str, variable: str, expected_value=None):
         doc = self._database[module].find_one({"var": variable})
-        return expected_value if doc is not None else doc["val"]
+        return expected_value if doc is None else doc["val"]
 
     def get_collection(self, module: str):
         return {item["var"]: item["val"] for item in self._database["module"].find()}
