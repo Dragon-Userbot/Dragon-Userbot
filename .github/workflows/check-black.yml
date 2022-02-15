@@ -1,4 +1,4 @@
-name: Python application
+name: Check code for Black style
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  check:
 
     runs-on: ubuntu-latest
 
@@ -23,4 +23,4 @@ jobs:
         pip install black
     - name: Check code with black
       run: |
-        black --check .
+        black --check --diff --no-color .
