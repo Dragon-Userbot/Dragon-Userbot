@@ -21,34 +21,29 @@ from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
 
+commands = ["spam", "statspam", "slowspam", "fastspam"]
 
-@Client.on_message(
-    filters.command(["spam", "statspam", "slowspam", "fastspam"], prefix) & filters.me
-)
+
+@Client.on_message(filters.command(commands, prefix) & filters.me)
 async def spam(client: Client, message: Message):
     amount = int(message.command[1])
     text = " ".join(message.command[2:])
 
-    if message.command[0] == "spam":
-        cooldown = 0.15
-    elif message.command[0] == "statspam":
-        cooldown = 0.1
-    elif message.command[0] == "slowspam":
-        cooldown = 0.9
-    else:
-        cooldown = 0
+    cooldown = {"spam": 0.15, "statspam": 0.1, "slowspam": 0.9, "fastspam": 0}
 
     await message.delete()
 
-    for _ in range(amount):
+    for msg in range(amount):
         if message.reply_to_message:
             sent = await message.reply_to_message.reply(text)
         else:
             sent = await client.send_message(message.chat.id, text)
+
         if message.command[0] == "statspam":
             await asyncio.sleep(0.1)
             await sent.delete()
-        await asyncio.sleep(cooldown)
+
+        await asyncio.sleep(cooldown[message.command[0]])
 
 
 modules_help["spam"] = {

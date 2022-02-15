@@ -27,9 +27,16 @@ anti_pm_enabled = filters.create(
 
 in_contact_list = filters.create(lambda _, __, message: message.from_user.is_contact)
 
+is_support = filters.create(lambda _, __, message: message.chat.is_support)
+
 
 @Client.on_message(
-    filters.private & ~filters.me & ~filters.bot & ~in_contact_list & anti_pm_enabled
+    filters.private
+    & ~filters.me
+    & ~filters.bot
+    & ~in_contact_list
+    & ~is_support
+    & anti_pm_enabled
 )
 async def anti_pm_handler(client: Client, message: Message):
     user_info = await client.resolve_peer(message.chat.id)
