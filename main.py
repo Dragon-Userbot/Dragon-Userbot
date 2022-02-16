@@ -146,11 +146,12 @@ if __name__ == "__main__":
             app.send_message(chat_id=sys.argv[1], text=text)
 
     # required for sessionkiller module
-    db.set(
-        "core.sessionkiller",
-        "auths_hashes",
-        [auth["hash"] for auth in app.send(GetAuthorizations())["authorizations"]],
-    )
+    if db.get("core.sessionkiller", "enabled", False):
+        db.set(
+            "core.sessionkiller",
+            "auths_hashes",
+            [auth["hash"] for auth in app.send(GetAuthorizations())["authorizations"]],
+        )
 
     logging.info("Dragon-Userbot started!")
 
