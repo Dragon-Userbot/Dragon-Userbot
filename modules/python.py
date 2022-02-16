@@ -85,6 +85,6 @@ def user_eval(client: Client, message: Message):
 
 modules_help["python"] = {
     "ex [python code]": "Execute Python code",
-    "exnoedit [python code": "Execute Python code and return result with reply",
-    "eval [python code": "Eval Python code",
+    "exnoedit [python code]": "Execute Python code and return result with reply",
+    "eval [python code]": "Eval Python code",
 }
