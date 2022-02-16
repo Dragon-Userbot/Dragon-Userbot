@@ -102,9 +102,9 @@ def format_module_help(module_name: str):
     help_text = f"<b>Help for |{module_name}|\n\nUsage:</b>\n"
 
     for command, desc in commands.items():
-        name, args = command.split()
+        name, args = command.split(maxsplit=1)
         if args:
-            args = f" </code> <code>{args}"
+            args = f"</code> <code>{args}"
         help_text += f"<code>{prefix}{name}{args}</code> — <i>{desc}</i>\n"
 
     return help_text
@@ -115,9 +115,9 @@ def format_small_module_help(module_name: str):
 
     help_text = f"<b>Help for |{module_name}|\n\nCommands list:\n"
     for command, desc in commands.items():
-        name, args = command.split()
+        name, args = command.split(maxsplit=1)
         if args:
-            args = f" </code> <code>{args}"
+            args = f"</code> <code>{args}"
         help_text += f"<code>{prefix}{name}{args}</code>\n"
     help_text += f"\nGet full usage: <code>{prefix}help {module_name}</code></b>"
 
