@@ -56,14 +56,24 @@ async def help_cmd(_, message: Message):
             await message.reply(text, disable_web_page_preview=True)
         else:
             await message.edit(text, disable_web_page_preview=True)
+    elif message.command[1].lower() in modules_help:
+        await message.edit(format_module_help(message.command[1].lower()))
     else:
-        module_name = message.text.split(maxsplit=1)[1].lower()
-        if module_name in modules_help:
-            await message.edit(format_module_help(module_name))
-        else:
-            await message.edit(f"<b>Module {module_name} not found</b>")
+        # TODO: refactor this cringe
+        command_name = message.command[1].lower()
+        for name, commands in modules_help.items():
+            for command in commands.keys():
+                if command.split()[0] == command_name:
+                    cmd = command.split(maxsplit=1)
+                    cmd_desc = commands[command]
+                    return await message.edit(
+                        f"<b>Help for command <code>{prefix}{command_name}</code>\n"
+                        f"Module: {name} (<code>{prefix}help {name}</code>)</b>\n\n"
+                        f"<code>{prefix}{cmd[0]}</code>"
+                        f"{' <code>' + cmd[1] + '</code>' if len(cmd) > 1 else ''}"
+                        f" — <i>{cmd_desc}</i>"
+                    )
+        await message.edit(f"<b>Module {command_name} not found</b>")
 
 
-modules_help["help"] = {
-    "help [module name]": "To get help. Module name isn't required."
-}
+modules_help["help"] = {"help [module/command name]": "Get common/module/command help"}
