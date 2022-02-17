@@ -53,7 +53,7 @@ async def support(_, message: Message):
 async def version(client: Client, message: Message):
     changelog = ""
     async for m in client.search_messages(
-        "dRaGoN_uB_cHaNgElOg", query=f"{userbot_version}."
+        "dRaGoN_uB_cHaNgElOg", query=".".join(userbot_version.split(".")[:2]) + "."
     ):
         if userbot_version in m.text:
             changelog = m.message_id
