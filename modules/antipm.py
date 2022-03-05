@@ -39,7 +39,6 @@ is_support = filters.create(lambda _, __, message: message.chat.is_support)
     & anti_pm_enabled
 )
 async def anti_pm_handler(client: Client, message: Message):
-    await client.read_history(message.chat.id)
     user_info = await client.resolve_peer(message.chat.id)
     if db.get("core.antipm", "spamrep", False):
         await client.send(functions.messages.ReportSpam(peer=user_info))
@@ -117,24 +116,6 @@ async def antipm_block(_, message: Message):
         await message.edit("<b>Blocking users disabled!</b>")
     else:
         await message.edit(f"<b>Usage: {prefix}antipm_block [enable|disable]</b>")
-
-
-@Client.on_message(filters.command(["disable_anti_pm"], prefix) & filters.me)
-async def disable_anti_pm(_, message: Message):
-    db.set("core.antipm", "status", False)
-    await message.edit("<b>Anti-PM disabled!</b>")
-
-
-@Client.on_message(filters.command(["esr"], prefix) & filters.me)
-async def esr(_, message: Message):
-    db.set("core.antipm", "spamrep", True)
-    await message.edit("Spam-reporting enabled")
-
-
-@Client.on_message(filters.command(["dsr"], prefix) & filters.me)
-async def dsr(_, message: Message):
-    db.set("core.antipm", "spamrep", False)
-    await message.edit("Spam-reporting disabled")
 
 
 modules_help["antipm"] = {

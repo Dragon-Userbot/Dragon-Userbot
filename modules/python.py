@@ -22,9 +22,12 @@ from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
 from utils.scripts import format_exc
+
+# noinspection PyUnresolvedReferences
 from utils.db import db
 
 
+# noinspection PyUnusedLocal
 @Client.on_message(
     filters.command(["ex", "exec", "py", "exnoedit"], prefix) & filters.me
 )
@@ -32,6 +35,8 @@ def user_exec(client: Client, message: Message):
     if len(message.command) == 1:
         message.edit("<b>Code to execute isn't provided</b>")
         return
+
+    reply = message.reply_to_message
 
     code = message.text.split(maxsplit=1)[1]
     stdout = StringIO()
@@ -55,11 +60,14 @@ def user_exec(client: Client, message: Message):
         message.edit(format_exc(e))
 
 
+# noinspection PyUnusedLocal
 @Client.on_message(filters.command(["ev", "eval"], prefix) & filters.me)
 def user_eval(client: Client, message: Message):
     if len(message.command) == 1:
         message.edit("<b>Code to eval isn't provided</b>")
         return
+
+    reply = message.reply_to_message
 
     code = message.text.split(maxsplit=1)[1]
 
@@ -77,6 +85,6 @@ def user_eval(client: Client, message: Message):
 
 modules_help["python"] = {
     "ex [python code]": "Execute Python code",
-    "exnoedit [python code": "Execute Python code and return result with reply",
-    "eval [python code": "Eval Python code",
+    "exnoedit [python code]": "Execute Python code and return result with reply",
+    "eval [python code]": "Eval Python code",
 }

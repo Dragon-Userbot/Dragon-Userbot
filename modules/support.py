@@ -53,7 +53,7 @@ async def support(_, message: Message):
 async def version(client: Client, message: Message):
     changelog = ""
     async for m in client.search_messages(
-        "dRaGoN_uB_cHaNgElOg", query=f"{userbot_version}."
+        "dRaGoN_uB_cHaNgElOg", query=".".join(userbot_version.split(".")[:2]) + "."
     ):
         if userbot_version in m.text:
             changelog = m.message_id
@@ -75,8 +75,12 @@ async def version(client: Client, message: Message):
         f"<a href=tg://user?id=293490416>♿️</a>"
         f"<a href=https://t.me/LKRinternationalrunetcomphinc>asphuy</a>"
         f"<a href=https://t.me/artemjj2>♿️</a></i>\n\n"
-        f"<b>Branch: <a href={remote_url}/tree/{gitrepo.active_branch}>{gitrepo.active_branch}</a>\n"
-        f"Commit: <a href={remote_url}/commit/{gitrepo.head.commit.hexsha}>"
+        + (
+            f"<b>Branch: <a href={remote_url}/tree/{gitrepo.active_branch}>{gitrepo.active_branch}</a>\n"
+            if gitrepo.active_branch != "master"
+            else ""
+        )
+        + f"Commit: <a href={remote_url}/commit/{gitrepo.head.commit.hexsha}>"
         f"{gitrepo.head.commit.hexsha[:7]}</a> by {gitrepo.head.commit.author.name}\n"
         f"Commit time: {commit_time}</b>",
     )
