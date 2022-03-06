@@ -52,10 +52,11 @@ async def support(_, message: Message):
 @Client.on_message(filters.command(["version", "ver"], prefix) & filters.me)
 async def version(client: Client, message: Message):
     changelog = ""
+    ub_version = ".".join(userbot_version.split(".")[:2])
     async for m in client.search_messages(
-        "dRaGoN_uB_cHaNgElOg", query=".".join(userbot_version.split(".")[:2]) + "."
+        "dRaGoN_uB_cHaNgElOg", query=ub_version + "."
     ):
-        if userbot_version in m.text:
+        if ub_version in m.text:
             changelog = m.message_id
 
     await message.delete()
