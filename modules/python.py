@@ -74,7 +74,7 @@ def user_eval(client: Client, message: Message):
     try:
         result = eval(code)
         message.edit(
-            "<b>Code:</b>\n"
+            "<b>Expression:</b>\n"
             f"<code>{code}</code>\n\n"
             "<b>Result</b>:\n"
             f"<code>{result}</code>"
