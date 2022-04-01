@@ -696,7 +696,7 @@ async def mute_command(client: Client, message: Message):
                     ChatPermissions(),
                 )
                 message_text = (
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code> was muted for never</code>"
+                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code> was muted indefinitely</code>"
                     + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             await message.edit(message_text)
@@ -768,7 +768,7 @@ async def mute_command(client: Client, message: Message):
                             message.chat.id, user_to_unmute.id, ChatPermissions()
                         )
                         message_text = (
-                            f"<b>{user_to_unmute.first_name}</b> <code> was muted for never</code>"
+                            f"<b>{user_to_unmute.first_name}</b> <code> was muted indefinitely</code>"
                             + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                         )
                     await message.edit(message_text)
