@@ -88,6 +88,19 @@ async_eval = import_library("async_eval")
 aeval = async_eval.eval
 
 
+async def aexec(codea, client, message):
+    codea = f"async def __todo(message, client): " + "".join(f"\n {_l}" for _l in codea.split("\n"))
+    if "return" in codea:
+        exec(codea)
+        return await locals()["__todo"](message, client)
+    else:
+        f = StringIO()
+        exec(codea)
+        with redirect_stdout(f):
+            await locals()["__todo"](message, client)
+        jj = f.getvalue()
+        return jj
+
 @Client.on_message(filters.command(["aex", "aexec"], prefix) & filters.me)
 async def aexec_handler(client: Client, message: Message):
     try:
@@ -98,21 +111,7 @@ async def aexec_handler(client: Client, message: Message):
         return await message.edit("<b>Not found code to execute.</b>")
     try:
         await message.edit("<b>Executing...</b>")
-
-        async def aexec(codea):
-            codea = f"async def __todo(): " + "".join(f"\n {_l}" for _l in codea.split("\n"))
-            if "return" in codea:
-                exec(codea)
-                return await locals()["__todo"]()
-            else:
-                f = StringIO()
-                exec(codea)
-                with redirect_stdout(f):
-                    await locals()["__todo"]()
-                jj = f.getvalue()
-                return jj
-
-        s = await aexec(code)
+        s = await aexec(code, client, message)
         s = s.replace("<", "").replace(">", "") if s else ""
         return await message.edit(
             f'<b>Code:</b>\n<code>{code.replace("<", "").replace(">", "")}</code>\n\n<b>Result'
