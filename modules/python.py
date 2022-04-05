@@ -84,7 +84,7 @@ def user_eval(client: Client, message: Message):
         message.edit(format_exc(e))
 
 
-async_eval = import_library("async-eval")
+async_eval = import_library("async_eval")
 aeval = async_eval.eval
 
 
