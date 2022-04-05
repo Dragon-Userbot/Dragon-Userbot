@@ -92,7 +92,7 @@ aeval = async_eval.eval
 async def aexec(codea, client, message):
     codea = "async def __todo(message, client, reply): " + \
             "".join(f"\n {_l}" for _l in codea.split("\n"))
-    if "print(" not in codea:
+    if "print(" not in codea.replace(' ', ''):
         exec(codea)
         return await locals()["__todo"](message, client, message.reply_to_message)
     else:
