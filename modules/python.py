@@ -99,20 +99,20 @@ async def aexec_handler(client: Client, message: Message):
     try:
         await message.edit("<b>Executing...</b>")
 
-        async def aexec(code):
-            code = f"async def __todo(): " + "".join(f"\n {_l}" for _l in code.split("\n"))
-            if "return" in code:
-                exec(code)
+        async def aexec():
+            codea = f"async def __todo(): " + "".join(f"\n {_l}" for _l in code.split("\n"))
+            if "return" in codea:
+                exec(codea)
                 return await locals()["__todo"]()
             else:
                 f = StringIO()
-                exec(code)
+                exec(codea)
                 with redirect_stdout(f):
                     await locals()["__todo"]()
                 jj = f.getvalue()
                 return jj
 
-        s = await aexec(code)
+        s = await aexec()
         s = s.replace("<", "").replace(">", "") if s else ""
         return await message.edit(
             f'<b>Code:</b>\n<code>{code.replace("<", "").replace(">", "")}</code>\n\n<b>Result'
