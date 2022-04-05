@@ -131,7 +131,7 @@ async def aeval_handler(client: Client, message: Message):
         return await message.edit("<b>Not found expression.</b>")
     try:
         await message.edit("<b>Executing...</b>")
-        s = aeval(code)
+        s = aeval(code, {'message': message, 'client': client})
         s = s.replace("<", "").replace(">", "") if type(s) == str else s
         return await message.edit(
             f'<b>Expression:</b>\n<code>{code.replace("<", "").replace(">", "")}</code>\n\n<b>Result'
