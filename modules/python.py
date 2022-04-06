@@ -117,7 +117,11 @@ async def aexec_handler(client: Client, message: Message):
     try:
         await message.edit("<b>Executing...</b>")
         s = await aexec(code, client, message)
-        s = s.replace("<", "").replace(">", "") if s else ""
+        s = (
+            str(s).replace("<", "").replace(">", "")
+            if type(s) == str or "<" in str(s) or ">" in str(s)
+            else s
+        )
         return await message.edit(
             f"<b>Code:</b>\n<code>"
             f'{code.replace("<", "").replace(">", "")}'
@@ -143,7 +147,11 @@ async def aeval_handler(client: Client, message: Message):
             code,
             {"message": message, "client": client, "reply": message.reply_to_message},
         )
-        s = s.replace("<", "").replace(">", "") if type(s) == str else s
+        s = (
+            str(s).replace("<", "").replace(">", "")
+            if type(s) == str or "<" in str(s) or ">" in str(s)
+            else s
+        )
         return await message.edit(
             f"<b>Expression:</b>\n<code>"
             f'{code.replace("<", "").replace(">", "")}</code>'
