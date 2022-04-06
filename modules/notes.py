@@ -102,7 +102,7 @@ async def save_note(client: Client, message: Message):
             else:
                 await message.edit("<b>This note already exists</b>")
     elif len(message.text.split()) >= 3:
-        note_name = message.text.split(maxsplit=1)[1]
+        note_name = message.text.split(maxsplit=1)[1].split()[0]
         checking_note = db.get("core.notes", f"note{note_name}", False)
         if not checking_note:
             message_id = await client.send_message(
