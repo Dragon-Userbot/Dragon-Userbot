@@ -25,14 +25,14 @@ from pyrogram.types import (
 
 from utils.db import db
 from utils.misc import modules_help, prefix
-from utils.scripts import with_reply
+
+#  from utils.scripts import with_reply
 
 # noinspection PyUnresolvedReferences
 from modules.python import aexec_handler
 
 
 @Client.on_message(filters.command(["save"], prefix) & filters.me)
-@with_reply
 async def save_note(client: Client, message: Message):
     await message.edit("<b>Loading...</b>")
 
@@ -101,10 +101,31 @@ async def save_note(client: Client, message: Message):
                 await message.edit(f"<b>Note {note_name} saved</b>")
             else:
                 await message.edit("<b>This note already exists</b>")
+    elif message.reply_to_message and len(message.text.split()) >= 3:
+        note_name = message.text.split(maxsplit=1)[1]
+        checking_note = db.get("core.notes", f"note{note_name}", False)
+        if not checking_note:
+            try:
+                message_id = await message.forward(chat_id)
+            except errors.ChatForwardsRestricted:
+                if message.text:
+                    message_id = await client.send_message(chat_id, message.text)
+                else:
+                    await message.edit(
+                        "<b>Forwarding messages is restricted by chat admins</b>"
+                    )
+                    return
+            note = {
+                "MEDIA_GROUP": False,
+                "MESSAGE_ID": str(message_id.message_id),
+                "CHAT_ID": str(chat_id),
+            }
+            db.set("core.notes", f"note{note_name}", note)
+            await message.edit(f"<b>Note {note_name} saved</b>")
+        else:
+            await message.edit("<b>This note already exists</b>")
     else:
-        await message.edit(
-            f"<b>Example: <code>{prefix}save note_name</code> (reply to message is required)</b>"
-        )
+        await message.edit(f"<b>Example: <code>{prefix}save note_name</code></b>")
 
 
 @Client.on_message(filters.command(["note"], prefix) & filters.me)
