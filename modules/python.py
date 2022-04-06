@@ -118,7 +118,7 @@ async def aexec_handler(client: Client, message: Message):
         await message.edit("<b>Executing...</b>")
         s = await aexec(code, client, message)
         s = (
-            s.replace("<", "").replace(">", "")
+            str(s).replace("<", "").replace(">", "")
             if type(s) == str or "<" in str(s) or ">" in str(s)
             else s
         )
@@ -148,7 +148,7 @@ async def aeval_handler(client: Client, message: Message):
             {"message": message, "client": client, "reply": message.reply_to_message},
         )
         s = (
-            s.replace("<", "").replace(">", "")
+            str(s).replace("<", "").replace(">", "")
             if type(s) == str or "<" in str(s) or ">" in str(s)
             else s
         )
