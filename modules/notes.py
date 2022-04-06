@@ -235,7 +235,7 @@ async def note_send(client: Client, message: Message):
         await message.edit(f"<b>Example: <code>{prefix}note note_name</code></b>")
 
 
-@Client.on_message(filters.command(["notexec"], prefix) & filters.me)
+@Client.on_message(filters.command(["exnote"], prefix) & filters.me)
 async def note_send(client: Client, message: Message):
     if len(message.text.split()) >= 2:
         await message.edit("<b>Loading...</b>")
@@ -265,7 +265,7 @@ async def note_send(client: Client, message: Message):
         else:
             await message.edit("<b>There is no such note</b>")
     else:
-        await message.edit(f"<b>Example: <code>{prefix}notexec note_name</code></b>")
+        await message.edit(f"<b>Example: <code>{prefix}exnote note_name</code></b>")
 
 
 @Client.on_message(filters.command(["notes"], prefix) & filters.me)
@@ -298,5 +298,5 @@ modules_help["notes"] = {
     "note [name]*": "Get saved note",
     "notes": "Get note list",
     "clear [name]*": "Delete note",
-    "notexec [name]": "Execute note",
+    "exnote [name]": "Execute note",
 }
