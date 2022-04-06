@@ -105,16 +105,7 @@ async def save_note(client: Client, message: Message):
         note_name = message.text.split(maxsplit=1)[1]
         checking_note = db.get("core.notes", f"note{note_name}", False)
         if not checking_note:
-            try:
-                message_id = await message.forward(chat_id)
-            except errors.ChatForwardsRestricted:
-                if message.text:
-                    message_id = await client.send_message(chat_id, message.text)
-                else:
-                    await message.edit(
-                        "<b>Forwarding messages is restricted by chat admins</b>"
-                    )
-                    return
+            await client.send_message(chat_id, message.text.split(note_name)[1].strip())
             note = {
                 "MEDIA_GROUP": False,
                 "MESSAGE_ID": str(message_id.message_id),
