@@ -207,7 +207,9 @@ async def filters_handler(client: Client, message: Message):
         return await message.edit(format_exc(e))
 
 
-@Client.on_message(filters.command(["delfilter", "filterdel", "fdel"], prefix) & filters.me)
+@Client.on_message(
+    filters.command(["delfilter", "filterdel", "fdel"], prefix) & filters.me
+)
 async def filter_del_handler(client: Client, message: Message):
     try:
         if len(message.text.split()) < 2:
