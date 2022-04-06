@@ -90,9 +90,10 @@ aeval = async_eval.eval
 
 
 async def aexec(codea, client, message):
-    codea = "async def __todo(message, client, reply): " + \
-            "".join(f"\n {_l}" for _l in codea.split("\n"))
-    if "print(" not in codea.replace(' ', ''):
+    codea = "async def __todo(message, client, reply): " + "".join(
+        f"\n {_l}" for _l in codea.split("\n")
+    )
+    if "print(" not in codea.replace(" ", ""):
         exec(codea)
         return await locals()["__todo"](message, client, message.reply_to_message)
     else:
@@ -118,9 +119,9 @@ async def aexec_handler(client: Client, message: Message):
         s = await aexec(code, client, message)
         s = s.replace("<", "").replace(">", "") if s else ""
         return await message.edit(
-            f'<b>Code:</b>\n<code>'
+            f"<b>Code:</b>\n<code>"
             f'{code.replace("<", "").replace(">", "")}'
-            '</code>\n\n<b>Result'
+            "</code>\n\n<b>Result"
             f":</b>\n<code>{s}</code>"
         )
     except Exception as ex:
@@ -138,12 +139,15 @@ async def aeval_handler(client: Client, message: Message):
         return await message.edit("<b>Not found expression.</b>")
     try:
         await message.edit("<b>Executing...</b>")
-        s = aeval(code, {'message': message, 'client': client, 'reply': message.reply_to_message})
+        s = aeval(
+            code,
+            {"message": message, "client": client, "reply": message.reply_to_message},
+        )
         s = s.replace("<", "").replace(">", "") if type(s) == str else s
         return await message.edit(
-            f'<b>Expression:</b>\n<code>'
+            f"<b>Expression:</b>\n<code>"
             f'{code.replace("<", "").replace(">", "")}</code>'
-            '\n\n<b>Result'
+            "\n\n<b>Result"
             f":</b>\n<code>{s}</code>"
         )
     except Exception as ex:
