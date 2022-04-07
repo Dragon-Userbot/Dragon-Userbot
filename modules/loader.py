@@ -41,7 +41,8 @@ async def get_mod_hash(_, message: Message):
         return
 
     await message.edit(
-        f"<b>Module hash: <code>{hashlib.sha256(resp.content).hexdigest()}</code></b>"
+        f"<b>Module hash: <code>{hashlib.sha256(resp.content).hexdigest()}</code>\n"
+        f"Link: <code>{url}</code>\nFile: <code>{url.split('/')[-1]}</code></b>"
     )
 
 
