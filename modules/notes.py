@@ -238,7 +238,7 @@ async def note_send(client: Client, message: Message):
 
 
 @Client.on_message(filters.command(["exnote"], prefix) & filters.me)
-async def note_send(client: Client, message: Message):
+async def exnote_send(client: Client, message: Message):
     if len(message.text.split()) >= 2:
         await message.edit("<b>Loading...</b>")
 
