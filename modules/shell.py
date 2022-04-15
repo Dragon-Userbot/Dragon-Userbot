@@ -39,7 +39,6 @@ async def shell(_, message: Message):
         stdout=PIPE,
         stderr=PIPE,
         text=True,
-        input=inp,
     )
 
     char = "#" if os.getuid() == 0 else "$"
@@ -48,7 +47,7 @@ async def shell(_, message: Message):
     await message.edit(text + "<b>Running...</b>")
     try:
         start_time = perf_counter()
-        stdout, stderr = cmd_obj.communicate(timeout=60)
+        stdout, stderr = cmd_obj.communicate(timeout=60, input=inp)
     except TimeoutExpired:
         text += "<b>Timeout expired (60 seconds)</b>"
     else:
