@@ -29,6 +29,10 @@ async def shell(_, message: Message):
     if len(message.command) < 2:
         return await message.edit("<b>Specify the command in message text</b>")
     cmd_text = message.text.split(maxsplit=1)[1]
+    if len(message.command) > 2:
+        inp = message.text.split(maxsplit=2)[2]
+    else:
+        inp = None
     cmd_obj = Popen(
         cmd_text,
         shell=True,
@@ -43,7 +47,7 @@ async def shell(_, message: Message):
     await message.edit(text + "<b>Running...</b>")
     try:
         start_time = perf_counter()
-        stdout, stderr = cmd_obj.communicate(timeout=60)
+        stdout, stderr = cmd_obj.communicate(timeout=60, input=inp)
     except TimeoutExpired:
         text += "<b>Timeout expired (60 seconds)</b>"
     else:
