@@ -29,12 +29,17 @@ async def shell(_, message: Message):
     if len(message.command) < 2:
         return await message.edit("<b>Specify the command in message text</b>")
     cmd_text = message.text.split(maxsplit=1)[1]
+    if len(message.command) > 2:
+        inp = message.text.split(maxsplit=2)[2]
+    else:
+        inp = None
     cmd_obj = Popen(
         cmd_text,
         shell=True,
         stdout=PIPE,
         stderr=PIPE,
         text=True,
+        input=inp,
     )
 
     char = "#" if os.getuid() == 0 else "$"
