@@ -44,7 +44,7 @@ responsible for any damage to chat rooms caused by using this userbot.</p>
 <h1>Installation</h1>
 <h2>Linux, Termux (use <a href='https://f-droid.org/en/packages/com.termux/'>f-droid</a> version) and Windows [only wsl]</h2>
 
-<pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/Dragon-Userbot/Dragon-Userbot.git && cd Dragon-Userbot/ && sh install.sh
+<pre><code>apt-get upgrade -y && apt-get update && apt install git && git clone https://github.com/Dragon-Userbot/Dragon-Userbot.git && cd Dragon-Userbot/ && bash install.sh
 </code></pre>
 
 <h2>macOS [<a href='https://brew.sh'>brew</a>]</h2>
