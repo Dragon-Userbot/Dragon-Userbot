@@ -23,7 +23,6 @@ from pyrogram.types import Message
 # noinspection PyUnresolvedReferences
 from utils.misc import modules_help, prefix
 from utils.scripts import format_exc
-from utils.scripts import import_library
 
 # noinspection PyUnresolvedReferences
 from utils.db import db
@@ -85,87 +84,8 @@ def user_eval(client: Client, message: Message):
         message.edit(format_exc(e))
 
 
-async_eval = import_library("async_eval")
-aeval = async_eval.eval
-
-
-async def aexec(codea, client, message):
-    codea = "async def __todo(message, client, reply): " + "".join(
-        f"\n {_l}" for _l in codea.split("\n")
-    )
-    if "print(" not in codea.replace(" ", ""):
-        exec(codea)
-        return await locals()["__todo"](message, client, message.reply_to_message)
-    else:
-        f = StringIO()
-        exec(codea)
-        with redirect_stdout(f):
-            await locals()["__todo"](message, client, message.reply_to_message)
-        jj = f.getvalue()
-        return jj
-
-
-# noinspection PyUnusedLocal
-@Client.on_message(filters.command(["aex", "aexec"], prefix) & filters.me)
-async def aexec_handler(client: Client, message: Message):
-    try:
-        code = message.text.split(maxsplit=1)[1]
-    except:
-        code = ""
-    if not code:
-        return await message.edit("<b>Not found code to execute.</b>")
-    try:
-        await message.edit("<b>Executing...</b>")
-        s = await aexec(code, client, message)
-        s = (
-            str(s).replace("<", "").replace(">", "")
-            if type(s) == str or "<" in str(s) or ">" in str(s)
-            else s
-        )
-        return await message.edit(
-            f"<b>Code:</b>\n<code>"
-            f'{code.replace("<", "").replace(">", "")}'
-            "</code>\n\n<b>Result"
-            f":</b>\n<code>{s}</code>"
-        )
-    except Exception as ex:
-        return await message.edit(f"<b>Error:</b>\n<code>{format_exc(ex)}</code>")
-
-
-# noinspection PyUnusedLocal
-@Client.on_message(filters.command(["aev", "aeval"], prefix) & filters.me)
-async def aeval_handler(client: Client, message: Message):
-    try:
-        code = message.text.split(maxsplit=1)[1]
-    except:
-        code = ""
-    if not code:
-        return await message.edit("<b>Not found expression.</b>")
-    try:
-        await message.edit("<b>Executing...</b>")
-        s = aeval(
-            code,
-            {"message": message, "client": client, "reply": message.reply_to_message},
-        )
-        s = (
-            str(s).replace("<", "").replace(">", "")
-            if type(s) == str or "<" in str(s) or ">" in str(s)
-            else s
-        )
-        return await message.edit(
-            f"<b>Expression:</b>\n<code>"
-            f'{code.replace("<", "").replace(">", "")}</code>'
-            "\n\n<b>Result"
-            f":</b>\n<code>{s}</code>"
-        )
-    except Exception as ex:
-        return await message.edit(f"<b>Error:</b>\n<code>{format_exc(ex)}</code>")
-
-
 modules_help["python"] = {
     "ex [python code]": "Execute Python code",
     "exnoedit [python code]": "Execute Python code and return result with reply",
     "eval [python code]": "Eval Python code",
-    "aex [python code]": "Async execute python code",
-    "aeval [python code-str]": "Async evaluate python code",
 }
