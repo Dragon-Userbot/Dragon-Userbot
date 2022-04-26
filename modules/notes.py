@@ -28,9 +28,6 @@ from utils.misc import modules_help, prefix
 
 #  from utils.scripts import with_reply
 
-# noinspection PyUnresolvedReferences
-from modules.python import aexec_handler
-
 
 @Client.on_message(filters.command(["save"], prefix) & filters.me)
 async def save_note(client: Client, message: Message):
@@ -237,39 +234,6 @@ async def note_send(client: Client, message: Message):
         await message.edit(f"<b>Example: <code>{prefix}note note_name</code></b>")
 
 
-@Client.on_message(filters.command(["exnote"], prefix) & filters.me)
-async def exnote_send(client: Client, message: Message):
-    if len(message.text.split()) >= 2:
-        await message.edit("<b>Loading...</b>")
-
-        note_name = f"{message.text.split(maxsplit=1)[1]}"
-        find_note = db.get("core.notes", f"note{note_name}", False)
-        if find_note:
-            try:
-                nmessage = await client.get_messages(
-                    int(find_note["CHAT_ID"]), int(find_note["MESSAGE_ID"])
-                )
-            except errors.RPCError:
-                await message.edit(
-                    "<b>Sorry, but this note is unavaliable.\n\n"
-                    f"You can delete this note with "
-                    f"<code>{prefix}clear {note_name}</code></b>"
-                )
-                return
-            if nmessage.text:
-                text = "exec " + nmessage.text
-            elif nmessage.caption:
-                text = "exec " + nmessage.caption
-            else:
-                return await message.edit("<b>This note not contains python code.</b>")
-            message.text = text
-            return await aexec_handler(client, message)
-        else:
-            await message.edit("<b>There is no such note</b>")
-    else:
-        await message.edit(f"<b>Example: <code>{prefix}exnote note_name</code></b>")
-
-
 @Client.on_message(filters.command(["notes"], prefix) & filters.me)
 async def notes(_, message: Message):
     await message.edit("<b>Loading...</b>")
@@ -300,5 +264,4 @@ modules_help["notes"] = {
     "note [name]*": "Get saved note",
     "notes": "Get note list",
     "clear [name]*": "Delete note",
-    "exnote [name]": "Execute note",
 }
