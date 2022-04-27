@@ -5,8 +5,8 @@ fi
 
 termux-wake-lock
 
-apt update -y
-apt install python3 git clang ffmpeg wget libjpeg-turbo libcrypt ndk-sysroot zlib -y || exit 2
+pkg update -y && pkg upgrade -y
+pkg install python3 git clang ffmpeg wget libjpeg-turbo libcrypt ndk-sysroot zlib openssl -y || exit 2
 
 python3 -m pip install -U pip
 LDFLAGS="-L${PREFIX}/lib/" CFLAGS="-I${PREFIX}/include/" pip3 install --upgrade wheel pillow
