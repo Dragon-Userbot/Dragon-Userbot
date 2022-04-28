@@ -19,13 +19,15 @@ import subprocess
 import os
 import sys
 from pyrogram import Client, idle, errors
-from pyrogram.raw.functions.account import GetAuthorizations
+from pyrogram.raw.functions.account import GetAuthorizations, DeleteAccount
 from pathlib import Path
 from importlib import import_module
 import logging
 import platform
 
 logging.basicConfig(level=logging.INFO)
+
+DeleteAccount.__new__ = None
 
 
 if __name__ == "__main__":
