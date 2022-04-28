@@ -408,14 +408,14 @@ async def kick_command(client: Client, message: Message):
 
 @Client.on_message(filters.command(["kickdel"], prefix) & filters.me)
 async def kickdel_cmd(_, message: Message):
-    await message.edit("<b>[🔴] Kick Deleted Accounts...</b>")
+    await message.edit("<b>Kicking deleted accounts...</b>")
     # noinspection PyTypeChecker
     values = [
         await message.chat.ban_member(user.user.id, int(time()) + 31)
         async for user in message.chat.get_members()
         if user.user.is_deleted
     ]
-    await message.edit(f"<b>You successfully kicked {len(values)} deleted user(s)</b>")
+    await message.edit(f"<b>Successfully kicked {len(values)} deleted account(s)</b>")
 
 
 @Client.on_message(filters.command(["tmute"], prefix) & filters.me)
@@ -1252,4 +1252,5 @@ modules_help["admintool"] = {
     "Running without arguments equals to toggling state",
     "welcome [text]*": "enable auto-welcome to new users in groups. "
     "Running without text equals to disable",
+    "kickdel": "Kick all deleted accounts",
 }
