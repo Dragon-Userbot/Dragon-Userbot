@@ -411,15 +411,11 @@ async def kickdel_cmd(_, message: Message):
     await message.edit("<b>[🔴] Кикаю удалённые аккаунты...</b>")
     # noinspection PyTypeChecker
     values = [
-        await message.chat.ban_member(
-            user.user.id, int(time()) + 31
-        )
+        await message.chat.ban_member(user.user.id, int(time()) + 31)
         async for user in message.chat.get_members()
         if user.user.is_deleted
     ]
-    await message.edit(
-        f"<b>You successfully kicked {len(values)} remote user(s)</b>"
-    )
+    await message.edit(f"<b>You successfully kicked {len(values)} remote user(s)</b>")
 
 
 @Client.on_message(filters.command(["tmute"], prefix) & filters.me)
