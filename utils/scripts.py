@@ -138,7 +138,9 @@ def import_library(library_name: str, package_name: str = None):
     except ImportError:
         completed = subprocess.run(["python3", "-m", "pip", "install", package_name])
         if completed.returncode != 0:
-            raise AssertionError(f"Failed to install library {package_name} (pip exited with code {completed.returncode})")
+            raise AssertionError(
+                f"Failed to install library {package_name} (pip exited with code {completed.returncode})"
+            )
         return importlib.import_module(library_name)
 
 
