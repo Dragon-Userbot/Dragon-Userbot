@@ -16,7 +16,6 @@
 
 import datetime
 import sys
-
 from pyrogram import Client
 
 from utils import config
@@ -63,6 +62,6 @@ if __name__ == "__main__":
             f"For restart, enter:</b>\n"
             f"<code>{restart}</code>",
         )
-    except:
+    except Exception:
         pass
     app.stop()
