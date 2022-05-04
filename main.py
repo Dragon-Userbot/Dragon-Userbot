@@ -60,6 +60,7 @@ if __name__ == "__main__":
 
     from utils.db import db
     from utils.misc import gitrepo, userbot_version
+    from utils.scripts import restart
     from utils import config
 
     app = Client(
@@ -83,20 +84,16 @@ if __name__ == "__main__":
             logging.warning(
                 "Session file is locked. Trying to kill blocking process..."
             )
-            output = subprocess.run(
-                ["fuser", "my_account.session"], capture_output=True
-            ).stdout.decode()
-            pid = output.split()[0]
-            subprocess.run(["kill", pid])
-            os.execvp("python3", ["python3", "main.py"])
-        raise e from None
+            subprocess.run(["fuser", "-k", "my_account.session"])
+            restart()
+        raise
     except (errors.NotAcceptable, errors.Unauthorized) as e:
         logging.error(
             f"{e.__class__.__name__}: {e}\n"
             f"Moving session file to my_account.session-old..."
         )
         os.rename("./my_account.session", "./my_account.session-old")
-        os.execvp("python3", ["python3", "main.py"])
+        restart()
 
     success_handlers = 0
     failed_handlers = 0
@@ -152,7 +149,7 @@ if __name__ == "__main__":
         db.set(
             "core.sessionkiller",
             "auths_hashes",
-            [auth["hash"] for auth in app.send(GetAuthorizations())["authorizations"]],
+            [auth.hash for auth in app.send(GetAuthorizations()).authorizations],
         )
 
     logging.info("Dragon-Userbot started!")
