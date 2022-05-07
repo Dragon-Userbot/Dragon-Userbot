@@ -412,8 +412,8 @@ async def kickdel_cmd(_, message: Message):
     # noinspection PyTypeChecker
     values = [
         await message.chat.ban_member(user.user.id, int(time()) + 31)
-        async for user in message.chat.get_members()
-        if user.user.is_deleted
+        for member in await message.chat.get_members()
+        if member.user.is_deleted
     ]
     await message.edit(f"<b>Successfully kicked {len(values)} deleted account(s)</b>")
 
