@@ -44,7 +44,7 @@ responsible for any damage to chat rooms caused by using this userbot.</p>
 <h1>Installation</h1>
 <h2>lavHost</h2>
 
-<a href="https://t.me/lavhostbot?start=RHJhZ29u"><img src="https://x0.at/BzW0.png"></a>
+<a href="https://t.me/lavhostbot?start=RHJhZ29u"><img src="https://f.lavhost.ml/images/install_to_lavhost.png"></a>
 
 
 <h2>Linux, Termux (use <a href='https://f-droid.org/en/packages/com.termux/'>f-droid</a> version) and Windows [only wsl]</h2>
