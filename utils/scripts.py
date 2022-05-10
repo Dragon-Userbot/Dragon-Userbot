@@ -47,9 +47,7 @@ def format_exc(e: Exception, hint: str = None):
         )
     else:
         hint_text = f"\n\n<b>Hint: {hint}</b>" if hint else ""
-        return (
-            f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>{hint_text}"
-        )
+        return f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>{hint_text}"
 
 
 def with_reply(func):

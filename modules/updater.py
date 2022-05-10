@@ -28,11 +28,15 @@ from utils.scripts import format_exc, restart
 
 @Client.on_message(filters.command("restart", prefix) & filters.me)
 async def restart_cmd(_, message: Message):
-    db.set("core.updater", "restart_info", {
-        "type": "restart",
-        "chat_id": message.chat.id,
-        "message_id": message.message_id,
-    })
+    db.set(
+        "core.updater",
+        "restart_info",
+        {
+            "type": "restart",
+            "chat_id": message.chat.id,
+            "message_id": message.message_id,
+        },
+    )
 
     if "LAVHOST" in os.environ:
         await message.edit("<b>Your lavHost is restarting...</b>")
@@ -45,11 +49,15 @@ async def restart_cmd(_, message: Message):
 
 @Client.on_message(filters.command("update", prefix) & filters.me)
 async def update(_, message: Message):
-    db.set("core.updater", "restart_info", {
-        "type": "update",
-        "chat_id": message.chat.id,
-        "message_id": message.message_id,
-    })
+    db.set(
+        "core.updater",
+        "restart_info",
+        {
+            "type": "update",
+            "chat_id": message.chat.id,
+            "message_id": message.message_id,
+        },
+    )
 
     if "LAVHOST" in os.environ:
         await message.edit("<b>Your lavHost is updating...</b>")

@@ -101,9 +101,7 @@ if __name__ == "__main__":
         else:
             success_modules += 1
 
-    logging.info(
-        f"Imported {success_handlers} handlers from {success_modules} modules"
-    )
+    logging.info(f"Imported {success_handlers} handlers from {success_modules} modules")
     if failed_modules:
         logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
