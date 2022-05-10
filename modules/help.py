@@ -59,7 +59,7 @@ async def help_cmd(_, message: Message):
     elif message.command[1].lower() in modules_help:
         await message.edit(format_module_help(message.command[1].lower()))
     else:
-        # TODO: refactor this cringe
+        # No, this cringe won't be refactored
         command_name = message.command[1].lower()
         for name, commands in modules_help.items():
             for command in commands.keys():

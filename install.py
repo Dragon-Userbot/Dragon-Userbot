@@ -16,7 +16,7 @@
 
 import datetime
 import sys
-from pyrogram import Client
+from pyrogram import Client, errors
 
 from utils import config
 
@@ -62,6 +62,6 @@ if __name__ == "__main__":
             f"For restart, enter:</b>\n"
             f"<code>{restart}</code>",
         )
-    except Exception:
+    except errors.RPCError:
         pass
     app.stop()

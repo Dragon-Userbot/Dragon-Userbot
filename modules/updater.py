@@ -22,51 +22,56 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix, requirements_list
-from utils.scripts import format_exc
-
-
-def restart(message: Message, restart_type):
-    text = "1" if restart_type == "update" else "2"
-    os.execvp(
-        sys.executable,
-        [
-            sys.executable,
-            "main.py",
-            f"{message.chat.id}",
-            f" {message.message_id}",
-            f"{text}",
-        ],
-    )
+from utils.db import db
+from utils.scripts import format_exc, restart
 
 
 @Client.on_message(filters.command("restart", prefix) & filters.me)
 async def restart_cmd(_, message: Message):
+    db.set("core.updater", "restart_info", {
+        "type": "restart",
+        "chat_id": message.chat.id,
+        "message_id": message.message_id,
+    })
+
+    if "LAVHOST" in os.environ:
+        await message.edit("<b>Your lavHost is restarting...</b>")
+        os.system("lavhost restart")
+        return
+
     await message.edit("<b>Restarting...</b>")
-    restart(message, "restart")
+    restart()
 
 
 @Client.on_message(filters.command("update", prefix) & filters.me)
 async def update(_, message: Message):
+    db.set("core.updater", "restart_info", {
+        "type": "update",
+        "chat_id": message.chat.id,
+        "message_id": message.message_id,
+    })
+
+    if "LAVHOST" in os.environ:
+        await message.edit("<b>Your lavHost is updating...</b>")
+        os.system("lavhost update")
+        return
+
+    await message.edit("<b>Updating...</b>")
     try:
-        await message.edit("<b>Updating: 1/4 (updating pip)</b>")
         subprocess.run([sys.executable, "-m", "pip", "install", "-U", "pip"])
-        await message.edit("<b>Updating: 2/4 (git pull)</b>")
         subprocess.run(["git", "pull"])
-        await message.edit("<b>Updating: 3/4 (updating libs from requirements.txt)</b>")
         subprocess.run(
             [sys.executable, "-m", "pip", "install", "-U", "-r", "requirements.txt"]
-        )
-        await message.edit(
-            "<b>Updating: 4/4 (updating libs from requirements_list)</b>"
         )
         subprocess.run(
             [sys.executable, "-m", "pip", "install", "-U", *requirements_list]
         )
-        await message.edit("<b>Updating: done! Restarting...</b>")
     except Exception as e:
         await message.edit(format_exc(e))
+        db.remove("core.updater", "restart_info")
     else:
-        restart(message, "update")
+        await message.edit("<b>Restarting...</b>")
+        restart()
 
 
 modules_help["updater"] = {

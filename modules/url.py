@@ -112,7 +112,7 @@ async def upload_cmd(_, message: Message):
             disable_web_page_preview=True,
         )
     else:
-        await message.edit(f"<b>API returned an error!\n" f"{response.text}</b>")
+        await message.edit(f"<b>API returned an error!\n{response.text}</b>")
 
     os.remove(file_name)
 

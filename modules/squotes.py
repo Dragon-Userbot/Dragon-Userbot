@@ -136,7 +136,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
     response = requests.post(url, json=params)
     if not response.ok:
         return await message.edit(
-            f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>"
+            f"<b>Quotes API error!</b>\n<code>{response.text}</code>"
         )
 
     resized = resize_image(

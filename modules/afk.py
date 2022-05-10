@@ -34,6 +34,7 @@ afk_info = db.get(
 )
 
 is_afk = filters.create(lambda _, __, ___: afk_info["is_afk"])
+is_support = filters.create(lambda _, __, message: message.chat.is_support)
 
 
 @Client.on_message(
@@ -42,13 +43,14 @@ is_afk = filters.create(lambda _, __, ___: afk_info["is_afk"])
     & ~filters.channel
     & ~filters.me
     & ~filters.bot
+    & ~is_support
 )
 async def afk_handler(_, message: types.Message):
     start = datetime.datetime.fromtimestamp(afk_info["start"])
     end = datetime.datetime.now().replace(microsecond=0)
     afk_time = end - start
     await message.reply(
-        f"<b>I'm AFK {afk_time}\n" f"Reason:</b> <i>{afk_info['reason']}</i>"
+        f"<b>I'm AFK {afk_time}\nReason:</b> <i>{afk_info['reason']}</i>"
     )
 
 

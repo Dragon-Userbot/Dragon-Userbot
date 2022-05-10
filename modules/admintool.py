@@ -407,14 +407,16 @@ async def kick_command(client: Client, message: Message):
 
 
 @Client.on_message(filters.command(["kickdel"], prefix) & filters.me)
-async def kickdel_cmd(_, message: Message):
+async def kickdel_cmd(client: Client, message: Message):
     await message.edit("<b>Kicking deleted accounts...</b>")
-    # noinspection PyTypeChecker
-    values = [
-        await message.chat.ban_member(user.user.id, int(time()) + 31)
-        for member in await message.chat.get_members()
-        if member.user.is_deleted
-    ]
+    try:
+        values = [
+            await message.chat.ban_member(member.user.id, int(time()) + 31)
+            async for member in client.iter_chat_members(message.chat.id)
+            if member.user.is_deleted
+        ]
+    except Exception as e:
+        return await message.edit(format_exc(e))
     await message.edit(f"<b>Successfully kicked {len(values)} deleted account(s)</b>")
 
 

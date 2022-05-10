@@ -14,16 +14,22 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import sqlite3
-import subprocess
 import os
 import sys
-from pyrogram import Client, idle, errors
-from pyrogram.raw.functions.account import GetAuthorizations, DeleteAccount
+import logging
+import sqlite3
+import platform
+import subprocess
 from pathlib import Path
 from importlib import import_module
-import logging
-import platform
+
+from pyrogram import Client, idle, errors
+from pyrogram.raw.functions.account import GetAuthorizations, DeleteAccount
+
+from utils import config
+from utils.db import db
+from utils.misc import gitrepo, userbot_version
+from utils.scripts import restart
 
 logging.basicConfig(level=logging.INFO)
 
@@ -34,34 +40,6 @@ if __name__ == "__main__":
     script_path = os.path.dirname(os.path.realpath(__file__))
     if script_path != os.getcwd():
         os.chdir(script_path)
-
-    if os.path.exists("./config.ini.old") and not os.path.exists("./.env"):
-        logging.warning("Old config.ini file detected! Converting to .env...")
-        import configparser
-
-        parser = configparser.ConfigParser()
-        parser.read("./config.ini.old")
-        db_url = parser.get("pyrogram", "db_url")
-        db_name = parser.get("db", "db_name")
-
-        with open(".env.dist") as f:
-            env_text = f.read().format(
-                db_url=db_url,
-                db_name=db_name,
-                db_type="mongodb",
-            )
-
-        with open(".env", "w") as f:
-            f.write(env_text)
-
-        os.remove("./config.ini.old")
-
-        logging.warning("Old config file has been successfully converted")
-
-    from utils.db import db
-    from utils.misc import gitrepo, userbot_version
-    from utils.scripts import restart
-    from utils import config
 
     app = Client(
         "my_account",
@@ -100,7 +78,7 @@ if __name__ == "__main__":
     success_modules = 0
     failed_modules = 0
 
-    for path in sorted((Path("modules")).rglob("*.py")):
+    for path in sorted(Path("modules").rglob("*.py")):
         module_path = ".".join(path.parent.parts + (path.stem,))
         try:
             module = import_module(module_path)
@@ -124,25 +102,23 @@ if __name__ == "__main__":
             success_modules += 1
 
     logging.info(
-        f"Imported {success_handlers} handlers from {success_modules} modules."
+        f"Imported {success_handlers} handlers from {success_modules} modules"
     )
     if failed_modules:
         logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
         logging.warning(f"Failed to add {failed_handlers} to handlers")
 
-    if len(sys.argv) == 4:
-        restart_type = sys.argv[3]
-        if restart_type == "1":
-            text = "<b>Update process completed!</b>"
-        else:
-            text = "<b>Restart completed!</b>"
+    if info := db.get("core.updater", "restart_info"):
+        text = {
+            "restart": "<b>Restart completed!</b>",
+            "update": "<b>Update process completed!</b>",
+        }[info["type"]]
         try:
-            app.send_message(
-                chat_id=sys.argv[1], text=text, reply_to_message_id=int(sys.argv[2])
-            )
+            app.edit_message_text(info["chat_id"], info["message_id"], text)
         except errors.RPCError:
-            app.send_message(chat_id=sys.argv[1], text=text)
+            pass
+        db.remove("core.updater", "restart_info")
 
     # required for sessionkiller module
     if db.get("core.sessionkiller", "enabled", False):
@@ -155,3 +131,5 @@ if __name__ == "__main__":
     logging.info("Dragon-Userbot started!")
 
     idle()
+
+    app.stop()

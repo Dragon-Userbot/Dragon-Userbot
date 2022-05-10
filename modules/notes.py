@@ -79,16 +79,7 @@ async def save_note(client: Client, message: Message):
                 try:
                     message_id = await message.reply_to_message.forward(chat_id)
                 except errors.ChatForwardsRestricted:
-                    if message.reply_to_message.text:
-                        # manual copy
-                        message_id = await client.send_message(
-                            chat_id, message.reply_to_message.text
-                        )
-                    else:
-                        await message.edit(
-                            "<b>Forwarding messages is restricted by chat admins</b>"
-                        )
-                        return
+                    message_id = await message.copy(chat_id)
                 note = {
                     "MEDIA_GROUP": False,
                     "MESSAGE_ID": str(message_id.message_id),

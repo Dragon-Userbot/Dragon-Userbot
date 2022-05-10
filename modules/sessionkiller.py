@@ -113,7 +113,7 @@ async def check_new_login(client: Client, update: UpdateServiceNotification, _, 
                 f"in again.</b>"
             )
             # schedule sending report message so user will get notification
-            schedule_date = int(time.time() + 3)
+            schedule_date = int(time.time() + 15)
             await client.send_message("me", full_report, schedule_date=schedule_date)
             return
 

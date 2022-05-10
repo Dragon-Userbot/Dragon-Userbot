@@ -32,6 +32,9 @@ def text(message: types.Message):
 
 
 def restart():
+    if "LAVHOST" in os.environ:
+        os.system("lavhost restart")
+        return
     os.execvp(sys.executable, [sys.executable, "main.py"])
 
 
@@ -43,12 +46,9 @@ def format_exc(e: Exception, hint: str = None):
             f"<code>[{e.CODE} {e.ID or e.NAME}] - {e.MESSAGE}</code>"
         )
     else:
-        if hint:
-            hint_text = f"\n\n<b>Hint: {hint}</b>"
-        else:
-            hint_text = ""
+        hint_text = f"\n\n<b>Hint: {hint}</b>" if hint else ""
         return (
-            f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>" + hint_text
+            f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>{hint_text}"
         )
 
 
