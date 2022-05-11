@@ -29,7 +29,7 @@ async def spam(client: Client, message: Message):
     amount = int(message.command[1])
     text = " ".join(message.command[2:])
 
-    cooldown = {"spam": 0.15, "statspam": 0.1, "slowspam": 0.9, "fastspam": 0}
+    cooldown = {"spam": 0.15, "statspam": 0.1, "slowspam": 0.9}
 
     await message.delete()
 
@@ -42,8 +42,8 @@ async def spam(client: Client, message: Message):
         if message.command[0] == "statspam":
             await asyncio.sleep(0.1)
             await sent.delete()
-
-        await asyncio.sleep(cooldown[message.command[0]])
+        if message.command[0] != "fastspam":
+            await asyncio.sleep(cooldown[message.command[0]])
 
 
 modules_help["spam"] = {
