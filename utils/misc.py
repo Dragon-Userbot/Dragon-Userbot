@@ -19,7 +19,15 @@ from .db import db
 from git import Repo
 
 
-modules_help = {}
+class ModulesHelp(dict):
+    def __setitem__(self, key, value):
+        return super().__setitem__(str(key).lower(), value)
+
+    def __getitem__(self, item):
+        return super().__getitem__(str(item).lower())
+
+
+modules_help = ModulesHelp()
 requirements_list = []
 
 python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"

@@ -16,7 +16,7 @@
 
 import hashlib
 import os
-from importlib import import_module
+from importlib import import_module, invalidate_caches
 
 import requests
 from pyrogram import Client, filters
@@ -49,73 +49,32 @@ async def get_mod_hash(_, message: Message):
 
 @Client.on_message(filters.command(["loadmod", "lm"], prefix) & filters.me)
 async def loadmod(client: Client, message: Message):
-    if (
-        not (
-            message.reply_to_message
-            and message.reply_to_message.document
-            and message.reply_to_message.document.file_name.endswith(".py")
-        )
-        and len(message.command) == 1
-    ):
+    if len(message.command) == 1:
         await message.edit("<b>Specify module to download</b>")
         return
 
-    if len(message.command) > 1:
-        url = message.command[1].lower()
+    url = message.command[1].lower()
 
-        if url.startswith(
-            "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
-        ):
-            module_name = url.split("/")[-1].split(".")[0]
-        elif "/" not in url and "." not in url:
-            module_name = url.lower()
-            url = f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}.py"
-        else:
-            modules_hashes = requests.get(
-                "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/modules_hashes.txt"
-            ).text
-            resp = requests.get(url)
-
-            if not resp.ok:
-                await message.edit(
-                    f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
-                )
-                return
-
-            if hashlib.sha256(resp.content).hexdigest() not in modules_hashes:
-                return await message.edit(
-                    "<b>Only <a href=https://github.com/Dragon-Userbot/custom_modules/tree/main/modules_hashes.txt>"
-                    "verified</a> modules or from the official "
-                    "<a href=https://github.com/Dragon-Userbot/custom_modules>"
-                    "custom_modules</a> repository are supported!</b>",
-                    disable_web_page_preview=True,
-                )
-
-            module_name = url.split("/")[-1].split(".")[0]
-
-        resp = requests.get(url)
-        if not resp.ok:
-            await message.edit(f"<b>Module <code>{module_name}</code> is not found</b>")
-            return
-
-        if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
-            os.mkdir(f"{BASE_PATH}/modules/custom_modules")
-
-        with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
-            f.write(resp.content)
+    if url.startswith(
+        "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
+    ):
+        module_name = url.split("/")[-1].split(".")[0]
+    elif "/" not in url and "." not in url:
+        module_name = url.lower()
+        url = f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}.py"
     else:
-        file_name = await message.reply_to_message.download()
-        module_name = message.reply_to_message.document.file_name[:-3]
-
-        with open(file_name, "rb") as f:
-            content = f.read()
-
         modules_hashes = requests.get(
             "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/modules_hashes.txt"
         ).text
+        resp = requests.get(url)
 
-        if hashlib.sha256(content).hexdigest() not in modules_hashes:
-            os.remove(file_name)
+        if not resp.ok:
+            await message.edit(
+                f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
+            )
+            return
+
+        if hashlib.sha256(resp.content).hexdigest() not in modules_hashes:
             return await message.edit(
                 "<b>Only <a href=https://github.com/Dragon-Userbot/custom_modules/tree/main/modules_hashes.txt>"
                 "verified</a> modules or from the official "
@@ -123,18 +82,31 @@ async def loadmod(client: Client, message: Message):
                 "custom_modules</a> repository are supported!</b>",
                 disable_web_page_preview=True,
             )
-        else:
-            os.rename(file_name, f"./modules/custom_modules/{module_name}.py")
+
+        module_name = url.split("/")[-1].split(".")[0]
+
+    resp = requests.get(url)
+    if not resp.ok:
+        await message.edit(f"<b>Module <code>{module_name}</code> is not found</b>")
+        return
+
+    if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
+        os.mkdir(f"{BASE_PATH}/modules/custom_modules")
+
+    if module_name in modules_help:
+        # Unload module before updating it
+
+        module = import_module(f"modules.custom_modules.{module_name}")
+        for name, obj in vars(module).items():
+            for handler, group in getattr(obj, "handlers", []):
+                client.remove_handler(handler, group)
+        invalidate_caches()
+
+    with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
+        f.write(resp.content)
 
     try:
         module = import_module(f"modules.custom_modules.{module_name}")
-        if module_name not in modules_help:
-            # it can happen when user load module by replying to file
-            # file name and module name in modules_help aren't same
-            await message.edit("<b>Invalid module name</b>")
-            os.remove(f"./modules/custom_modules/{module_name}.py")
-            return
-
         for name, obj in vars(module).items():
             for handler, group in getattr(obj, "handlers", []):
                 client.add_handler(handler, group)
@@ -143,7 +115,7 @@ async def loadmod(client: Client, message: Message):
 
     await message.edit(
         f"<b>The module <code>{module_name}</code> is loaded!</b>\n\n"
-        f"{format_module_help(module_name)}"
+        f"{format_module_help(module_name, False)}"
     )
 
 
@@ -164,6 +136,7 @@ async def unload_mods(client: Client, message: Message):
         for name, obj in vars(module).items():
             for handler, group in getattr(obj, "handlers", []):
                 client.remove_handler(handler, group)
+        del modules_help[module_name]
 
         os.remove(f"{BASE_PATH}/modules/custom_modules/{module_name}.py")
         await message.edit(f"<b>The module <code>{module_name}</code> removed!</b>")
