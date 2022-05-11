@@ -231,5 +231,5 @@ modules_help["loader"] = {
     "unloadmod [module_name]*": "Delete module",
     "modhash [link]*": "Get module hash by link",
     "loadallmods": "Load all custom modules (use it at your own risk)",
-    "updateallmods": "Update all custom modules",
+    "updateallmods": "Update all loaded custom modules",
 }
