@@ -16,12 +16,13 @@
 
 import hashlib
 import os
+from importlib import import_module
 
 import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from utils.scripts import restart
+from utils.scripts import restart, format_exc, format_module_help
 from utils.misc import modules_help, prefix
 
 
@@ -47,7 +48,7 @@ async def get_mod_hash(_, message: Message):
 
 
 @Client.on_message(filters.command(["loadmod", "lm"], prefix) & filters.me)
-async def loadmod(_, message: Message):
+async def loadmod(client: Client, message: Message):
     if (
         not (
             message.reply_to_message
@@ -125,14 +126,31 @@ async def loadmod(_, message: Message):
         else:
             os.rename(file_name, f"./modules/custom_modules/{module_name}.py")
 
-    await message.edit(f"<b>The module <code>{module_name}</code> is loaded!</b>")
-    restart()
+    try:
+        module = import_module(f"modules.custom_modules.{module_name}")
+        if module_name not in modules_help:
+            # it can happen when user load module by replying to file
+            # file name and module name in modules_help aren't same
+            await message.edit("<b>Invalid module name</b>")
+            os.remove(f"./modules/custom_modules/{module_name}.py")
+            return
+
+        for name, obj in vars(module).items():
+            for handler, group in getattr(obj, "handlers", []):
+                client.add_handler(handler, group)
+    except Exception as e:
+        return await message.edit(format_exc(e))
+
+    await message.edit(
+        f"<b>The module <code>{module_name}</code> is loaded!</b>\n\n"
+        f"{format_module_help(module_name)}"
+    )
 
 
 @Client.on_message(filters.command(["unloadmod", "ulm"], prefix) & filters.me)
-async def unload_mods(_, message: Message):
+async def unload_mods(client: Client, message: Message):
     if len(message.command) <= 1:
-        return
+        return await message.edit("<b>Specify module to unload</b>")
 
     module_name = message.command[1].lower()
 
@@ -142,9 +160,13 @@ async def unload_mods(_, message: Message):
         module_name = module_name.split("/")[-1].split(".")[0]
 
     if os.path.exists(f"{BASE_PATH}/modules/custom_modules/{module_name}.py"):
+        module = import_module(f"modules.custom_modules.{module_name}")
+        for name, obj in vars(module).items():
+            for handler, group in getattr(obj, "handlers", []):
+                client.remove_handler(handler, group)
+
         os.remove(f"{BASE_PATH}/modules/custom_modules/{module_name}.py")
         await message.edit(f"<b>The module <code>{module_name}</code> removed!</b>")
-        restart()
     elif os.path.exists(f"{BASE_PATH}/modules/{module_name}.py"):
         await message.edit(
             "<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>"
@@ -154,7 +176,7 @@ async def unload_mods(_, message: Message):
 
 
 @Client.on_message(filters.command(["loadallmods"], prefix) & filters.me)
-async def load_all_mods(_, message: Message):
+async def load_all_mods(client: Client, message: Message):
     await message.edit("<b>Fetching info...</b>")
 
     if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
@@ -174,10 +196,20 @@ async def load_all_mods(_, message: Message):
     if not new_modules:
         return await message.edit("<b>All modules already loaded</b>")
 
-    await message.edit(f'<b>Loading new modules: {" ".join(new_modules.keys())}</b>')
-    for name, url in new_modules.items():
-        with open(f"./modules/custom_modules/{name}.py", "wb") as f:
+    await message.edit(
+        f"<b>Loading new modules (it may take a lot of time): "
+        f'{" ".join(new_modules.keys())}</b>'
+    )
+
+    for module_name, url in new_modules.items():
+        with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
             f.write(requests.get(url).content)
+
+        module = import_module(f"modules.custom_modules.{module_name}")
+
+        for name, obj in vars(module).items():
+            for handler, group in getattr(obj, "handlers", []):
+                client.add_handler(handler, group)
 
     await message.edit(
         f'<b>Successfully loaded new modules: {" ".join(new_modules.keys())}</b>'
@@ -211,7 +243,12 @@ async def updateallmods(_, message: Message):
         with open(f"./modules/custom_modules/{module_name}", "wb") as f:
             f.write(resp.content)
 
+        # Unloading and loading modules manually will take a lot of time
+        # Restart will do this work faster
+
     await message.edit(f"<b>Successfully updated {len(modules_installed)} modules</b>")
+
+    restart()
 
 
 modules_help["loader"] = {

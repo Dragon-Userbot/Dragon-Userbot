@@ -58,7 +58,7 @@ def user_exec(client: Client, message: Message):
         else:
             message.edit(text)
     except Exception as e:
-        message.edit(format_exc(e))
+        message.edit(format_exc(e, f"Code was <code>{code}</code>"))
 
 
 # noinspection PyUnusedLocal
@@ -81,7 +81,7 @@ def user_eval(client: Client, message: Message):
             f"<code>{result}</code>"
         )
     except Exception as e:
-        message.edit(format_exc(e))
+        message.edit(format_exc(e, f"Code was <code>{code}</code>"))
 
 
 modules_help["python"] = {
