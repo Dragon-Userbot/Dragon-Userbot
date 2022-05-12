@@ -43,7 +43,7 @@ def format_exc(e: Exception, suffix=""):
     if isinstance(e, errors.RPCError):
         return (
             f"<b>Telegram API error!</b>\n"
-            f"<code>[{e.CODE} {e.ID or e.NAME}] — {e.MESSAGE}</code>"
+            f"<code>[{e.CODE} {e.ID or e.NAME}] — {e.MESSAGE}</code>\n\n<b>{suffix}</b>"
         )
     return (
         f"<b>Error!</b>\n"
