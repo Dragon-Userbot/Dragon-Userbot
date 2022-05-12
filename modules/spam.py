@@ -28,8 +28,7 @@ commands = ["spam", "statspam", "slowspam", "fastspam"]
 async def spam(client: Client, message: Message):
     amount = int(message.command[1])
     text = " ".join(message.command[2:])
-
-    cooldown = {"spam": 0.15, "statspam": 0.1, "slowspam": 0.9}
+    spam_type = message.command[0]
 
     await message.delete()
 
@@ -39,11 +38,14 @@ async def spam(client: Client, message: Message):
         else:
             sent = await client.send_message(message.chat.id, text)
 
-        if message.command[0] == "statspam":
+        if spam_type == "statspam":
             await asyncio.sleep(0.1)
             await sent.delete()
-        if message.command[0] != "fastspam":
-            await asyncio.sleep(cooldown[message.command[0]])
+
+        if spam_type in ["spam", "statspam"]:
+            await asyncio.sleep(0.1)
+        elif spam_type == "slowspam":
+            await asyncio.sleep(0.9)
 
 
 modules_help["spam"] = {
