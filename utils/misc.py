@@ -13,7 +13,7 @@
 
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import sys
+
 from sys import version_info
 from .db import db
 from git import Repo
@@ -30,7 +30,7 @@ class ModulesHelp(dict):
 modules_help = ModulesHelp()
 requirements_list = []
 
-python_version = ".".join(sys.version_info[:2])
+python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
 
 prefix = db.get("core.main", "prefix", ".")
 
