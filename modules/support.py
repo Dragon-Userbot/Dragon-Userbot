@@ -26,9 +26,7 @@ async def support(_, message: Message):
     devs = ["@john_phonk", "@thefsch", "@nalinor"]
     random.shuffle(devs)
 
-    commands_count = float(
-        len([cmd for module in modules_help for cmd in module])
-    )
+    commands_count = float(len([cmd for module in modules_help for cmd in module]))
 
     await message.edit(
         f"<b>Dragon-Userbot\n\n"

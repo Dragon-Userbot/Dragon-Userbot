@@ -38,16 +38,17 @@ def restart():
     os.execvp(sys.executable, [sys.executable, "main.py"])
 
 
-def format_exc(e: Exception, hint: str = None):
+def format_exc(e: Exception, suffix=""):
     traceback.print_exc()
     if isinstance(e, errors.RPCError):
         return (
             f"<b>Telegram API error!</b>\n"
-            f"<code>[{e.CODE} {e.ID or e.NAME}] - {e.MESSAGE}</code>"
+            f"<code>[{e.CODE} {e.ID or e.NAME}] — {e.MESSAGE}</code>"
         )
-    else:
-        hint_text = f"\n\n<b>Hint: {hint}</b>" if hint else ""
-        return f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>{hint_text}"
+    return (
+        f"<b>Error!</b>\n"
+        f"<code>{e.__class__.__name__}: {e}</code>\n\n<b>{suffix}</b>"
+    )
 
 
 def with_reply(func):
