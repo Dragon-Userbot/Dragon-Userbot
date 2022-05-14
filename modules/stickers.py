@@ -73,7 +73,9 @@ async def kang(client: Client, message: types.Message):
     os.remove(path)
 
     await interact_with(await client.send_document("@stickers", resized))
-    response = await interact_with(await client.send_message("@stickers", emoji))
+    response = await interact_with(
+        await client.send_message("@stickers", emoji)
+    )
     if "/done" in response.text:
         # ok
         await interact_with(await client.send_message("@stickers", "/done"))
@@ -82,11 +84,15 @@ async def kang(client: Client, message: types.Message):
             f"<b>Sticker added to <a href=https://t.me/addstickers/{pack}>pack</a></b>"
         )
     else:
-        await message.edit("<b>Something went wrong. Check history with @stickers</b>")
+        await message.edit(
+            "<b>Something went wrong. Check history with @stickers</b>"
+        )
     interact_with_to_delete.clear()
 
 
-@Client.on_message(filters.command(["stp", "s2p", "stick2png"], prefix) & filters.me)
+@Client.on_message(
+    filters.command(["stp", "s2p", "stick2png"], prefix) & filters.me
+)
 @with_reply
 async def stick2png(client: Client, message: types.Message):
     try:

@@ -76,4 +76,6 @@ async def help_cmd(_, message: Message):
         await message.edit(f"<b>Module {command_name} not found</b>")
 
 
-modules_help["help"] = {"help [module/command name]": "Get common/module/command help"}
+modules_help["help"] = {
+    "help [module/command name]": "Get common/module/command help"
+}

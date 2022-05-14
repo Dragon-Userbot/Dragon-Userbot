@@ -99,7 +99,9 @@ def format_module_help(module_name: str, full=True):
     commands = modules_help[module_name]
 
     help_text = (
-        f"<b>Help for |{module_name}|\n\nUsage:</b>\n" if full else "<b>Usage:</b>\n"
+        f"<b>Help for |{module_name}|\n\nUsage:</b>\n"
+        if full
+        else "<b>Usage:</b>\n"
     )
 
     for command, desc in commands.items():
@@ -122,7 +124,9 @@ def format_small_module_help(module_name: str, full=True):
         cmd = command.split(maxsplit=1)
         args = " <code>" + cmd[1] + "</code>" if len(cmd) > 1 else ""
         help_text += f"<code>{prefix}{cmd[0]}</code>{args}\n"
-    help_text += f"\nGet full usage: <code>{prefix}help {module_name}</code></b>"
+    help_text += (
+        f"\nGet full usage: <code>{prefix}help {module_name}</code></b>"
+    )
 
     return help_text
 
@@ -141,7 +145,9 @@ def import_library(library_name: str, package_name: str = None):
     try:
         return importlib.import_module(library_name)
     except ImportError:
-        completed = subprocess.run(["python3", "-m", "pip", "install", package_name])
+        completed = subprocess.run(
+            ["python3", "-m", "pip", "install", package_name]
+        )
         if completed.returncode != 0:
             raise AssertionError(
                 f"Failed to install library {package_name} (pip exited with code {completed.returncode})"

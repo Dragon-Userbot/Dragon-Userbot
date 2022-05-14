@@ -87,7 +87,9 @@ async def loadmod(client: Client, message: Message):
 
     resp = requests.get(url)
     if not resp.ok:
-        await message.edit(f"<b>Module <code>{module_name}</code> is not found</b>")
+        await message.edit(
+            f"<b>Module <code>{module_name}</code> is not found</b>"
+        )
         return
 
     if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
@@ -139,13 +141,17 @@ async def unload_mods(client: Client, message: Message):
         del modules_help[module_name]
 
         os.remove(f"{BASE_PATH}/modules/custom_modules/{module_name}.py")
-        await message.edit(f"<b>The module <code>{module_name}</code> removed!</b>")
+        await message.edit(
+            f"<b>The module <code>{module_name}</code> removed!</b>"
+        )
     elif os.path.exists(f"{BASE_PATH}/modules/{module_name}.py"):
         await message.edit(
             "<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>"
         )
     else:
-        await message.edit(f"<b>Module <code>{module_name}</code> is not found</b>")
+        await message.edit(
+            f"<b>Module <code>{module_name}</code> is not found</b>"
+        )
 
 
 @Client.on_message(filters.command(["loadallmods"], prefix) & filters.me)
@@ -163,7 +169,9 @@ async def load_all_mods(client: Client, message: Message):
     for module_info in modules_list:
         if not module_info["name"].endswith(".py"):
             continue
-        if os.path.exists(f'{BASE_PATH}/modules/custom_modules/{module_info["name"]}'):
+        if os.path.exists(
+            f'{BASE_PATH}/modules/custom_modules/{module_info["name"]}'
+        ):
             continue
         new_modules[module_info["name"][:-3]] = module_info["download_url"]
     if not new_modules:
@@ -219,7 +227,9 @@ async def updateallmods(_, message: Message):
         # Unloading and loading modules manually will take a lot of time
         # Restart will do this work faster
 
-    await message.edit(f"<b>Successfully updated {len(modules_installed)} modules</b>")
+    await message.edit(
+        f"<b>Successfully updated {len(modules_installed)} modules</b>"
+    )
 
     restart()
 

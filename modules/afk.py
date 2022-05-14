@@ -76,7 +76,9 @@ async def unafk(_, message):
         start = datetime.datetime.fromtimestamp(afk_info["start"])
         end = datetime.datetime.now().replace(microsecond=0)
         afk_time = end - start
-        await message.edit(f"<b>I'm not AFK anymore.\n" f"I was afk {afk_time}</b>")
+        await message.edit(
+            f"<b>I'm not AFK anymore.\n" f"I was afk {afk_time}</b>"
+        )
         afk_info["is_afk"] = False
     else:
         await message.edit("<b>You weren't afk</b>")

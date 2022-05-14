@@ -55,7 +55,8 @@ async def admintool_handler(_, message: Message):
     if message.sender_chat:
         if (
             message.sender_chat.type == "supergroup"
-            or message.sender_chat.id == db_cache.get(f"linked{message.chat.id}", 0)
+            or message.sender_chat.id
+            == db_cache.get(f"linked{message.chat.id}", 0)
         ):
             raise ContinuePropagation
 
@@ -132,7 +133,10 @@ async def get_user_and_name(message):
 @Client.on_message(filters.command(["ban"], prefix) & filters.me)
 async def ban_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         user_for_ban, name = await get_user_and_name(message)
         try:
             await client.ban_chat_member(message.chat.id, user_for_ban)
@@ -215,7 +219,9 @@ async def ban_command(client: Client, message: Message):
                         if _.lower() not in ["delete_history", "report_spam"]
                     )
 
-                    await client.ban_chat_member(message.chat.id, user_to_ban.id)
+                    await client.ban_chat_member(
+                        message.chat.id, user_to_ban.id
+                    )
                     await message.edit(
                         f"<b>{name}</b> <code>banned!</code>"
                         + f"\n{'<b>Cause:</b> <i>' + text_c.split(' ', maxsplit=2)[2] + '</i>' if len(text_c.split()) > 2 else ''}"
@@ -241,7 +247,10 @@ async def ban_command(client: Client, message: Message):
 @Client.on_message(filters.command(["unban"], prefix) & filters.me)
 async def unban_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         user_for_unban, name = await get_user_and_name(message)
         try:
             await client.unban_chat_member(message.chat.id, user_for_unban)
@@ -277,7 +286,9 @@ async def unban_command(client: Client, message: Message):
                 )
 
                 try:
-                    await client.unban_chat_member(message.chat.id, user_to_unban.id)
+                    await client.unban_chat_member(
+                        message.chat.id, user_to_unban.id
+                    )
                     await message.edit(
                         f"<b>{name}</b> <code>unbanned!</code>"
                         + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
@@ -303,7 +314,10 @@ async def unban_command(client: Client, message: Message):
 @Client.on_message(filters.command(["kick"], prefix) & filters.me)
 async def kick_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         if message.reply_to_message.from_user:
             try:
                 await client.ban_chat_member(
@@ -315,7 +329,10 @@ async def kick_command(client: Client, message: Message):
                 user_id = await client.resolve_peer(
                     message.reply_to_message.from_user.id
                 )
-                if "report_spam" in cause.lower().split() and message.reply_to_message:
+                if (
+                    "report_spam" in cause.lower().split()
+                    and message.reply_to_message
+                ):
                     await client.send(
                         functions.channels.ReportSpam(
                             channel=channel,
@@ -417,13 +434,18 @@ async def kickdel_cmd(client: Client, message: Message):
         ]
     except Exception as e:
         return await message.edit(format_exc(e))
-    await message.edit(f"<b>Successfully kicked {len(values)} deleted account(s)</b>")
+    await message.edit(
+        f"<b>Successfully kicked {len(values)} deleted account(s)</b>"
+    )
 
 
 @Client.on_message(filters.command(["tmute"], prefix) & filters.me)
 async def tmute_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         user_for_tmute, name = await get_user_and_name(message)
 
         if (
@@ -474,7 +496,9 @@ async def tmute_command(client: Client, message: Message):
                         + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 else:
-                    await message.edit(f"<b>{name}</b> <code>already in tmute</code>")
+                    await message.edit(
+                        f"<b>{name}</b> <code>already in tmute</code>"
+                    )
 
             except PeerIdInvalid:
                 await message.edit("<b>User is not found</b>")
@@ -493,7 +517,10 @@ async def tmute_command(client: Client, message: Message):
 @Client.on_message(filters.command(["tunmute"], prefix) & filters.me)
 async def tunmute_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         user_for_tunmute, name = await get_user_and_name(message)
 
         tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
@@ -516,7 +543,9 @@ async def tunmute_command(client: Client, message: Message):
                 if await check_username_or_id(cause.split(" ")[1]) == "channel":
                     user_to_tunmute = await client.get_chat(cause.split(" ")[1])
                 elif await check_username_or_id(cause.split(" ")[1]) == "user":
-                    user_to_tunmute = await client.get_users(cause.split(" ")[1])
+                    user_to_tunmute = await client.get_users(
+                        cause.split(" ")[1]
+                    )
                     if user_to_tunmute.is_self:
                         return await message.edit("<b>Not on yourself</b>")
                 else:
@@ -531,7 +560,9 @@ async def tunmute_command(client: Client, message: Message):
 
                 tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
                 if user_to_tunmute.id not in tmuted_users:
-                    await message.edit(f"<b>{name}</b> <code>not in tmute</code>")
+                    await message.edit(
+                        f"<b>{name}</b> <code>not in tmute</code>"
+                    )
                 else:
                     tmuted_users.remove(user_to_tunmute.id)
                     db.set("core.ats", f"c{message.chat.id}", tmuted_users)
@@ -596,7 +627,10 @@ async def tunmute_users_command(client: Client, message: Message):
 @Client.on_message(filters.command(["unmute"], prefix) & filters.me)
 async def unmute_command(client, message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         u_p = message.chat.permissions
         if message.reply_to_message.from_user:
             try:
@@ -628,7 +662,10 @@ async def unmute_command(client, message):
                 user_to_unmute = await client.get_users(cause.split(" ")[1])
                 try:
                     await client.restrict_chat_member(
-                        message.chat.id, user_to_unmute.id, u_p, int(time() + 30)
+                        message.chat.id,
+                        user_to_unmute.id,
+                        u_p,
+                        int(time() + 30),
                     )
                     await message.edit(
                         f"<b>{user_to_unmute.first_name}</b> <code>unmuted!</code>"
@@ -655,18 +692,25 @@ async def unmute_command(client, message):
 @Client.on_message(filters.command(["mute"], prefix) & filters.me)
 async def mute_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         mute_seconds: int = 0
         for character in "mhdw":
             match = re.search(rf"(\d+|(\d+\.\d+)){character}", message.text)
             if match:
                 if character == "m":
                     mute_seconds += int(
-                        float(match.string[match.start() : match.end() - 1]) * 60 // 1
+                        float(match.string[match.start() : match.end() - 1])
+                        * 60
+                        // 1
                     )
                 if character == "h":
                     mute_seconds += int(
-                        float(match.string[match.start() : match.end() - 1]) * 3600 // 1
+                        float(match.string[match.start() : match.end() - 1])
+                        * 3600
+                        // 1
                     )
                 if character == "d":
                     mute_seconds += int(
@@ -729,29 +773,47 @@ async def mute_command(client: Client, message: Message):
                 user_to_unmute = await client.get_users(cause.split(" ")[1])
                 mute_seconds: int = 0
                 for character in "mhdw":
-                    match = re.search(rf"(\d+|(\d+\.\d+)){character}", message.text)
+                    match = re.search(
+                        rf"(\d+|(\d+\.\d+)){character}", message.text
+                    )
                     if match:
                         if character == "m":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(
+                                    match.string[
+                                        match.start() : match.end() - 1
+                                    ]
+                                )
                                 * 60
                                 // 1
                             )
                         if character == "h":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(
+                                    match.string[
+                                        match.start() : match.end() - 1
+                                    ]
+                                )
                                 * 3600
                                 // 1
                             )
                         if character == "d":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(
+                                    match.string[
+                                        match.start() : match.end() - 1
+                                    ]
+                                )
                                 * 86400
                                 // 1
                             )
                         if character == "w":
                             mute_seconds += int(
-                                float(match.string[match.start() : match.end() - 1])
+                                float(
+                                    match.string[
+                                        match.start() : match.end() - 1
+                                    ]
+                                )
                                 * 604800
                                 // 1
                             )
@@ -779,7 +841,9 @@ async def mute_command(client: Client, message: Message):
                             message_text = message_text.replace("  ", " ")
                     else:
                         await client.restrict_chat_member(
-                            message.chat.id, user_to_unmute.id, ChatPermissions()
+                            message.chat.id,
+                            user_to_unmute.id,
+                            ChatPermissions(),
                         )
                         message_text = (
                             f"<b>{user_to_unmute.first_name}</b> <code> was muted indefinitely</code>"
@@ -807,7 +871,10 @@ async def mute_command(client: Client, message: Message):
 @Client.on_message(filters.command(["demote"], prefix) & filters.me)
 async def demote_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         if message.reply_to_message.from_user:
             try:
                 await client.promote_chat_member(
@@ -883,7 +950,10 @@ async def demote_command(client: Client, message: Message):
 @Client.on_message(filters.command(["promote"], prefix) & filters.me)
 async def promote_command(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         if message.reply_to_message.from_user:
             try:
                 await client.promote_chat_member(
@@ -991,7 +1061,10 @@ async def anti_channels(client: Client, message: Message):
 @Client.on_message(filters.command(["delete_history", "dh"], prefix))
 async def delete_history(client: Client, message: Message):
     cause = text(message)
-    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+    if message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
         if message.reply_to_message.from_user:
             try:
                 user_for_delete, name = await get_user_and_name(message)
@@ -1127,7 +1200,9 @@ async def ro(client: Client, message: Message):
         db.set("core.ats", f"ro{message.chat.id}", perms_list)
 
         try:
-            await client.set_chat_permissions(message.chat.id, ChatPermissions())
+            await client.set_chat_permissions(
+                message.chat.id, ChatPermissions()
+            )
         except (UserAdminInvalid, ChatAdminRequired):
             await message.edit("<b>No rights</b>")
         else:
@@ -1201,7 +1276,9 @@ async def antiraid(client: Client, message: Message):
             db.set("core.ats", f"antiraid{message.chat.id}", True)
             group = await client.get_chat(message.chat.id)
             if group.linked_chat:
-                db.set("core.ats", f"linked{message.chat.id}", group.linked_chat.id)
+                db.set(
+                    "core.ats", f"linked{message.chat.id}", group.linked_chat.id
+                )
             else:
                 db.set("core.ats", f"linked{message.chat.id}", 0)
             await message.edit(

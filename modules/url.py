@@ -29,12 +29,16 @@ async def short(_, message: Message):
     elif message.reply_to_message:
         link = message.reply_to_message.text
     else:
-        await message.edit(f"<b>Usage: </b><code>{prefix}short [url to short]</code>")
+        await message.edit(
+            f"<b>Usage: </b><code>{prefix}short [url to short]</code>"
+        )
         return
 
     shortened = requests.get("https://clck.ru/--", data={"url": link}).text
 
-    await message.edit(shortened.replace("https://", ""), disable_web_page_preview=True)
+    await message.edit(
+        shortened.replace("https://", ""), disable_web_page_preview=True
+    )
 
 
 @Client.on_message(filters.command("urldl", prefix) & filters.me)
@@ -89,7 +93,9 @@ async def upload_cmd(_, message: Message):
             return
 
     if os.path.getsize(file_name) > max_size:
-        await message.edit(f"<b>Files longer than {max_size_mb}MB isn't supported</b>")
+        await message.edit(
+            f"<b>Files longer than {max_size_mb}MB isn't supported</b>"
+        )
         os.remove(file_name)
         return
 
@@ -104,7 +110,8 @@ async def upload_cmd(_, message: Message):
         file_size_mb = os.path.getsize(file_name) / 1024 / 1024
         file_age = int(
             min_file_age
-            + (max_file_age - min_file_age) * ((1 - (file_size_mb / max_size_mb)) ** 2)
+            + (max_file_age - min_file_age)
+            * ((1 - (file_size_mb / max_size_mb)) ** 2)
         )
         url = response.text.replace("https://", "")
         await message.edit(
@@ -123,7 +130,9 @@ async def webshot(client: Client, message: Message):
         user_link = message.command[1]
         await message.delete()
         full_link = f"https://webshot.deam.io/{user_link}/?delay=2000"
-        await client.send_document(message.chat.id, full_link, caption=f"{user_link}")
+        await client.send_document(
+            message.chat.id, full_link, caption=f"{user_link}"
+        )
     except Exception as e:
         await message.edit(format_exc(e))
 

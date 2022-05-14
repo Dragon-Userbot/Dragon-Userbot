@@ -44,7 +44,9 @@ async def quote_cmd(client: Client, message: types.Message):
     messages = []
 
     async for msg in client.iter_history(
-        message.chat.id, offset_id=message.reply_to_message.message_id, reverse=True
+        message.chat.id,
+        offset_id=message.reply_to_message.message_id,
+        reverse=True,
     ):
         if msg.empty:
             continue
@@ -67,7 +69,9 @@ async def quote_cmd(client: Client, message: types.Message):
     url = "https://quotes.fl1yd.su/generate"
     params = {
         "messages": [
-            await render_message(client, msg) for msg in messages if not msg.empty
+            await render_message(client, msg)
+            for msg in messages
+            if not msg.empty
         ],
         "quote_color": "#162330",
         "text_color": "#fff",
@@ -270,10 +274,14 @@ async def render_message(app: Client, message: types.Message) -> dict:
     else:
         author["id"] = message.sender_chat.id
         author["name"] = message.sender_chat.title
-        author["rank"] = "channel" if message.sender_chat.type == "channel" else ""
+        author["rank"] = (
+            "channel" if message.sender_chat.type == "channel" else ""
+        )
 
         if message.sender_chat.photo:
-            author["avatar"] = await get_file(message.sender_chat.photo.big_file_id)
+            author["avatar"] = await get_file(
+                message.sender_chat.photo.big_file_id
+            )
         else:
             author["avatar"] = ""
     author["via_bot"] = message.via_bot.username if message.via_bot else ""
@@ -333,7 +341,8 @@ def get_reply_text(reply: types.Message) -> str:
         if reply.video_note
         else "🎵 Voice"
         if reply.voice
-        else (reply.sticker.emoji + " " if reply.sticker.emoji else "") + "Sticker"
+        else (reply.sticker.emoji + " " if reply.sticker.emoji else "")
+        + "Sticker"
         if reply.sticker
         else "💾 File " + reply.document.file_name
         if reply.document
@@ -395,7 +404,9 @@ def get_poll_text(poll: types.Poll) -> str:
 
 def get_reply_poll_text(poll: types.Poll) -> str:
     if poll.is_anonymous:
-        text = "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
+        text = (
+            "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
+        )
     else:
         text = "📊 Poll" if poll.type == "regular" else "📊 Quiz"
     if poll.is_closed:

@@ -18,7 +18,13 @@ from pyrogram.types import Message
 import random
 import datetime
 
-from utils.misc import modules_help, prefix, userbot_version, python_version, gitrepo
+from utils.misc import (
+    modules_help,
+    prefix,
+    userbot_version,
+    python_version,
+    gitrepo,
+)
 
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
@@ -26,7 +32,9 @@ async def support(_, message: Message):
     devs = ["@john_phonk", "@thefsch", "@nalinor"]
     random.shuffle(devs)
 
-    commands_count = float(len([cmd for module in modules_help for cmd in module]))
+    commands_count = float(
+        len([cmd for module in modules_help for cmd in module])
+    )
 
     await message.edit(
         f"<b>Dragon-Userbot\n\n"

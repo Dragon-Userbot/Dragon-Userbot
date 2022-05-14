@@ -25,7 +25,9 @@ anti_pm_enabled = filters.create(
     lambda _, __, ___: db.get("core.antipm", "status", False)
 )
 
-in_contact_list = filters.create(lambda _, __, message: message.from_user.is_contact)
+in_contact_list = filters.create(
+    lambda _, __, message: message.from_user.is_contact
+)
 
 is_support = filters.create(lambda _, __, message: message.chat.is_support)
 
@@ -92,7 +94,9 @@ async def antipm_report(_, message: Message):
         db.set("core.antipm", "spamrep", False)
         await message.edit("<b>Spam-reporting disabled!</b>")
     else:
-        await message.edit(f"<b>Usage: {prefix}antipm_report [enable|disable]</b>")
+        await message.edit(
+            f"<b>Usage: {prefix}antipm_report [enable|disable]</b>"
+        )
 
 
 @Client.on_message(filters.command(["antipm_block"], prefix) & filters.me)
@@ -115,7 +119,9 @@ async def antipm_block(_, message: Message):
         db.set("core.antipm", "block", False)
         await message.edit("<b>Blocking users disabled!</b>")
     else:
-        await message.edit(f"<b>Usage: {prefix}antipm_block [enable|disable]</b>")
+        await message.edit(
+            f"<b>Usage: {prefix}antipm_block [enable|disable]</b>"
+        )
 
 
 modules_help["antipm"] = {

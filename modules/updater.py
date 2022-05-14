@@ -69,7 +69,15 @@ async def update(_, message: Message):
         subprocess.run([sys.executable, "-m", "pip", "install", "-U", "pip"])
         subprocess.run(["git", "pull"])
         subprocess.run(
-            [sys.executable, "-m", "pip", "install", "-U", "-r", "requirements.txt"]
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "-U",
+                "-r",
+                "requirements.txt",
+            ]
         )
         subprocess.run(
             [sys.executable, "-m", "pip", "install", "-U", *requirements_list]

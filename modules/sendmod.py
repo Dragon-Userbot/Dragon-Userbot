@@ -20,7 +20,11 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
-from utils.scripts import format_exc, format_module_help, format_small_module_help
+from utils.scripts import (
+    format_exc,
+    format_module_help,
+    format_small_module_help,
+)
 
 
 @Client.on_message(filters.command(["sendmod", "sm"], prefix) & filters.me)
@@ -40,7 +44,9 @@ async def sendmod(client: Client, message: Message):
                 await client.send_document(
                     message.chat.id, f"modules/{module_name}.py", caption=text
                 )
-            elif os.path.isfile(f"modules/custom_modules/{module_name.lower()}.py"):
+            elif os.path.isfile(
+                f"modules/custom_modules/{module_name.lower()}.py"
+            ):
                 await client.send_document(
                     message.chat.id,
                     f"modules/custom_modules/{module_name}.py",

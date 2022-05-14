@@ -101,7 +101,9 @@ if __name__ == "__main__":
         else:
             success_modules += 1
 
-    logging.info(f"Imported {success_handlers} handlers from {success_modules} modules")
+    logging.info(
+        f"Imported {success_handlers} handlers from {success_modules} modules"
+    )
     if failed_modules:
         logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
@@ -123,7 +125,10 @@ if __name__ == "__main__":
         db.set(
             "core.sessionkiller",
             "auths_hashes",
-            [auth.hash for auth in app.send(GetAuthorizations()).authorizations],
+            [
+                auth.hash
+                for auth in app.send(GetAuthorizations()).authorizations
+            ],
         )
 
     logging.info("Dragon-Userbot started!")

@@ -23,7 +23,8 @@ from utils.misc import modules_help, prefix
 
 
 @Client.on_message(
-    filters.command(["sp", "setprefix", "setprefix_dragon"], prefix) & filters.me
+    filters.command(["sp", "setprefix", "setprefix_dragon"], prefix)
+    & filters.me
 )
 async def setprefix(_, message: Message):
     if len(message.command) > 1:

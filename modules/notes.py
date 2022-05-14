@@ -106,7 +106,9 @@ async def save_note(client: Client, message: Message):
         else:
             await message.edit("<b>This note already exists</b>")
     else:
-        await message.edit(f"<b>Example: <code>{prefix}save note_name</code></b>")
+        await message.edit(
+            f"<b>Example: <code>{prefix}save note_name</code></b>"
+        )
 
 
 @Client.on_message(filters.command(["note"], prefix) & filters.me)
@@ -138,10 +140,14 @@ async def note_send(client: Client, message: Message):
                     if _.photo:
                         if _.caption:
                             media_grouped_list.append(
-                                InputMediaPhoto(_.photo.file_id, _.caption.markdown)
+                                InputMediaPhoto(
+                                    _.photo.file_id, _.caption.markdown
+                                )
                             )
                         else:
-                            media_grouped_list.append(InputMediaPhoto(_.photo.file_id))
+                            media_grouped_list.append(
+                                InputMediaPhoto(_.photo.file_id)
+                            )
                     elif _.video:
                         if _.caption:
                             if _.video.thumbs:
@@ -154,7 +160,9 @@ async def note_send(client: Client, message: Message):
                                 )
                             else:
                                 media_grouped_list.append(
-                                    InputMediaVideo(_.video.file_id, _.caption.markdown)
+                                    InputMediaVideo(
+                                        _.video.file_id, _.caption.markdown
+                                    )
                                 )
                         elif _.video.thumbs:
                             media_grouped_list.append(
@@ -163,14 +171,20 @@ async def note_send(client: Client, message: Message):
                                 )
                             )
                         else:
-                            media_grouped_list.append(InputMediaVideo(_.video.file_id))
+                            media_grouped_list.append(
+                                InputMediaVideo(_.video.file_id)
+                            )
                     elif _.audio:
                         if _.caption:
                             media_grouped_list.append(
-                                InputMediaAudio(_.audio.file_id, _.caption.markdown)
+                                InputMediaAudio(
+                                    _.audio.file_id, _.caption.markdown
+                                )
                             )
                         else:
-                            media_grouped_list.append(InputMediaAudio(_.audio.file_id))
+                            media_grouped_list.append(
+                                InputMediaAudio(_.audio.file_id)
+                            )
                     elif _.document:
                         if _.caption:
                             if _.document.thumbs:
@@ -190,7 +204,8 @@ async def note_send(client: Client, message: Message):
                         elif _.document.thumbs:
                             media_grouped_list.append(
                                 InputMediaDocument(
-                                    _.document.file_id, _.document.thumbs[0].file_id
+                                    _.document.file_id,
+                                    _.document.thumbs[0].file_id,
                                 )
                             )
                         else:
@@ -204,7 +219,9 @@ async def note_send(client: Client, message: Message):
                         reply_to_message_id=message.reply_to_message.message_id,
                     )
                 else:
-                    await client.send_media_group(message.chat.id, media_grouped_list)
+                    await client.send_media_group(
+                        message.chat.id, media_grouped_list
+                    )
             elif message.reply_to_message:
                 await client.copy_message(
                     message.chat.id,
@@ -222,7 +239,9 @@ async def note_send(client: Client, message: Message):
         else:
             await message.edit("<b>There is no such note</b>")
     else:
-        await message.edit(f"<b>Example: <code>{prefix}note note_name</code></b>")
+        await message.edit(
+            f"<b>Example: <code>{prefix}note note_name</code></b>"
+        )
 
 
 @Client.on_message(filters.command(["notes"], prefix) & filters.me)
@@ -247,7 +266,9 @@ async def clear_note(_, message: Message):
         else:
             await message.edit("<b>There is no such note</b>")
     else:
-        await message.edit(f"<b>Example: <code>{prefix}clear note_name</code></b>")
+        await message.edit(
+            f"<b>Example: <code>{prefix}clear note_name</code></b>"
+        )
 
 
 modules_help["notes"] = {
