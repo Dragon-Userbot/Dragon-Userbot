@@ -13,15 +13,13 @@
 
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+import asyncio
 import os
-import sys
 import logging
 import sqlite3
 import platform
 import subprocess
 from pathlib import Path
-from importlib import import_module
 
 from pyrogram import Client, idle, errors
 from pyrogram.raw.functions.account import GetAuthorizations, DeleteAccount
@@ -29,14 +27,12 @@ from pyrogram.raw.functions.account import GetAuthorizations, DeleteAccount
 from utils import config
 from utils.db import db
 from utils.misc import gitrepo, userbot_version
-from utils.scripts import restart
-
-logging.basicConfig(level=logging.INFO)
-
-DeleteAccount.__new__ = None
+from utils.scripts import restart, load_module
 
 
-if __name__ == "__main__":
+async def main():
+    logging.basicConfig(level=logging.INFO)
+    DeleteAccount.__new__ = None
     script_path = os.path.dirname(os.path.realpath(__file__))
     if script_path != os.getcwd():
         os.chdir(script_path)
@@ -56,7 +52,7 @@ if __name__ == "__main__":
     )
 
     try:
-        app.start()
+        await app.start()
     except sqlite3.OperationalError as e:
         if str(e) == "database is locked" and os.name == "posix":
             logging.warning(
@@ -73,41 +69,30 @@ if __name__ == "__main__":
         os.rename("./my_account.session", "./my_account.session-old")
         restart()
 
-    success_handlers = 0
-    failed_handlers = 0
     success_modules = 0
     failed_modules = 0
 
-    for path in sorted(Path("modules").rglob("*.py")):
-        module_path = ".".join(path.parent.parts + (path.stem,))
+    for path in Path("modules").rglob("*.py"):
         try:
-            module = import_module(module_path)
-            for name, obj in vars(module).items():
-                # defaulting to [] if obj isn't a function-handler
-                for handler, group in getattr(obj, "handlers", []):
-                    try:
-                        app.add_handler(handler, group)
-                        success_handlers += 1
-                    except Exception as e:
-                        failed_handlers += 1
-                        logging.warning(
-                            f"Can't add {module_path}.{name}.{handler.__name__}: {e.__class__.__name__}: {e}"
-                        )
-        except Exception as e:
+            await load_module(
+                path.stem,
+                app,
+                core="custom_modules" not in path.parent.parts
+            )
+        except Exception:
             logging.warning(
-                f"Can't import module {module_path}: {e.__class__.__name__}: {e}"
+                f"Can't import module {path.stem}",
+                exc_info=True
             )
             failed_modules += 1
         else:
             success_modules += 1
 
     logging.info(
-        f"Imported {success_handlers} handlers from {success_modules} modules"
+        f"Imported {success_modules} modules"
     )
     if failed_modules:
         logging.warning(f"Failed to import {failed_modules} modules")
-    if failed_handlers:
-        logging.warning(f"Failed to add {failed_handlers} to handlers")
 
     if info := db.get("core.updater", "restart_info"):
         text = {
@@ -115,7 +100,7 @@ if __name__ == "__main__":
             "update": "<b>Update process completed!</b>",
         }[info["type"]]
         try:
-            app.edit_message_text(info["chat_id"], info["message_id"], text)
+            await app.edit_message_text(info["chat_id"], info["message_id"], text)
         except errors.RPCError:
             pass
         db.remove("core.updater", "restart_info")
@@ -127,12 +112,16 @@ if __name__ == "__main__":
             "auths_hashes",
             [
                 auth.hash
-                for auth in app.send(GetAuthorizations()).authorizations
+                for auth in (await app.send(GetAuthorizations())).authorizations
             ],
         )
 
     logging.info("Dragon-Userbot started!")
 
-    idle()
+    await idle()
 
-    app.stop()
+    await app.stop()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

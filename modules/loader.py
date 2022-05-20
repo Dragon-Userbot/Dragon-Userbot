@@ -14,37 +14,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import hashlib
 import os
-from importlib import import_module, invalidate_caches
 
 import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from utils.scripts import restart, format_exc, format_module_help
+from utils.scripts import restart, format_exc, format_module_help, load_module, unload_module
 from utils.misc import modules_help, prefix
 
-
 BASE_PATH = os.path.abspath(os.getcwd())
-
-
-@Client.on_message(filters.command(["modhash", "mh"], prefix) & filters.me)
-async def get_mod_hash(_, message: Message):
-    if len(message.command) == 1:
-        return
-    url = message.command[1].lower()
-    resp = requests.get(url)
-    if not resp.ok:
-        await message.edit(
-            f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
-        )
-        return
-
-    await message.edit(
-        f"<b>Module hash: <code>{hashlib.sha256(resp.content).hexdigest()}</code>\n"
-        f"Link: <code>{url}</code>\nFile: <code>{url.split('/')[-1]}</code></b>"
-    )
 
 
 @Client.on_message(filters.command(["loadmod", "lm"], prefix) & filters.me)
@@ -53,37 +32,8 @@ async def loadmod(client: Client, message: Message):
         await message.edit("<b>Specify module to download</b>")
         return
 
-    url = message.command[1].lower()
-
-    if url.startswith(
-        "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
-    ):
-        module_name = url.split("/")[-1].split(".")[0]
-    elif "/" not in url and "." not in url:
-        module_name = url.lower()
-        url = f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}.py"
-    else:
-        modules_hashes = requests.get(
-            "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/modules_hashes.txt"
-        ).text
-        resp = requests.get(url)
-
-        if not resp.ok:
-            await message.edit(
-                f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
-            )
-            return
-
-        if hashlib.sha256(resp.content).hexdigest() not in modules_hashes:
-            return await message.edit(
-                "<b>Only <a href=https://github.com/Dragon-Userbot/custom_modules/tree/main/modules_hashes.txt>"
-                "verified</a> modules or from the official "
-                "<a href=https://github.com/Dragon-Userbot/custom_modules>"
-                "custom_modules</a> repository are supported!</b>",
-                disable_web_page_preview=True,
-            )
-
-        module_name = url.split("/")[-1].split(".")[0]
+    module_name = message.command[1].lower()
+    url = f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}.py"
 
     resp = requests.get(url)
     if not resp.ok:
@@ -95,23 +45,11 @@ async def loadmod(client: Client, message: Message):
     if not os.path.exists(f"{BASE_PATH}/modules/custom_modules"):
         os.mkdir(f"{BASE_PATH}/modules/custom_modules")
 
-    if module_name in modules_help:
-        # Unload module before updating it
-
-        module = import_module(f"modules.custom_modules.{module_name}")
-        for name, obj in vars(module).items():
-            for handler, group in getattr(obj, "handlers", []):
-                client.remove_handler(handler, group)
-        invalidate_caches()
-
     with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
         f.write(resp.content)
 
     try:
-        module = import_module(f"modules.custom_modules.{module_name}")
-        for name, obj in vars(module).items():
-            for handler, group in getattr(obj, "handlers", []):
-                client.add_handler(handler, group)
+        module = await load_module(module_name, client, message)
     except Exception as e:
         return await message.edit(format_exc(e))
 
@@ -129,16 +67,15 @@ async def unload_mods(client: Client, message: Message):
     module_name = message.command[1].lower()
 
     if module_name.startswith(
-        "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
+            "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
     ):
         module_name = module_name.split("/")[-1].split(".")[0]
 
     if os.path.exists(f"{BASE_PATH}/modules/custom_modules/{module_name}.py"):
-        module = import_module(f"modules.custom_modules.{module_name}")
-        for name, obj in vars(module).items():
-            for handler, group in getattr(obj, "handlers", []):
-                client.remove_handler(handler, group)
-        del modules_help[module_name]
+        try:
+            await unload_module(module_name, client)
+        except Exception as e:
+            return await message.edit(format_exc(e))
 
         os.remove(f"{BASE_PATH}/modules/custom_modules/{module_name}.py")
         await message.edit(
@@ -170,7 +107,7 @@ async def load_all_mods(client: Client, message: Message):
         if not module_info["name"].endswith(".py"):
             continue
         if os.path.exists(
-            f'{BASE_PATH}/modules/custom_modules/{module_info["name"]}'
+                f'{BASE_PATH}/modules/custom_modules/{module_info["name"]}'
         ):
             continue
         new_modules[module_info["name"][:-3]] = module_info["download_url"]
@@ -186,16 +123,11 @@ async def load_all_mods(client: Client, message: Message):
         with open(f"./modules/custom_modules/{module_name}.py", "wb") as f:
             f.write(requests.get(url).content)
 
-        module = import_module(f"modules.custom_modules.{module_name}")
-
-        for name, obj in vars(module).items():
-            for handler, group in getattr(obj, "handlers", []):
-                client.add_handler(handler, group)
+        await load_module(module_name, client)
 
     await message.edit(
         f'<b>Successfully loaded new modules: {" ".join(new_modules.keys())}</b>'
     )
-    restart()
 
 
 @Client.on_message(filters.command(["updateallmods"], prefix) & filters.me)
@@ -235,11 +167,11 @@ async def updateallmods(_, message: Message):
 
 
 modules_help["loader"] = {
-    "loadmod [module_name]*": "Download module.\n"
-    "Only modules from the official custom_modules repository and proven "
-    "modules whose hashes are in modules_hashes.txt are supported",
+    "loadmod [module_name]*": (
+        "Download module.\n"
+        "Only modules from the official custom_modules repository are supported"
+    ),
     "unloadmod [module_name]*": "Delete module",
-    "modhash [link]*": "Get module hash by link",
     "loadallmods": "Load all custom modules (use it at your own risk)",
     "updateallmods": "Update all loaded custom modules",
 }

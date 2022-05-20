@@ -13,32 +13,40 @@
 
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import asyncio
-import os
-import sys
-from io import BytesIO
 
-from PIL import Image
+import os
+import re
+import sys
+import asyncio
+import traceback
 import importlib
 import subprocess
+from io import BytesIO
+from types import ModuleType
+from typing import Dict
 
+from PIL import Image
 from pyrogram import Client, errors, types
-import traceback
+
 from .misc import modules_help, prefix, requirements_list
 
+META_COMMENTS = re.compile(r"^ *# *meta +(\S+) *: *(.*?)\s*$", re.MULTILINE)
+interact_with_to_delete = []
 
-def text(message: types.Message):
+
+def text(message: types.Message) -> str:
+    """Find text in `types.Message` object"""
     return message.text if message.text else message.caption
 
 
-def restart():
+def restart() -> None:
     if "LAVHOST" in os.environ:
         os.system("lavhost restart")
-        return
-    os.execvp(sys.executable, [sys.executable, "main.py"])
+    else:
+        os.execvp(sys.executable, [sys.executable, "main.py"])
 
 
-def format_exc(e: Exception, suffix=""):
+def format_exc(e: Exception, suffix="") -> str:
     traceback.print_exc()
     if isinstance(e, errors.RPCError):
         return (
@@ -92,9 +100,6 @@ async def interact_with(message: types.Message) -> types.Message:
     return response[0]
 
 
-interact_with_to_delete = []
-
-
 def format_module_help(module_name: str, full=True):
     commands = modules_help[module_name]
 
@@ -146,7 +151,7 @@ def import_library(library_name: str, package_name: str = None):
         return importlib.import_module(library_name)
     except ImportError:
         completed = subprocess.run(
-            ["python3", "-m", "pip", "install", package_name]
+            [sys.executable, "-m", "pip", "install", package_name]
         )
         if completed.returncode != 0:
             raise AssertionError(
@@ -173,3 +178,96 @@ def resize_image(input_img, output=None, img_type="PNG"):
         img.resize(size).save(output, img_type)
 
     return output
+
+
+async def load_module(
+        module_name: str, client: Client, message: types.Message = None, core=False,
+) -> ModuleType:
+    if module_name in modules_help and not core:
+        await unload_module(module_name, client)
+
+    with open(f"modules/custom_modules/{module_name}.py") as f:
+        code = f.read()
+    meta = parse_meta_comments(code)
+
+    packages = meta.get("requires", "").split()
+    requirements_list.extend(packages)
+
+    path = f"modules.{'custom_modules.' if not core else ''}{module_name}"
+    try:
+        module = importlib.import_module(path)
+    except ImportError as e:
+        if core:
+            # Core modules shouldn't raise ImportError
+            raise
+
+        if not packages:
+            raise
+
+        if message:
+            await message.edit(f"<b>Installing requirements: {' '.join(packages)}</b>")
+
+        proc = await asyncio.create_subprocess_exec(
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "-U",
+            *packages,
+        )
+        try:
+            await asyncio.wait_for(proc.wait(), timeout=120)
+        except asyncio.TimeoutError:
+            if message:
+                await message.edit(
+                    "<b>Timeout while installed requirements. Try to install them manually</b>"
+                )
+            raise TimeoutError("timeout while installing requirements") from e
+
+        if proc.returncode != 0:
+            if message:
+                await message.edit(
+                    f"<b>Failed to install requirements (pip exited with code {proc.returncode}). "
+                    f"Check logs for futher info</b>"
+                )
+            raise RuntimeError("failed to install requirements") from e
+
+        module = importlib.import_module(path)
+
+    for name, obj in vars(module).items():
+        for handler, group in getattr(obj, "handlers", []):
+            client.add_handler(handler, group)
+
+    module.__meta__ = meta
+
+    return module
+
+
+async def unload_module(module_name: str, client: Client) -> bool:
+    path = "modules.custom_modules." + module_name
+    if path not in sys.modules:
+        return False
+
+    module = importlib.import_module(path)
+
+    for name, obj in vars(module).items():
+        for handler, group in getattr(obj, "handlers", []):
+            client.remove_handler(handler, group)
+
+    del modules_help[module_name]
+    del sys.modules[path]
+    
+    return True
+
+
+def parse_meta_comments(code: str) -> Dict[str, str]:
+    try:
+        groups = META_COMMENTS.search(code).groups()
+    except AttributeError:
+        return {}
+
+    return {
+        groups[i]: groups[i + 1]
+        for i
+        in range(0, len(groups), 2)
+    }
