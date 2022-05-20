@@ -181,19 +181,23 @@ def resize_image(input_img, output=None, img_type="PNG"):
 
 
 async def load_module(
-        module_name: str, client: Client, message: types.Message = None, core=False,
+    module_name: str,
+    client: Client,
+    message: types.Message = None,
+    core=False,
 ) -> ModuleType:
     if module_name in modules_help and not core:
         await unload_module(module_name, client)
 
-    with open(f"modules/custom_modules/{module_name}.py") as f:
+    path = f"modules.{'custom_modules.' if not core else ''}{module_name}"
+
+    with open(f"{path.replace('.', '/')}.py") as f:
         code = f.read()
     meta = parse_meta_comments(code)
 
     packages = meta.get("requires", "").split()
     requirements_list.extend(packages)
 
-    path = f"modules.{'custom_modules.' if not core else ''}{module_name}"
     try:
         module = importlib.import_module(path)
     except ImportError as e:
@@ -205,7 +209,9 @@ async def load_module(
             raise
 
         if message:
-            await message.edit(f"<b>Installing requirements: {' '.join(packages)}</b>")
+            await message.edit(
+                f"<b>Installing requirements: {' '.join(packages)}</b>"
+            )
 
         proc = await asyncio.create_subprocess_exec(
             sys.executable,
@@ -256,7 +262,7 @@ async def unload_module(module_name: str, client: Client) -> bool:
 
     del modules_help[module_name]
     del sys.modules[path]
-    
+
     return True
 
 
@@ -266,8 +272,4 @@ def parse_meta_comments(code: str) -> Dict[str, str]:
     except AttributeError:
         return {}
 
-    return {
-        groups[i]: groups[i + 1]
-        for i
-        in range(0, len(groups), 2)
-    }
+    return {groups[i]: groups[i + 1] for i in range(0, len(groups), 2)}

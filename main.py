@@ -75,22 +75,15 @@ async def main():
     for path in Path("modules").rglob("*.py"):
         try:
             await load_module(
-                path.stem,
-                app,
-                core="custom_modules" not in path.parent.parts
+                path.stem, app, core="custom_modules" not in path.parent.parts
             )
         except Exception:
-            logging.warning(
-                f"Can't import module {path.stem}",
-                exc_info=True
-            )
+            logging.warning(f"Can't import module {path.stem}", exc_info=True)
             failed_modules += 1
         else:
             success_modules += 1
 
-    logging.info(
-        f"Imported {success_modules} modules"
-    )
+    logging.info(f"Imported {success_modules} modules")
     if failed_modules:
         logging.warning(f"Failed to import {failed_modules} modules")
 
@@ -100,7 +93,9 @@ async def main():
             "update": "<b>Update process completed!</b>",
         }[info["type"]]
         try:
-            await app.edit_message_text(info["chat_id"], info["message_id"], text)
+            await app.edit_message_text(
+                info["chat_id"], info["message_id"], text
+            )
         except errors.RPCError:
             pass
         db.remove("core.updater", "restart_info")

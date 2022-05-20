@@ -20,7 +20,13 @@ import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from utils.scripts import restart, format_exc, format_module_help, load_module, unload_module
+from utils.scripts import (
+    restart,
+    format_exc,
+    format_module_help,
+    load_module,
+    unload_module,
+)
 from utils.misc import modules_help, prefix
 
 BASE_PATH = os.path.abspath(os.getcwd())
@@ -66,11 +72,6 @@ async def unload_mods(client: Client, message: Message):
 
     module_name = message.command[1].lower()
 
-    if module_name.startswith(
-            "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/"
-    ):
-        module_name = module_name.split("/")[-1].split(".")[0]
-
     if os.path.exists(f"{BASE_PATH}/modules/custom_modules/{module_name}.py"):
         try:
             await unload_module(module_name, client)
@@ -107,7 +108,7 @@ async def load_all_mods(client: Client, message: Message):
         if not module_info["name"].endswith(".py"):
             continue
         if os.path.exists(
-                f'{BASE_PATH}/modules/custom_modules/{module_info["name"]}'
+            f'{BASE_PATH}/modules/custom_modules/{module_info["name"]}'
         ):
             continue
         new_modules[module_info["name"][:-3]] = module_info["download_url"]
