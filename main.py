@@ -29,27 +29,28 @@ from utils.db import db
 from utils.misc import gitrepo, userbot_version
 from utils.scripts import restart, load_module
 
+script_path = os.path.dirname(os.path.realpath(__file__))
+if script_path != os.getcwd():
+    os.chdir(script_path)
+
+app = Client(
+    "my_account",
+    api_id=config.api_id,
+    api_hash=config.api_hash,
+    hide_password=True,
+    workdir=script_path,
+    app_version=userbot_version,
+    device_model=f"Dragon-Userbot @ {gitrepo.head.commit.hexsha[:7]}",
+    system_version=platform.version() + " " + platform.machine(),
+    sleep_threshold=30,
+    test_mode=config.test_server,
+    parse_mode="html",
+)
+
 
 async def main():
     logging.basicConfig(level=logging.INFO)
     DeleteAccount.__new__ = None
-    script_path = os.path.dirname(os.path.realpath(__file__))
-    if script_path != os.getcwd():
-        os.chdir(script_path)
-
-    app = Client(
-        "my_account",
-        api_id=config.api_id,
-        api_hash=config.api_hash,
-        hide_password=True,
-        workdir=script_path,
-        app_version=userbot_version,
-        device_model=f"Dragon-Userbot @ {gitrepo.head.commit.hexsha[:7]}",
-        system_version=platform.version() + " " + platform.machine(),
-        sleep_threshold=30,
-        test_mode=config.test_server,
-        parse_mode="html",
-    )
 
     try:
         await app.start()
@@ -119,4 +120,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    app.run(main())

@@ -18,6 +18,15 @@ from sys import version_info
 from .db import db
 from git import Repo
 
+__all__ = [
+    "modules_help",
+    "requirements_list",
+    "python_version",
+    "prefix",
+    "gitrepo",
+    "userbot_version",
+]
+
 
 class ModulesHelp(dict):
     def __setitem__(self, key, value):

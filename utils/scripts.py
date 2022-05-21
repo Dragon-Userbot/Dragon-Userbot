@@ -191,7 +191,7 @@ async def load_module(
 
     path = f"modules.{'custom_modules.' if not core else ''}{module_name}"
 
-    with open(f"{path.replace('.', '/')}.py") as f:
+    with open(f"{path.replace('.', '/')}.py", encoding="utf-8") as f:
         code = f.read()
     meta = parse_meta_comments(code)
 
