@@ -59,6 +59,7 @@ async def loadmod(client: Client, message: Message):
     try:
         module = await load_module(module_name, client, message)
     except Exception as e:
+        os.remove(f"./modules/custom_modules/{module_name}.py")
         return await message.edit(format_exc(e))
 
     await message.edit(
