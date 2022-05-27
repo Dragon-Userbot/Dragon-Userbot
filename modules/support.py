@@ -79,7 +79,7 @@ async def version(client: Client, message: Message):
         f"Changelogs are written by </b><i>"
         f"<a href=tg://user?id=318865588>\u2060</a>"
         f"<a href=tg://user?id=293490416>♿️</a>"
-        f"<a href=https://t.me/LKRinternationalrunetcomphinc>asphuy</a>"
+        f"<a href=https://t.me/acnxua>asphuy</a>"
         f"<a href=https://t.me/artemjj2>♿️</a></i>\n\n"
         + (
             f"<b>Branch: <a href={remote_url}/tree/{gitrepo.active_branch}>{gitrepo.active_branch}</a>\n"
