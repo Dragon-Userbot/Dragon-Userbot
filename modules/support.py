@@ -29,7 +29,7 @@ from utils.misc import (
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
 async def support(_, message: Message):
-    devs = ["@john_phonk", "@thefsch", "@nalinor"]
+    devs = ["@john_phonk", "@fuccsoc", "@nalinor"]
     random.shuffle(devs)
 
     commands_count = float(
