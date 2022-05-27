@@ -28,6 +28,7 @@ from utils.scripts import (
     unload_module,
 )
 from utils.misc import modules_help, prefix
+from utils.config import modules_repo_branch
 
 BASE_PATH = os.path.abspath(os.getcwd())
 
@@ -39,9 +40,10 @@ async def loadmod(client: Client, message: Message):
         return
 
     module_name = message.command[1].lower()
-    url = f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}.py"
-
-    resp = requests.get(url)
+    resp = requests.get(
+        "https://raw.githubusercontent.com/Dragon-Userbot"
+        f"/custom_modules/{modules_repo_branch}/{module_name}.py"
+    )
     if not resp.ok:
         await message.edit(
             f"<b>Module <code>{module_name}</code> is not found</b>"
@@ -100,7 +102,8 @@ async def load_all_mods(client: Client, message: Message):
         os.mkdir(f"{BASE_PATH}/modules/custom_modules")
 
     modules_list = requests.get(
-        "https://api.github.com/repos/Dragon-Userbot/custom_modules/contents/"
+        "https://api.github.com/repos/Dragon-Userbot/custom_modules/contents/",
+        params={"ref": modules_repo_branch},
     ).json()
 
     new_modules = {}
@@ -148,7 +151,8 @@ async def updateallmods(_, message: Message):
             continue
 
         resp = requests.get(
-            f"https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main/{module_name}"
+            "https://raw.githubusercontent.com/Dragon-Userbot/"
+            f"custom_modules/{modules_repo_branch}/{module_name}"
         )
         if not resp.ok:
             modules_installed.remove(module_name)
