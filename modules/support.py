@@ -23,7 +23,7 @@ from utils.misc import modules_help, prefix, userbot_version, python_version, gi
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
 async def support(_, message: Message):
-    devs = ["@john_phonk", "@thefsch", "@nalinor"]
+    devs = ["@john_phonk", "@nalinor"]
     random.shuffle(devs)
 
     commands_count = 0.0
