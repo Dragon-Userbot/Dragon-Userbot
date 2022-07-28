@@ -22,7 +22,7 @@ from utils import config
 
 if __name__ == "__main__":
     app = Client(
-        "my_account",
+        name="my_account",
         api_id=config.api_id,
         api_hash=config.api_hash,
         hide_password=True,
