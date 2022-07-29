@@ -6,7 +6,7 @@ from utils.misc import modules_help, prefix
 from utils.db import db
 
 
-@Client.on_message(filters.channel & ~filters.edited)
+@Client.on_message(filters.channel)
 async def send_comment(client: Client, message: Message):
     enabled = db.get("custom.auto_comment", "enabled", False)
     with suppress(MsgIdInvalid):
