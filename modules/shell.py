@@ -52,7 +52,7 @@ async def shell(_, message: Message):
             text += "<b>Output:</b>\n" f"<code>{stdout}</code>\n\n"
         if stderr:
             text += "<b>Error:</b>\n" f"<code>{stderr}</code>\n\n"
-        text += f"<b>Completed in {round(stop_time - start_time, 5)} seconds with code {cmd_obj.returncode}</b>"
+        text += f"<b>Completed in {round(stop_time - start_time, 1000)} seconds with code {cmd_obj.returncode}</b>"
     await message.edit(text)
     cmd_obj.kill()
 
