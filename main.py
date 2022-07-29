@@ -140,8 +140,8 @@ if __name__ == "__main__":
         else:
             logging.info("config.log_chat done")
         app.send_message(
-            config.log_chat,
-            f"Online"
+            chat_id=config.log_chat,
+            text=f"Online memek"
         )
     except Exception as e:
         logging.warning(f"{e}")
