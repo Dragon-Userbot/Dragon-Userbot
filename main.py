@@ -143,6 +143,8 @@ if __name__ == "__main__":
             config.log_chat,
             f"aktip"
         )
+    except:
+        pass
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
         if restart_type == "1":
