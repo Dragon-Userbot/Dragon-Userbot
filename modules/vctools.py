@@ -4,7 +4,10 @@ from contextlib import suppress
 import ffmpeg
 from pyrogram import Client, filters
 from pyrogram.types import Message
-
+from pyrogram.raw.functions.channels import GetFullChannel
+from pyrogram.raw.functions.messages import GetFullChat
+from pyrogram.raw.functions.phone import CreateGroupCall, DiscardGroupCall
+from pyrogram.raw.types import InputGroupCall, InputPeerChannel, InputPeerChat
 from utils.misc import modules_help, prefix
 from utils.scripts import import_library, with_reply, restart
 
@@ -12,6 +15,23 @@ pytgcalls = import_library("pytgcalls")
 from pytgcalls import GroupCallFactory
 
 group_call = None
+
+
+async def get_group_call(
+    client: Client, message: Message, err_msg: str = ""
+) -> Optional[InputGroupCall]:
+    chat_peer = await app.resolve_peer(message.chat.id)
+    if isinstance(chat_peer, (InputPeerChannel, InputPeerChat)):
+        if isinstance(chat_peer, InputPeerChannel):
+            full_chat = (await client.send(GetFullChannel(channel=chat_peer))).full_chat
+        elif isinstance(chat_peer, InputPeerChat):
+            full_chat = (
+                await client.send(GetFullChat(chat_id=chat_peer.chat_id))
+            ).full_chat
+        if full_chat is not None:
+            return full_chat.call
+    await message.edit(f"<b>No group call Found</b> {err_msg}")
+    return False
 
 
 def get_text(message: Message) -> [None, str]:
@@ -75,20 +95,24 @@ async def volume(_, message):
 
 @Client.on_message(filters.command("joinvc", prefix) & filters.me)
 @init_client
-async def start(_, message: Message):
-    p = await message.edit("`Joining...`")
-    chat_id = get_text(message)
-    if chat_id == "":
-        chat_id = message.chat.id
-    else:
-        return
-    with suppress(ValueError):
-        chat_id = int(chat_id)
-    try:
-        await group_call.start(chat_id)
-        await p.edit("<b>Joining successfully!</b>")
-    except Exception as e:
-        await p.edit(f"<b>An unexpected error has occurred: <code>{e}</code></b>")
+async def joinvc(client: Client, message: Message):
+    kontol = get_text(message)
+    o = await message.reply("Processing...")
+    chat_id = message.chat.id
+    if not kontol:
+        try:
+            await group_call.start(chat_id)
+        except Exception as e:
+            return await o.edit(f"<b>ERROR:</b> <code>{e}</code>")
+        await o.edit(f"× Joined VC in: <code>{chat_id}</code>")
+    elif kontol:
+        try:
+            await group_call.start(kontol)
+        except Exception as e:
+            return await tai.edit(f"<b>ERROR:</b> <code>{e}</code>")
+        await o.edit(f"× Joined VC in: <code>{kontol}</code>")
+    await sleep(5)
+    await group_call.set_is_mute(True)
 
 
 @Client.on_message(filters.command("leavevc", prefix) & filters.me)
@@ -104,6 +128,39 @@ async def stop(_, message: Message):
             "the bot will be unavailable for the next 4 seconds</b>"
         )
         restart()
+
+@Client.on_message(filters.command(["startvc"], prefix) & filters.me)
+async def opengc(client: Client, message: Message):
+    flags = " ".join(message.command[1:])
+    k = await message edit("`Processing...`")
+    if flags == "channel":
+        chat_id = message.chat.title
+    else:
+        chat_id = message.chat.id
+    try:
+        await client.send(
+            CreateGroupCall(
+                peer=(await client.resolve_peer(chat_id)),
+                random_id=randint(10000, 999999999),
+            )
+        )
+        await k.edit(f"Started group call...")
+    except Exception as e:
+        await k.edit(f"<b>INFO:</b> <code>{e}</code>")
+
+
+@Client.on_message(filters.command(["stopvc"], prefix) & filters.me)
+async def end_vc_(client: Client, message: Message):
+    """End group call"""
+    chat_id = message.chat.id
+    if not (
+        group_call := (
+            await get_group_call(app, message, err_msg=", group callalready ended")
+        )
+    ):
+        return
+    await client.send(DiscardGroupCall(call=group_call))
+    await message.edit("Voice chat ended...")
 
 
 @Client.on_message(filters.command("stop", prefix) & filters.me)
