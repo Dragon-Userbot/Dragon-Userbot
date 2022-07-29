@@ -66,8 +66,10 @@ async def start(_, message: Message):
     p = await message.edit("`Joining...`")
     if len(message.command) > 1:
         chat_id = message.chat.id
+        return
     else:
         chat_id = message.command[1]
+        return
     with suppress(ValueError):
         chat_id = int(chat_id)
     try:
