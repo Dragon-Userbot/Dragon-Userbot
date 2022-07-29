@@ -16,11 +16,12 @@ async def sosmed(client, message):
     bot = "thisvidbot"
     if tetek:
         try:
-            await client.send_message(bot, tetek)
+            y = await client.send_message(bot, tetek)
             await asyncio.sleep(5)
+            await y.delete()
         except Exception as e:
             return await client.send_message(client.me.id, f"{e}")
-    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=1):
+    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.EMPTY, limit=2):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
         await uh.delete()
         await turok.delete()
