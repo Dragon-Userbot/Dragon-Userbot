@@ -25,7 +25,7 @@ async def gmute(client, message):
     get_user = await client.get_users(user)
     gmuted_users = db.get("core.gmute", "gmuted_users", [])
     gmuted_users.append(get_user.id)
-    db.set("custom.gmute", "gmuted_users", gmuted_users)
+    db.set("core.gmute", "gmuted_users", gmuted_users)
     await message.edit(f"<b>Gmuted {get_user.first_name}, LOL!</b>")
 
 
@@ -44,14 +44,14 @@ async def ungmute(client, message):
         gmuted_users.remove(get_user.id)
     except ValueError:
         pass
-    db.set("custom.gmute", "gmuted_users", gmuted_users)
+    db.set("core.gmute", "gmuted_users", gmuted_users)
     await message.edit(f"<b>Unmuted {get_user.first_name}, enjoy!</b>")
 
 
 @Client.on_message(filters.group)
 async def check_and_del(_, message: Message):
     if message.from_user and message.from_user.id in db.get(
-        "custom.gmute", "gmuted_users", []
+        "core.gmute", "gmuted_users", []
     ):
         try:
             await message.delete()
@@ -72,7 +72,7 @@ async def gban(client, message):
     get_user = await client.get_users(user)
     gmuted_users = db.get("core.gban", "gbaned_users", [])
     gmuted_users.append(get_user.id)
-    db.set("custom.gban", "gbaned_users", gbaned_users)
+    db.set("core.gban", "gbaned_users", gbaned_users)
     await message.edit(f"<b>Gbanned {get_user.first_name}, LOL!</b>")
 
 
@@ -91,14 +91,14 @@ async def ungban(client, message):
         gmuted_users.remove(get_user.id)
     except ValueError:
         pass
-    db.set("custom.gban", "gbaned_users", gbaned_users)
+    db.set("core.gban", "gbaned_users", gbaned_users)
     await message.edit(f"<b>Ungbanned {get_user.first_name}, enjoy!</b>")
 
 
 @Client.on_message(filters.group)
 async def check_and_del(_, message: Message):
     if message.from_user and message.from_user.id in db.get(
-        "custom.gmute", "gbaned_users", []
+        "core.gmute", "gbaned_users", []
     ):
         try:
             await _.ban_member(message.chat.id, message.from_user.id)
