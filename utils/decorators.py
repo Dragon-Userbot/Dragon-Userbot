@@ -9,11 +9,12 @@ from pyrogram.errors import (
 from main import bot
 import asyncio
 
+k = bot.get_me()
 
 async def set_inline_in_botfather(Client: client):
     message = await Client.send_message("botfather", "/setinline")
     await asyncio.sleep(1)
-    await message.reply(f"@{bot.username}")
+    await message.reply(f"@{k.username}")
 
 
 def inline_check(func):
