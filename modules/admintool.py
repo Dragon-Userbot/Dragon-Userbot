@@ -406,18 +406,6 @@ async def kick_command(client: Client, message: Message):
         await message.edit("<b>Unsupported</b>")
 
 
-@Client.on_message(filters.command(["kickdel"], prefix) & filters.me)
-async def kickdel_cmd(_, message: Message):
-    await message.edit("<b>Kicking deleted accounts...</b>")
-    # noinspection PyTypeChecker
-    values = [
-        await message.chat.ban_member(user.user.id, int(time()) + 31)
-        for member in await message.chat.get_members()
-        if member.user.is_deleted
-    ]
-    await message.edit(f"<b>Successfully kicked {len(values)} deleted account(s)</b>")
-
-
 @Client.on_message(filters.command(["tmute"], prefix) & filters.me)
 async def tmute_command(client: Client, message: Message):
     cause = text(message)
@@ -602,7 +590,6 @@ async def unmute_command(client, message):
                     message.chat.id,
                     message.reply_to_message.from_user.id,
                     u_p,
-                    int(time() + 30),
                 )
                 await message.edit(
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code>unmuted</code>"
@@ -1250,7 +1237,5 @@ modules_help["admins"] = {
     "unro": "disable read-only mode",
     "antiraid [on|off]": "when enabled, anyone who writes message will be blocked. Useful in raids. "
     "Running without arguments equals to toggling state",
-    "welcome [text]*": "enable auto-welcome to new users in groups. "
     "Running without text equals to disable",
-    "kickdel": "Kick all deleted accounts",
 }
