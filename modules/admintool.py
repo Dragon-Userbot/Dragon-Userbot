@@ -336,7 +336,7 @@ async def kick_command(client: Client, message: Message):
                 )
 
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>kicked!</code>"
+                    f"<b>{message.reply_to_message.from_user.mention}</b> <code>kicked!</code>"
                     + f"\n{'<b>Cause:</b> <i>' + text_c.split(maxsplit=1)[1] + '</i>' if len(text_c.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
@@ -385,7 +385,7 @@ async def kick_command(client: Client, message: Message):
                         message.chat.id, user_to_ban.id, int(time() + 60)
                     )
                     await message.edit(
-                        f"<b>{user_to_ban.first_name}</b> <code>kicked!</code>"
+                        f"<b>{user_to_ban.mention}</b> <code>kicked!</code>"
                         + f"\n{'<b>Cause:</b> <i>' + text_c.split(' ', maxsplit=2)[2] + '</i>' if len(text_c.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
@@ -592,7 +592,7 @@ async def unmute_command(client, message):
                     u_p,
                 )
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>unmuted</code>"
+                    f"<b>{message.reply_to_message.from_user.mention}</b> <code>unmuted</code>"
                     + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
@@ -616,7 +616,7 @@ async def unmute_command(client, message):
                         message.chat.id, user_to_unmute.id, u_p, int(time() + 30)
                     )
                     await message.edit(
-                        f"<b>{user_to_unmute.first_name}</b> <code>unmuted!</code>"
+                        f"<b>{user_to_unmute.mention}</b> <code>unmuted!</code>"
                         + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
@@ -811,7 +811,7 @@ async def demote_command(client: Client, message: Message):
                     )
                 )
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>demoted!</code>"
+                    f"<b>{message.reply_to_message.from_user.mention}</b> <code>demoted!</code>"
                     + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
@@ -844,7 +844,7 @@ async def demote_command(client: Client, message: Message):
                         )
                     )
                     await message.edit(
-                        f"<b>{promote_user.first_name}</b> <code>demoted!</code>"
+                        f"<b>{promote_user.mention}</b> <code>demoted!</code>"
                         + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
@@ -889,7 +889,7 @@ async def promote_command(client: Client, message: Message):
                         cause.split(maxsplit=1)[1],
                     )
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>promoted!</code>"
+                    f"<b>{message.reply_to_message.from_user.mention}</b> <code>promoted!</code>"
                     + f"\n{'<b>Prefix:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
@@ -924,7 +924,89 @@ async def promote_command(client: Client, message: Message):
                             f"\n{cause.split(' ', maxsplit=2)[2] if len(cause.split()) > 2 else 'Admin'}",
                         )
                     await message.edit(
-                        f"<b>{promote_user.first_name}</b> <code>promoted!</code>"
+                        f"<b>{promote_user.mention}</b> <code>promoted!</code>"
+                        + f"\n{'<b>Prefix:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                    )
+                except UserAdminInvalid:
+                    await message.edit("<b>No rights</b>")
+                except ChatAdminRequired:
+                    await message.edit("<b>No rights</b>")
+                except Exception as e:
+                    await message.edit(format_exc(e))
+            except PeerIdInvalid:
+                await message.edit("<b>User is not found</b>")
+            except UsernameInvalid:
+                await message.edit("<b>User is not found</b>")
+            except IndexError:
+                await message.edit("<b>User is not found</b>")
+        else:
+            await message.edit("<b>user_id or username</b>")
+    else:
+        await message.edit("<b>Unsupported</b>")
+
+
+@Client.on_message(filters.command(["fullpromote"], prefix) & filters.me)
+async def fullpromote_command(client: Client, message: Message):
+    cause = text(message)
+    if message.reply_to_message and message.chat.type not in ["private", "channel"]:
+        if message.reply_to_message.from_user:
+            try:
+                await client.promote_chat_member(
+                    chat_id=message.chat.id,
+                    user_id=message.reply_to_message.from_user.id,
+                    privileges=ChatPrivilege(
+                        can_promote_members=True,
+                        can_delete_messages=True,
+                        can_restrict_members=True,
+                        can_invite_users=True,
+                        can_pin_messages=True,
+                        can_manage_video_chats=True,
+                    )
+                )
+                if len(cause.split()) > 1:
+                    await client.set_administrator_title(
+                        message.chat.id,
+                        message.reply_to_message.from_user.id,
+                        cause.split(maxsplit=1)[1],
+                    )
+                await message.edit(
+                    f"<b>{message.reply_to_message.from_user.mention}</b> <code>fullpromoted!</code>"
+                    + f"\n{'<b>Prefix:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
+                )
+            except UserAdminInvalid:
+                await message.edit("<b>No rights</b>")
+            except ChatAdminRequired:
+                await message.edit("<b>No rights</b>")
+            except Exception as e:
+                await message.edit(format_exc(e))
+    elif not message.reply_to_message and message.chat.type not in [
+        "private",
+        "channel",
+    ]:
+        if len(cause.split()) > 1:
+            try:
+                promote_user = await client.get_users(cause.split(" ")[1])
+                try:
+                    await client.promote_chat_member(
+                        chat_id=message.chat.id,
+                        user_id=promote_user.id,
+                        privileges=ChatPrivileges(
+                            can_promote_members=True,
+                            can_delete_messages=True,
+                            can_restrict_members=True,
+                            can_invite_users=True,
+                            can_pin_messages=True,
+                            can_manage_video_chats=True,
+                        )
+                    )
+                    if len(cause.split()) > 1:
+                        await client.set_administrator_title(
+                            message.chat.id,
+                            promote_user.id,
+                            f"\n{cause.split(' ', maxsplit=2)[2] if len(cause.split()) > 2 else 'Admin'}",
+                        )
+                    await message.edit(
+                        f"<b>{promote_user.mention}</b> <code>fullpromoted!</code>"
                         + f"\n{'<b>Prefix:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
