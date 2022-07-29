@@ -32,7 +32,7 @@ async def help_cmd(_, message: Message):
         )
 
         for module_name, module_commands in modules_help.items():
-            text += "<code>{} </code>× ".format(
+            text += "<code>{} </code>".format(
                 module_name.title()
             )
             if len(text) >= 2048:
