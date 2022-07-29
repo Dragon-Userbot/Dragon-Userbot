@@ -1,6 +1,18 @@
 import shlex
 from pyrogram import Client
 from pyrogram.types import Message
+from enum import IntEnum, unique
+from pyrogram.types import Message
+from pyrogram import enums
+
+
+async def eor(message: Message, *args, **kwargs) -> Message:
+    ok = (
+        message.edit_text
+        if bool(message.from_user and message.from_user.is_self or message.outgoing)
+        else (message.reply_to_message or message).reply_text
+    )
+    return await ok(*args, **kwargs)
 
 
 def get_arg(message):
