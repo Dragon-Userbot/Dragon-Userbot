@@ -23,13 +23,13 @@ from utils.misc import modules_help, prefix
 
 
 @Client.on_message(
-    filters.command(["sp", "setprefix", "setprefix_dragon"], prefix) & filters.me
+    filters.command(["sp", "setprefix"], prefix) & filters.me
 )
 async def setprefix(_, message: Message):
     if len(message.command) > 1:
         pref = message.command[1]
         db.set("core.main", "prefix", pref)
-        await message.edit(f"<b>Prefix [ <code>{pref}</code> ] is set!</b>")
+        await message.edit(f"<b>Your prefix changed to</b> » [ <code>{pref}</code> ]")
         restart()
     else:
         await message.edit("<b>The prefix must not be empty!</b>")
@@ -37,5 +37,4 @@ async def setprefix(_, message: Message):
 
 modules_help["prefix"] = {
     "setprefix [prefix]": "Set custom prefix",
-    "setprefix_dragon [prefix]": "Set custom prefix",
 }
