@@ -26,7 +26,7 @@ from importlib import import_module
 import logging
 import platform
 from utils.misc import prefix
-from ctrl import app
+from ctrl import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -119,8 +119,17 @@ if __name__ == "__main__":
         logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
         logging.warning(f"Failed to add {failed_handlers} to handlers")
-    k = app.get_me()
-
+    try:
+        if not db.get("core.log_chat", "log_chat_id").startswith("-100") or not str(config.log_chat).startswith("-100"):
+            tai = app.create_supergroup("CtrlUB Logs", "Powered by : @gcaika")
+            db.set("core.log_chat", "log_chat_id"[tai.id])
+        else:
+            print("LOG_CHAT, Sudah benar")
+        app.send_message(
+            tai.id,
+            f"🔥 **𝗣𝗿𝗶𝗺𝗲-𝗨𝘀𝗲𝗿𝗕𝗼𝘁 𝘂𝗱𝗮𝗵 𝗡𝘆𝗮𝗹𝗮 𝗔𝗻𝗷𝗮𝘆𝘆** 🔥\n└ •**ᴏᴡɴᴇʀ** : [{me.first_name}](tg://user?id={me.id})\n└
+•**ᴘʏʀᴏɢʀᴀᴍ ᴠᴇʀsɪᴏɴ :** `{pyver}`\n└ •**ᴘʀɪᴍᴇ ᴠᴇʀsɪᴏɴ  :** `3.2.1`\n└ •**sᴜᴘᴘᴏʀᴛ ʙʏ :** @PrimeSupportGroup\n└ •**ᴘᴀʀᴛɴᴇʀ :** @musikkugroup\n\n**Gunakan** `{PREFIX}ping` **untuk cek bot aktif**"
+        )
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
         if restart_type == "1":
@@ -129,10 +138,10 @@ if __name__ == "__main__":
             text = "<b>Restart completed!</b>"
         try:
             app.send_message(
-                chat_id=k.id, text=text, reply_to_message_id=int(sys.argv[2])
+                chat_id=tai.id, text=text, reply_to_message_id=int(sys.argv[2])
             )
         except errors.RPCError:
-            app.send_message(chat_id=k.id, text=text)
+            app.send_message(chat_id=tai.id, text=text)
 
     # required for sessionkiller module
     if db.get("core.sessionkiller", "enabled", False):
@@ -142,6 +151,6 @@ if __name__ == "__main__":
             [auth.hash for auth in app.send(GetAuthorizations()).authorizations],
         )
 
-    logging.info(f"CtrlUB {app.__bot_ver__}")
-
+    logging.info(f"CtrlUB {app.bot_version}")
+    app.send_message(tai.id, "Aktip")
     idle()
