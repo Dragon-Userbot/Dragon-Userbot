@@ -1,4 +1,5 @@
 import os
+from asyncio import sleep
 from contextlib import suppress
 from typing import Optional
 import ffmpeg
@@ -97,7 +98,7 @@ async def volume(_, message):
 @init_client
 async def joinvc(client: Client, message: Message):
     kontol = get_text(message)
-    o = await message.reply("Processing...")
+    o = await message.edit("Processing...")
     chat_id = message.chat.id
     if not kontol:
         try:
