@@ -1230,7 +1230,7 @@ async def welcome(_, message: Message):
     update_cache()
 
 
-modules_help["admintool"] = {
+modules_help["admins"] = {
     "ban [reply]/[username/id]* [reason] [report_spam] [delete_history]": "ban user in chat",
     "unban [reply]/[username/id]* [reason]": "unban user in chat",
     "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "kick user out of chat",
