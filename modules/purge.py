@@ -34,10 +34,10 @@ async def purge(client: Client, message: Message):
     chunk = []
     async for msg in client.get_chat_history(
         chat_id=message.chat.id,
-        offset_id=message.reply_to_message.message_id,
+        offset_id=message.reply_to_message.id,
         reverse=True
     ):
-        chunk.append(msg.message_id)
+        chunk.append(msg.id)
         if len(chunk) >= 100:
             await client.delete_messages(message.chat.id, chunk)
             chunk = []
