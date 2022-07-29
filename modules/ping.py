@@ -29,11 +29,11 @@ ALIVE_TEXT = """
 
 XUB is online!
 
-<b>Uptime:</b> <code>{uptime}</code>
-<b>Python:</b> <code>{piton}</code>
-<b>Pyrogram:</b> <code>{k}</code>
+<b>Uptime:</b> <code>{}</code>
+<b>Python:</b> <code>{}</code>
+<b>Pyrogram:</b> <code>{}</code>
 <b>XUB Version:</b> <code>master@0.0.1</code>
-<b>My Master:</b> {_.me.mention}
+<b>My Master:</b> {}
 """
 
 piton = f"{yy()}"
@@ -74,31 +74,33 @@ async def ping(_, message: Message):
     delta_ping = time.time() - start_time
     await reply.edit(
         f"🏓 <b>Pong!</b> <code>{delta_ping * 1000:.3f} ms</code>"
-        f"⏱️ <b>Uptime -</b> <code>{uptime}</code>"
+        f"\n⏱️ <b>Uptime -</b> <code>{uptime}</code>"
     )
 
 @Client.on_message(filters.command(["alive"], prefix) & filters.me)
 async def alive(_, m: Message):
     start_time = time.time()
     uptime = get_readable_time((time.time() - StartTime))
-    reply = await message.edit("Pinging...")
     end_time = time.time()
     if config.alive.endswith(".jpg"):
         return await _.send_photo(
             m.chat.id,
             photo=config.alive,
             caption=ALIVE_TEXT
+                .format(uptime, yy(), k, _.me.mention)
         )
     elif config.alive.endswith(".mp4"):
         return await _.send_video(
             m.chat.id,
             video=config.alive,
             caption=ALIVE_TEXT
+                .format(uptime, yy(), k, _.me.mention)
         )
     else:
-        return await _.send_message(
+        return await m.edit(
             m.chat.id,
             ALIVE_TEXT
+                .format(uptime, yy(), k, _.me.mention)
         )
 
 
