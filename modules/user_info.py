@@ -33,7 +33,7 @@ async def get_user_inf(client: Client, message: Message):
 
     response = await client.get_users(functions.users.GetFullUser(id=peer))
 
-    user = response.users[0]
+    user = peer
     full_user = response.full_user
 
     if user.username is None:
