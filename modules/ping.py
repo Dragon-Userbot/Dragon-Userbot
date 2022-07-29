@@ -61,7 +61,7 @@ async def alive(_, m: Message):
                 .format(python_version(), k, _.me.mention)
         )
     else:
-        return _.send_message(
+        return await _.send_message(
             m.chat.id,
             ALIVE_TEXT
                 .format(python_version(), k, _.me.mention)
