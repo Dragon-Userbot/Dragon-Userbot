@@ -26,7 +26,7 @@ async def limit(client, message):
             await message.edit_text("Something went wrong.")
         elif kontol:
             oh = kontol.text
-            await ppk.edit(oh)
+            await yy.edit(oh)
             await kontol.delete()
 
 
