@@ -21,7 +21,7 @@ async def limit(client, message):
         await client.unblock_user(bot)
         await yy.edit_text(f"@{bot} unblocked. Try `{prefix}limit` again.")
         return
-    async for kontol in app.get_chat_history(bot, limit=1):
+    async for kontol in client.get_chat_history(bot, limit=1):
         if not kontol:
             await message.edit_text("Something went wrong.")
         elif kontol:
