@@ -21,7 +21,7 @@ async def sosmed(client, message):
             await asyncio.sleep(5)
             await y.delete()
         except YouBlockedUser:
-            await client.unblok_user(bot)
+            await client.unblock_user(bot)
             y = await client.send_message(bot, tetek)
             await asyncio.sleep(5)
             await y.delete()
