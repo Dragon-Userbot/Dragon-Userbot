@@ -139,7 +139,7 @@ if __name__ == "__main__":
             sys.exit()
         else:
             logging.info("config.log_chat done")
-        app.send_message(
+        Client.send_message(
             chat_id=config.log_chat,
             text=f"Online memek"
         )
