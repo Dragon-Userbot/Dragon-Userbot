@@ -143,7 +143,7 @@ async def ban_command(client: Client, message: Message):
                     functions.channels.ReportSpam(
                         channel=channel,
                         participant=user_id,
-                        id=[message.reply_to_message.message_id],
+                        id=[message.reply_to_message.id],
                     )
                 )
             if "delete_history" in cause.lower().split():
@@ -199,7 +199,7 @@ async def ban_command(client: Client, message: Message):
                             functions.channels.ReportSpam(
                                 channel=channel,
                                 participant=user_id,
-                                id=[message.reply_to_message.message_id],
+                                id=[message.reply_to_message.id],
                             )
                         )
                     if "delete_history" in cause.lower().split():
@@ -320,7 +320,7 @@ async def kick_command(client: Client, message: Message):
                         functions.channels.ReportSpam(
                             channel=channel,
                             participant=user_id,
-                            id=[message.reply_to_message.message_id],
+                            id=[message.reply_to_message.id],
                         )
                     )
                 if "delete_history" in cause.lower().split():
@@ -365,7 +365,7 @@ async def kick_command(client: Client, message: Message):
                             functions.channels.ReportSpam(
                                 channel=channel,
                                 participant=user_id,
-                                id=[message.reply_to_message.message_id],
+                                id=[message.reply_to_message.id],
                             )
                         )
                     if "delete_history" in cause.lower().split():
@@ -921,7 +921,7 @@ async def promote_command(client: Client, message: Message):
                         await client.set_administrator_title(
                             message.chat.id,
                             promote_user.id,
-                            f"\n{cause.split(' ', maxsplit=2)[2] if len(cause.split()) > 2 else None}",
+                            f"\n{cause.split(' ', maxsplit=2)[2] if len(cause.split()) > 2 else "Admin"}",
                         )
                     await message.edit(
                         f"<b>{promote_user.first_name}</b> <code>promoted!</code>"
@@ -1068,7 +1068,7 @@ async def report_spam(client: Client, message: Message):
             functions.channels.ReportSpam(
                 channel=channel,
                 participant=peer,
-                id=[message.reply_to_message.message_id],
+                id=[message.reply_to_message.id],
             )
         )
     except Exception as e:
