@@ -26,9 +26,9 @@ async def help_cmd(_, message: Message):
     if len(message.command) == 1:
         msg_edited = False
         text = (
-            "<b>Help for <a href=https://t.me/gcaika>XUB</a>\n"
-            f"\n<b>Total modules:</b> <code>{len(modules_help)}</code>\n"
-            f"\nType <code>{prefix}help [module]</code> to see description of the modules/command.\n\n"
+            "🤖 <b>Help for <a href=https://t.me/gcaika>XUB</a>"
+            f"\nℹ️ <b>Total modules:</b> <code>{len(modules_help)}</code>\n"
+            f"\n💡 Type <code>{prefix}help [module]</code> to see description of the modules/command.\n\n"
         )
 
         for module_name, module_commands in modules_help.items():
