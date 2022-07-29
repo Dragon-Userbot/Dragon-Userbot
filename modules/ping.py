@@ -24,8 +24,7 @@ from utils.misc import modules_help, prefix
 from utils import config
 
 
-ALIVE_TEXT = """
-<b>Hey I am Alive!</b>
+ALIVE_TEXT = """<b>Hey I am Alive!</b>
 
 XUB is online!
 
