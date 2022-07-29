@@ -44,11 +44,11 @@ async def quote_cmd(client: Client, message: types.Message):
     messages = []
 
     async for msg in client.get_chat_history(
-        message.chat.id, offset_id=message.reply_to_message.message_id, reverse=True
+        message.chat.id, offset_id=message.reply_to_message.id, reverse=True
     ):
         if msg.empty:
             continue
-        if msg.message_id >= message.message_id:
+        if msg.id >= message.id:
             break
         if no_reply:
             msg.reply_to_message = None
@@ -113,7 +113,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         return await message.edit("<b>Fake quote text is empty</b>")
 
     q_message = await client.get_messages(
-        message.chat.id, message.reply_to_message.message_id
+        message.chat.id, message.reply_to_message.id
     )
     q_message.text = fake_quote_text
     q_message.entities = None
