@@ -145,7 +145,7 @@ if __name__ == "__main__":
         )
     except Exception as e:
         logging.warning(f"{e}")
-        return
+        sys.exit()
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
         if restart_type == "1":
