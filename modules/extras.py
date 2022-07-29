@@ -25,12 +25,10 @@ async def sosmed(client, message):
             y = await client.send_message(bot, tetek)
             await asyncio.sleep(5)
             await y.delete()
-    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=1):
+    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, query="Please", limit=1):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
         await uh.delete()
         await turok.delete()
-    async for konol in client.search_messages(bot, query="Please", limit=1)
-        await konol.delete()
 
 
 modules_help["extras"] = {
