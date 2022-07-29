@@ -1237,5 +1237,4 @@ modules_help["admins"] = {
     "unro": "disable read-only mode",
     "antiraid [on|off]": "when enabled, anyone who writes message will be blocked. Useful in raids. "
     "Running without arguments equals to toggling state",
-    "Running without text equals to disable",
 }
