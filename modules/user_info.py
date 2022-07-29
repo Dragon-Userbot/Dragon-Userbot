@@ -73,7 +73,6 @@ async def get_full_user_inf(client: Client, message: Message):
         about = "None" if full_user.bio is None else full_user.bio
         user_info = f"""|=<b>Username: {username}
 |-Id: <code>{user.id}</code>
-|-Account creation date: <code>{creation_date}</code>
 |-Bot: <code>{user.is_bot}</code>
 |-Scam: <code>{user.is_scam}</code>
 |-Prem: <code>{user.is_premium}</code>
