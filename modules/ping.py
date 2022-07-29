@@ -73,7 +73,7 @@ async def repos(_, m: Message):
         "XUB version: <code>master@0.0.1</code>"
         "Python version: <code>{}</code>"
         "Pyrogram version: <code>{}</code>"
-            .format(python_version(), v)
+            .format(python_version(), k)
     )
 
 
