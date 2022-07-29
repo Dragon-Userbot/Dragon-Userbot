@@ -66,18 +66,6 @@ async def get_full_user_inf(client: Client, message: Message):
         user = await client.get_users(peer)
         full_user = await client.get_chat(peer)
 
-        await client.unblock_user("@creationdatebot")
-        try:
-            response = await interact_with(
-                await client.send_message("creationdatebot", f"/id {user.id}")
-            )
-        except RuntimeError:
-            creation_date = "None"
-        else:
-            creation_date = response.text
-        # await client.delete_messages("@creationdatebot", interact_with_to_delete)
-        interact_with_to_delete.clear()
-
         if user.username is None:
             username = "None"
         else:
