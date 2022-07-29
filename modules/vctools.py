@@ -109,7 +109,7 @@ async def joinvc(client: Client, message: Message):
         try:
             await group_call.start(kontol)
         except Exception as e:
-            return await tai.edit(f"<b>ERROR:</b> <code>{e}</code>")
+            return await o.edit(f"<b>ERROR:</b> <code>{e}</code>")
         await o.edit(f"× Joined VC in: <code>{kontol}</code>")
     await sleep(5)
     await group_call.set_is_mute(True)
