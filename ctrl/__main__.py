@@ -1,5 +1,5 @@
-#  Dragon-Userbot - telegram userbot
-#  Copyright (C) 2020-present Dragon Userbot Organization
+#  CtrlUB - telegram userbot
+#  Copyright (C) 2022-present CtrlUB Organization
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@ from pathlib import Path
 from importlib import import_module
 import logging
 import platform
-from utils.misc import prefix
+from ctrl.utils.misc import prefix
+from ctrl import app
 
 logging.basicConfig(level=logging.INFO)
 
@@ -65,20 +66,6 @@ if __name__ == "__main__":
     from utils.scripts import restart
     from utils import config
 
-    app = Client(
-        name="my_account",
-        api_id=config.api_id,
-        api_hash=config.api_hash,
-        session_string=config.session_string,
-        hide_password=True,
-        workdir=script_path,
-        app_version=userbot_version,
-        device_model=f"Dragon-Userbot @ {gitrepo.head.commit.hexsha[:7]}",
-        system_version=platform.version() + " " + platform.machine(),
-        sleep_threshold=30,
-        test_mode=config.test_server,
-        in_memory=True
-    )
     try:
         app.start()
     except sqlite3.OperationalError as e:
@@ -155,6 +142,6 @@ if __name__ == "__main__":
             [auth.hash for auth in app.send(GetAuthorizations()).authorizations],
         )
 
-    logging.info("Dragon-Userbot started!")
-    k = app.send_message(chat_id=k.id, text=f"Your XUB is alive\n\nTry {prefix}alive for checks")
+    logging.info(f"CtrlUB {app.__bot_ver__}")
+
     idle()
