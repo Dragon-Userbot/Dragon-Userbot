@@ -66,6 +66,21 @@ if __name__ == "__main__":
     from utils.scripts import restart
     from utils import config
 
+    app = Client(
+        name="my_account",
+        api_id=config.api_id,
+        api_hash=config.api_hash,
+        session_string=config.session_string,
+        hide_password=True,
+        workdir=script_path,
+        app_version=userbot_version,
+        device_model=f"CtrlUB @ {gitrepo.head.commit.hexsha[:7]}",
+        system_version=platform.version() + " " + platform.machine(),
+        sleep_threshold=30,
+        test_mode=config.test_server,
+        in_memory=True
+    )
+
     try:
         app.start()
     except sqlite3.OperationalError as e:
@@ -120,15 +135,14 @@ if __name__ == "__main__":
     if failed_handlers:
         logging.warning(f"Failed to add {failed_handlers} to handlers")
     try:
-        if not db.get("core.log_chat", "log_chat_id").startswith("-100") or not str(config.log_chat).startswith("-100"):
-            tai = app.create_supergroup("CtrlUB Logs", "Powered by : @gcaika")
-            db.set("core.log_chat", "log_chat_id"[tai.id])
+        if not str(config.log_chat).startswith("-100"):
+            logging.warning("Your log is not a supergroup")
+            sys.exit()
         else:
-            print("LOG_CHAT, Sudah benar")
+            logging.info("config.log_chat done")
         app.send_message(
-            tai.id,
-            f"🔥 **𝗣𝗿𝗶𝗺𝗲-𝗨𝘀𝗲𝗿𝗕𝗼𝘁 𝘂𝗱𝗮𝗵 𝗡𝘆𝗮𝗹𝗮 𝗔𝗻𝗷𝗮𝘆𝘆** 🔥\n└ •**ᴏᴡɴᴇʀ** : [{me.first_name}](tg://user?id={me.id})\n└
-•**ᴘʏʀᴏɢʀᴀᴍ ᴠᴇʀsɪᴏɴ :** `{pyver}`\n└ •**ᴘʀɪᴍᴇ ᴠᴇʀsɪᴏɴ  :** `3.2.1`\n└ •**sᴜᴘᴘᴏʀᴛ ʙʏ :** @PrimeSupportGroup\n└ •**ᴘᴀʀᴛɴᴇʀ :** @musikkugroup\n\n**Gunakan** `{PREFIX}ping` **untuk cek bot aktif**"
+            config.log_chat,
+            f"aktip"
         )
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
@@ -138,10 +152,10 @@ if __name__ == "__main__":
             text = "<b>Restart completed!</b>"
         try:
             app.send_message(
-                chat_id=tai.id, text=text, reply_to_message_id=int(sys.argv[2])
+                chat_id=config.log_chat, text=text, reply_to_message_id=int(sys.argv[2])
             )
         except errors.RPCError:
-            app.send_message(chat_id=tai.id, text=text)
+            app.send_message(chat_id=config.log_chat, text=text)
 
     # required for sessionkiller module
     if db.get("core.sessionkiller", "enabled", False):
@@ -151,6 +165,5 @@ if __name__ == "__main__":
             [auth.hash for auth in app.send(GetAuthorizations()).authorizations],
         )
 
-    logging.info(f"CtrlUB {app.bot_version}")
-    app.send_message(tai.id, "Aktip")
+    logging.info(f"CtrlUB {app.app_version}")
     idle()
