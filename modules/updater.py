@@ -18,7 +18,7 @@ import os
 from sys import executable
 import sys
 import subprocess 
-import asyncio create_subprocess_shell, sleep
+from asyncio import create_subprocess_shell, sleep
 from asyncio.subprocess import PIPE
 
 from pyrogram import Client, filters
