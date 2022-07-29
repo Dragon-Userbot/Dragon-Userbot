@@ -18,7 +18,7 @@ import time
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from platform import python_version
+from platform import version_info
 from pyrogram import __version__ as k
 from utils.misc import modules_help, prefix
 from utils import config
@@ -29,42 +29,79 @@ ALIVE_TEXT = """
 
 XUB is online!
 
+<b>Uptime:</b> <code>{}</code>
 <b>Python:</b> <code>{}</code>
 <b>Pyrogram:</b> <code>{}</code>
 <b>XUB Version:</b> <code>master@0.0.1</code>
 <b>My Master:</b> {}
 """
 
+piton = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
+
+StartTime = time.time()
+
+def get_readable_time(seconds: int) -> str:
+    count = 0
+    ping_time = ""
+    time_list = []
+    time_suffix_list = ["s", "m", "h", "days"]
+
+    while count < 4:
+        count += 1
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
+
+    for x in range(len(time_list)):
+        time_list[x] = str(time_list[x]) + time_suffix_list[x]
+    if len(time_list) == 4:
+        ping_time += time_list.pop() + ", "
+
+    time_list.reverse()
+    ping_time += ":".join(time_list)
+
+    return ping_time
+
 
 @Client.on_message(filters.command(["ping"], prefix) & filters.me)
 async def ping(_, message: Message):
-    start = time.time()
+    start_time = time.time()
+    uptime = get_readable_time((time.time() - StartTime))
     reply = await message.edit("Pinging...")
-    delta_ping = time.time() - start
-    await reply.edit(f"**Pong!**\n`{delta_ping * 1000:.3f} ms`")
+    end_time = time.time()
+    delta_ping = time.time() - start_time
+    await reply.edit(
+        f"🏓 <b>Pong!</b> <code>{delta_ping * 1000:.3f} ms</code>"
+        f"⏱️ <b>Uptime -</b> <code>{uptime}</code>"
+    )
 
 @Client.on_message(filters.command(["alive"], prefix) & filters.me)
 async def alive(_, m: Message):
-    await m.delete()
+    start_time = time.time()
+    uptime = get_readable_time((time.time() - StartTime))
+    reply = await message.edit("Pinging...")
+    end_time = time.time()
     if config.alive.endswith(".jpg"):
         return await _.send_photo(
             m.chat.id,
             photo=config.alive,
             caption=ALIVE_TEXT
-                .format(python_version(), k, _.me.mention)
+                .format(uptime, piton, k, _.me.mention)
         )
     elif config.alive.endswith(".mp4"):
         return await _.send_video(
             m.chat.id,
             video=config.alive,
             caption=ALIVE_TEXT
-                .format(python_version(), k, _.me.mention)
+                .format(uptime, piton, k, _.me.mention)
         )
     else:
         return await _.send_message(
             m.chat.id,
             ALIVE_TEXT
-                .format(python_version(), k, _.me.mention)
+                .format(uptime, piton, k, _.me.mention)
         )
 
 
@@ -75,11 +112,14 @@ async def repos(_, m: Message):
         "\n\nXUB version: <code>master@0.0.1</code>"
         "\nPython version: <code>{}</code>"
         "\nPyrogram version: <code>{}</code>"
-            .format(python_version(), k)
+        "\nRepository link: <a href='https://github.com/kennedy-ex/XUB'>XUB</a>"
+            .format(piton, k),
+        disable_web_page_preview=True
     )
 
 
 modules_help["ping"] = {
     "ping": "Check ping to Telegram servers",
     "alive": "Get alive XUB",
+    "repo": "Show link repository of XUB",
 }
