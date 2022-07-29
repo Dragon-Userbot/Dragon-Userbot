@@ -18,12 +18,8 @@ app = Client(
     in_memory=True
 )
 
-app.start()
-
 ok = app.get_me()
 my_username = ok.username
 my_id = ok.id
 my_first_name = ok.first_name
 my_last_name = ok.last_name
-
-idle()
