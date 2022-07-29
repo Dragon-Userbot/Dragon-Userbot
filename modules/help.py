@@ -32,17 +32,17 @@ async def help_cmd(_, message: Message):
         )
 
         for module_name, module_commands in modules_help.items():
-            text += " {} ".format(
+            text += "<code>{} </code>× ".format(
                 module_name.title()
             )
             if len(text) >= 2048:
-                text += "</b>"
+                text += ""
                 if msg_edited:
                     await message.reply(text, disable_web_page_preview=True)
                 else:
                     await message.edit(text, disable_web_page_preview=True)
                     msg_edited = True
-                text = "<b>"
+                text = ""
 
         text += f"\nThe number of modules in the userbot: {len(modules_help) / 1}</b>"
 
