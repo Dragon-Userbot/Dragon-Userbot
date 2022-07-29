@@ -24,7 +24,7 @@ from pathlib import Path
 from importlib import import_module
 import logging
 import platform
-from utils log_chat import check_or_set_log_channel
+from utils.log_chat import check_or_set_log_channel
 
 logging.basicConfig(level=logging.INFO)
 
