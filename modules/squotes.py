@@ -44,7 +44,7 @@ async def quote_cmd(client: Client, message: types.Message):
     messages = []
 
     async for msg in client.get_chat_history(
-        message.chat.id, offset_id=message.reply_to_message.id, reverse=True
+        message.chat.id, offset_id=message.reply_to_message.id
     ):
         if msg.empty:
             continue
