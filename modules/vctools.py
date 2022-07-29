@@ -63,7 +63,9 @@ async def volume(_, message):
 @Client.on_message(filters.command("joinvc", prefix) & filters.me)
 @init_client
 async def start(_, message: Message):
-    chat_id = message.command[1] if len(message.command) > 1 else message.chat.id
+    chat_id = message.command[1]
+    if len(message.command) > 1:
+        chat_id = message.chat.id
     with suppress(ValueError):
         chat_id = int(chat_id)
     try:
