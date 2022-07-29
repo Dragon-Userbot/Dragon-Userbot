@@ -130,5 +130,5 @@ modules_help["extras"] = {
     "tt [link|reply]*": "Download video from tiktok",
     "sg or sa [id|reply]*": "Get history name user",
     "json [reply]": "Show json text",
-    "limit: "Show account status on @spambot",
+    "limit": "Show account status on @spambot",
 }
