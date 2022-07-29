@@ -142,10 +142,10 @@ if __name__ == "__main__":
             text = "<b>Restart completed!</b>"
         try:
             app.send_message(
-                chat_id=config.log_chat, text=text, reply_to_message_id=int(sys.argv[2])
+                chat_id=app.me.id, text=text, reply_to_message_id=int(sys.argv[2])
             )
         except errors.RPCError:
-            app.send_message(chat_id=config.log_chat, text=text)
+            app.send_message(chat_id=app.me.id, text=text)
 
     # required for sessionkiller module
     if db.get("core.sessionkiller", "enabled", False):
