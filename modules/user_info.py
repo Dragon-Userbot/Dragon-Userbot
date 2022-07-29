@@ -46,7 +46,6 @@ async def get_user_inf(client: Client, message: Message):
 |-Scam: <code>{user.is_scam}</code>
 |-Prem: <code>{user.is_premium}</code>
 |-Name: <code>{user.first_name}</code>
-|-Deleted: <code>{user.deleted}</code>
 |-BIO: <code>{about}</code>
 </b>"""
     await message.edit(user_info)
@@ -91,7 +90,6 @@ async def get_full_user_inf(client: Client, message: Message):
 |-Scam: <code>{user.is_scam}</code>
 |-Prem: <code>{user.is_premium}</code>
 |-Name: <code>{user.first_name}</code>
-|-Deleted: <code>{user.deleted}</code>
 |-BIO: <code>{about}</code>
 |-Contact: <code>{user.contact}</code>
 |-Can pin message: <code>{full_user.can_pin_message}</code>
