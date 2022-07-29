@@ -133,19 +133,7 @@ if __name__ == "__main__":
         logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
         logging.warning(f"Failed to add {failed_handlers} to handlers")
-    try:
-        if not str(config.log_chat).startswith("-100"):
-            logging.warning("Your log is not a supergroup")
-            sys.exit()
-        else:
-            logging.info("config.log_chat done")
-        app.send_message(
-            chat_id=config.log_chat,
-            text=f"Online memek"
-        )
-    except Exception as e:
-        logging.warning(f"{e}")
-        sys.exit()
+
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
         if restart_type == "1":
