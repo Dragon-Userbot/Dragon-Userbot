@@ -8,6 +8,59 @@ from utils.pyrohelpers import get_arg
 from utils.scripts import interact_with, interact_with_to_delete, format_exc
 
 
+@Client.on_message(filters.command(["sg", "sa"], prefix) & filters.me)
+async def sangmata(client, message):
+    await message.edit_text("Processing")
+    cmd = message.command
+    if not message.reply_to_message and len(cmd) == 1:
+        get_user = message.from_user.id
+    elif len(cmd) == 1:
+        get_user = message.reply_to_message.from_user.id
+    elif len(cmd) > 1:
+        get_user = cmd[1]
+        try:
+            get_user = int(cmd[1])
+        except ValueError:
+            pass
+    try:
+        user = await client.get_users(get_user)
+    except PeerIdInvalid:
+        await message.edit_text("Can't fint histroy name.")
+        return
+    bot = "SangMataInfo_bot"
+    chat = message.chat.id
+    if user:
+        try:
+            y = await client.send_message(bot, f"/search_id {user.id}")
+            await sleep(1)
+            await y.delete()
+        except YouBlockedUser:
+            await client.unblock_user(bot)
+            y = await client.send_message(bot, f"/search_id {user.id}")
+            await sleep(1)
+            await y.delete()
+            return
+    elif cmd[1]:
+        try:
+            kon = await client.send_message(bot, f"/search_id {cmd[1]}")            await sleep(1)
+            await y.delete()
+        except YouBlockedUser:
+            await client.unblock_user(bot)
+            y = await client.send_message(bot, f"/search_id {user.id}")
+            await sleep(1)
+            await y.delete()
+            return
+    async for jembut in client.search_messages(bot, query="Name", limit=1):
+        if not jembut:
+            await message.edit_text("Can't find histroy name of that user.")
+            return
+        elif jembut:
+            iss = jembut.text
+            await y.delete()
+            await message.edit(iss)
+            await jembut.delete()
+
+
 @Client.on_message(filters.command("tt", prefix) & filters.me)
 async def sosmed(client, message):
     uh = await message.edit("Processing")
@@ -34,5 +87,6 @@ async def sosmed(client, message):
 
 
 modules_help["extras"] = {
-    "tt [link|reply]*": "download video from tiktok",
+    "tt [link|reply]*": "Download video from tiktok",
+    "sg [id|reply]*": "Check history name of user",
 }
