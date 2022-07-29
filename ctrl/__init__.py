@@ -1,3 +1,4 @@
+import platform
 from pyrogram import Client
 from utils.misc import gitrepo, userbot_version
 from utils import config
