@@ -82,5 +82,5 @@ modules_help["mem_tools"] = {
         "invite [username/user_id]": "To invite a user or bot to the chat.",
         "inviteall [chat_username/chat_id]": "To inviting multiple member from chat you want.",
         "zombies": "To checks chat have deleted account member or not.",
-        "zombiesclean":, "To delete the deleted account from your chat you want.",
+        "zombiesclean": "To delete the deleted account from your chat you want.",
 }
