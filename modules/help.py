@@ -66,6 +66,7 @@ async def help_cmd(_, message: Message):
                         f"<code>{prefix}{cmd[0]}</code>"
                         f"{' <code>' + cmd[1] + '</code>' if len(cmd) > 1 else ''}"
                         f" — <i>{cmd_desc}</i>"
+                        "\nCopyright (C) 2020-present XUB"
                     )
         await message.edit(f"<b>Module {command_name} not found</b>")
 
