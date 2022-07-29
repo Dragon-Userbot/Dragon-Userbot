@@ -27,8 +27,8 @@ async def help_cmd(_, message: Message):
         msg_edited = False
         text = (
             "<b>Help for <a href=https://t.me/gcaika>XUB</a>\n"
-            f"For more help on how to use a command, type <code>{prefix}help [module]</code>\n\n"
-            "Available Modules:\n"
+            f\n<b>Total modules:</b> <code>{len(modules_help)}</code>\n"
+            f"\nType <code>{prefix}help [module]</code> to see description of the modules/command.\n\n"
         )
 
         for module_name, module_commands in modules_help.items():
@@ -44,7 +44,7 @@ async def help_cmd(_, message: Message):
                     msg_edited = True
                 text = ""
 
-        text += f"\nThe number of modules in the userbot: {len(modules_help) / 1}</b>"
+        text += f"\n\nCopyright ©️ 2020-present XUB"
 
         if msg_edited:
             await message.reply(text, disable_web_page_preview=True)
