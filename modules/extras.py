@@ -21,12 +21,12 @@ async def sosmed(client, message):
             await y.delete()
         except Exception as e:
             return await client.send_message(client.me.id, f"{e}")
-    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.EMPTY, limit=2):
+    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=2):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
         await uh.delete()
         await turok.delete()
 
 
-modules_help["tiktok"] = {
+modules_help["extras"] = {
     "tt [link|reply]*": "download video from tiktok",
 }
