@@ -24,17 +24,6 @@ from utils.misc import modules_help, prefix
 from utils import config
 
 
-ALIVE_TEXT = """<b>Hey I am Alive!</b>
-
-XUB is online!
-
-<b>Uptime:</b> <code>{}</code>
-<b>Python:</b> <code>{}</code>
-<b>Pyrogram:</b> <code>{}</code>
-<b>XUB Version:</b> <code>master@0.0.1</code>
-<b>My Master:</b> {}
-"""
-
 piton = f"{yy()}"
 
 StartTime = time.time()
@@ -80,8 +69,10 @@ async def ping(_, message: Message):
 async def alive(_, m: Message):
     start_time = time.time()
     uptime = get_readable_time((time.time() - StartTime))
+    kontol = await m.edit("<code>Checking...</code>")
     end_time = time.time()
     if config.alive.endswith(".jpg"):
+        return await kontol.delete()
         return await _.send_photo(
             m.chat.id,
             photo=config.alive,
@@ -89,6 +80,7 @@ async def alive(_, m: Message):
                 .format(uptime, yy(), k, _.me.mention)
         )
     elif config.alive.endswith(".mp4"):
+        return await kontol.delete()
         return await _.send_video(
             m.chat.id,
             video=config.alive,
@@ -96,7 +88,7 @@ async def alive(_, m: Message):
                 .format(uptime, yy(), k, _.me.mention)
         )
     else:
-        return await m.edit(
+        return await kontol.edit(
             m.chat.id,
             ALIVE_TEXT
                 .format(uptime, yy(), k, _.me.mention)
