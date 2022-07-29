@@ -45,6 +45,7 @@ async def ping(_, message: Message):
 
 @Client.on_message(filters.command(["alive"], prefix) & filters.me)
 async def alive(_, m: Message):
+    await m.delete()
     if config.alive.endswith(".jpg"):
         return await _.send_photo(
             m.chat.id,
@@ -60,7 +61,8 @@ async def alive(_, m: Message):
                 .format(python_version(), k, _.me.mention)
         )
     else:
-        return m.edit(
+        return _.send_message(
+            m.chat.id,
             ALIVE_TEXT
                 .format(python_version(), k, _.me.mention)
         )
@@ -70,9 +72,9 @@ async def alive(_, m: Message):
 async def repos(_, m: Message):
     await m.edit(
         "I am using XUB"
-        "XUB version: <code>master@0.0.1</code>"
-        "Python version: <code>{}</code>"
-        "Pyrogram version: <code>{}</code>"
+        "\n\nXUB version: <code>master@0.0.1</code>"
+        "\nPython version: <code>{}</code>"
+        "\nPyrogram version: <code>{}</code>"
             .format(python_version(), k)
     )
 
