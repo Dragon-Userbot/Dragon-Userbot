@@ -83,7 +83,7 @@ async def update(_, message: Message):
     await execute(f"{executable} -m pip install --upgrade -r requirements.txt")
     await execute(f"{executable} -m pip install -r requirements.txt")
     await message.edit("Update successful")
-    restart()
+    restart(message, "update")
     
 
 
