@@ -40,5 +40,5 @@ python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
 prefix = db.get("core.main", "prefix", ".")
 
 gitrepo = Repo(".")
-commits_since_tag = list(gitrepo.iter_commits(f"{gitrepo.tags[-1].name}..HEAD"))
+commits_since_tag = gitrepo.iter_commits(f"{gitrepo.tags[-1].name}..HEAD")
 userbot_version = f"3.1.{len(commits_since_tag)}"
