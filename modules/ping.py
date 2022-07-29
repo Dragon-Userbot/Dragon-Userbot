@@ -94,7 +94,6 @@ async def alive(_, m: Message):
         )
     else:
         return await m.edit(
-            m.chat.id,
             ALIVE_TEXT
                 .format(uptime, yy(), k, _.me.mention),
         )
