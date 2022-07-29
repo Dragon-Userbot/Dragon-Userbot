@@ -2,6 +2,7 @@ import asyncio
 from pyrogram.errors.exceptions.bad_request_400 import YouBlockedUser
 from pyrogram import Client, filters, enums
 from pyrogram.types import Message
+from pyrogram.raw.functions.messages import DeleteChatUser
 from utils.misc import modules_help, prefix
 from utils.pyrohelpers import get_arg
 from utils.scripts import interact_with, interact_with_to_delete, format_exc
@@ -25,11 +26,11 @@ async def sosmed(client, message):
             y = await client.send_message(bot, tetek)
             await asyncio.sleep(5)
             await y.delete()
-    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=1) and async for memek in client.search_messages(bot, query="Please", limit=1):
+    async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=1):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
         await uh.delete()
         await turok.delete()
-        await memek.delete()
+        await client.DeleteChatUser(bot)
 
 
 modules_help["extras"] = {
