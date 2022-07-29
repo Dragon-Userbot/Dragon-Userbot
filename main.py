@@ -75,7 +75,7 @@ if __name__ == "__main__":
         system_version=platform.version() + " " + platform.machine(),
         sleep_threshold=30,
         test_mode=config.test_server,
-        parse_mode="html",
+        parse_mode="HTML",
     )
 
     try:
