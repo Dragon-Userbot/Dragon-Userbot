@@ -17,7 +17,7 @@ async def sosmed(client, message):
         try:
             await client.send_message(bot, tetek)
             await asyncio.sleep(5)
-        except RPCError:
+        except:
             return await message.edit("Unblock @thisvidbot then try again.")
     async for turok in app.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=1):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
