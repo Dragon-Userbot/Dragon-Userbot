@@ -31,12 +31,12 @@ async def sangmata(client, message):
     chat = message.chat.id
     try:
         y = await client.send_message(bot, f"/search_id {user.id}")
-        await sleep(1)
+        await asyncio.sleep(1)
         await y.delete()
     except YouBlockedUser:
         await client.unblock_user(bot)
         y = await client.send_message(bot, f"/search_id {user.id}")
-        await sleep(1)
+        await asyncio.sleep(1)
         await y.delete()
         return
 
