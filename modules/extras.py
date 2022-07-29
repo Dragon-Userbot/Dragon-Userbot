@@ -9,6 +9,27 @@ from utils.pyrohelpers import get_arg
 from utils.scripts import interact_with, interact_with_to_delete, format_exc
 
 
+@Client.on_message(filters.command("limit", prefix) & filters.me)
+async def limit(client, message):
+    yy = await message.edit_text("Processing")
+    chat = message.chat.id
+    bot = "SpamBot"
+    try:
+        ok = await client.send_message(bot, "/start")
+        await ok.delete()
+    except YouBlockedUser:
+        await client.unblock_user(bot)
+        await yy.edit_text(f"@{bot} unblocked. Try `{prefix}limit` again.")
+        return
+    async for kontol in app.get_chat_history(bot, limit=1):
+        if not kontol:
+            await message.edit_text("Something went wrong.")
+        elif kontol:
+            oh = kontol.text
+            await ppk.edit(oh)
+            await kontol.delete()
+
+
 @Client.on_message(filters.command("json", prefix) & filters.me)
 async def start(client, message):
     try:
@@ -105,4 +126,5 @@ modules_help["extras"] = {
     "tt [link|reply]*": "Download video from tiktok",
     "sg [id|reply]*": "Check history name of user",
     "json [reply]": "Show code of the text you replied",
+    "limit": "Get your account limit info",
 }
