@@ -141,10 +141,11 @@ if __name__ == "__main__":
             logging.info("config.log_chat done")
         app.send_message(
             config.log_chat,
-            f"aktip"
+            f"Online"
         )
-    except:
-        pass
+    except Exception as e:
+        logging.warning(f"{e}")
+        return
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
         if restart_type == "1":
