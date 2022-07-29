@@ -33,7 +33,7 @@ def restart(message: Message, restart_type):
             sys.executable,
             "main.py",
             f"{message.chat.id}",
-            f" {message.message_id}",
+            f" {message.id}",
             f"{text}",
         ],
     )
@@ -48,16 +48,14 @@ async def restart_cmd(_, message: Message):
 @Client.on_message(filters.command("update", prefix) & filters.me)
 async def update(_, message: Message):
     try:
-        await message.edit("<b>Updating: 1/4 (updating pip)</b>")
-        subprocess.run([sys.executable, "-m", "pip", "install", "-U", "pip"])
-        await message.edit("<b>Updating: 2/4 (git pull)</b>")
+        await message.edit("<b>Updating: 1/3 (git pull)</b>")
         subprocess.run(["git", "pull"])
-        await message.edit("<b>Updating: 3/4 (updating libs from requirements.txt)</b>")
+        await message.edit("<b>Updating: 2/3 (updating libs from requirements.txt)</b>")
         subprocess.run(
             [sys.executable, "-m", "pip", "install", "-U", "-r", "requirements.txt"]
         )
         await message.edit(
-            "<b>Updating: 4/4 (updating libs from requirements_list)</b>"
+            "<b>Updating: 3/3 (updating libs from requirements_list)</b>"
         )
         subprocess.run(
             [sys.executable, "-m", "pip", "install", "-U", *requirements_list]
