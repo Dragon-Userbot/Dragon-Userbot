@@ -31,7 +31,7 @@ async def get_user_inf(client: Client, message: Message):
     else:
         peer = await client.resolve_peer("me")
 
-    response = await client.get_user(functions.users.GetFullUser(id=peer))
+    response = await client.get_users(functions.users.GetFullUser(id=peer))
 
     user = response.users[0]
     full_user = response.full_user
