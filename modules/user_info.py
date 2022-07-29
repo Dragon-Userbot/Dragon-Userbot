@@ -25,16 +25,14 @@ from utils.scripts import format_exc, interact_with, interact_with_to_delete
 @Client.on_message(filters.command("info", prefix) & filters.me)
 async def get_user_inf(client: Client, message: Message):
     if len(message.command) >= 2:
-        peer = await client.resolve_peer(message.command[1])
+        peer = message.command[1])
     elif message.reply_to_message and message.reply_to_message.from_user:
-        peer = await client.resolve_peer(message.reply_to_message.from_user.id)
+        peer = message.reply_to_message.from_user.id
     else:
-        peer = await client.resolve_peer("me")
+        peer = "me")
 
-    response = await client.get_users(functions.users.GetFullUser(id=peer))
-
-    user = peer
-    full_user = response.full_user
+    user = await client.get_users(peer)
+    full_user = await client.get_chat(peer)
 
     if user.username is None:
         username = "None"
@@ -53,22 +51,20 @@ async def get_user_inf(client: Client, message: Message):
     await message.edit(user_info)
 
 
-@Client.on_message(filters.command("inffull", prefix) & filters.me)
+@Client.on_message(filters.command("infofull", prefix) & filters.me)
 async def get_full_user_inf(client: Client, message: Message):
     await message.edit("<b>Receiving the information...</b>")
 
     try:
         if len(message.command) >= 2:
-            peer = await client.resolve_peer(message.command[1])
+            peer = message.command[1]
         elif message.reply_to_message and message.reply_to_message.from_user:
-            peer = await client.resolve_peer(message.reply_to_message.from_user.id)
+            peer = message.reply_to_message.from_user.id
         else:
-            peer = await client.resolve_peer("me")
+            peer = "me"
 
-        response = await client.send(functions.users.GetFullUser(id=peer))
-
-        user = response.users[0]
-        full_user = response.full_user
+        user = await client.get_users(peer)
+        full_user = await client.get_chat(peer)
 
         await client.unblock_user("@creationdatebot")
         try:
@@ -110,6 +106,6 @@ async def get_full_user_inf(client: Client, message: Message):
 
 
 modules_help["user_info"] = {
-    "inf [reply|id|username]": "Get brief information about user",
-    "inffull [reply|id|username": "Get full information about user",
+    "info [reply|id|username]": "Get brief information about user",
+    "infofull [reply|id|username": "Get full information about user",
 }
