@@ -24,13 +24,15 @@ from utils.misc import modules_help, prefix
 from utils import config
 
 
-ALIVE_TEXT = """<b>Hey I am Alive!</b>
+ALIVE_TEXT = """**Hey I am Alive!**
+
 XUB is online!
-<b>Uptime:</b> <code>{}</code>
-<b>Python:</b> <code>{}</code>
-<b>Pyrogram:</b> <code>{}</code>
-<b>XUB Version:</b> <code>master@0.0.1</code>
-<b>My Master:</b> {}
+
+**Uptime:** `{}`
+**Python:** `{}`
+**Pyrogram:** `{}`
+**XUB Version:** `master@0.0.1`
+**My Master:** {}
 """
 
 StartTime = time.time()
