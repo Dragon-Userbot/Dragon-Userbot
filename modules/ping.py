@@ -18,7 +18,7 @@ import time
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from platform import version_info
+from platform import python_version as yy
 from pyrogram import __version__ as k
 from utils.misc import modules_help, prefix
 from utils import config
@@ -36,7 +36,7 @@ XUB is online!
 <b>My Master:</b> {_.me.mention}
 """
 
-piton = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
+piton = f"{yy()}"
 
 StartTime = time.time()
 
