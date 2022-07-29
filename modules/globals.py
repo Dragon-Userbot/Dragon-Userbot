@@ -25,7 +25,7 @@ async def gmute(client, message):
     get_user = await client.get_users(user)
     gmuted_users = db.get("core.gmute", "gmuted_users", [])
     gmuted_users.append(get_user.id)
-    db.set("core.gmute", "gmuted_users", gmuted_users)
+    db.set("core.gmute", "gmuted_users", [f"{user}"])
     await message.edit(f"<b>Gmuted {get_user.first_name}, LOL!</b>")
 
 
@@ -72,7 +72,7 @@ async def gban(client, message):
     get_user = await client.get_users(user)
     gmuted_users = db.get("core.gban", "gbaned_users", [])
     gmuted_users.append(get_user.id)
-    db.set("core.gban", "gbaned_users", gbaned_users)
+    db.set("core.gban", "gbaned_users", gbaned_users, [f"{user}"])
     await message.edit(f"<b>Gbanned {get_user.first_name}, LOL!</b>")
 
 
