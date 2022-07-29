@@ -157,7 +157,7 @@ async def end_vc_(client: Client, message: Message):
         )
     ):
         return
-    await client.DiscardGroupCall(chat_id=chat_id, call=group_call))
+    await client.DiscardGroupCall(chat_id=chat_id, call=group_call)
     await message.edit("Voice chat ended...")
 
 
