@@ -18,18 +18,61 @@ import time
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
-
+from platform import python_version
+from pyrogram import __version__ as k
 from utils.misc import modules_help, prefix
 
 
-@Client.on_message(filters.command(["ping", "p"], prefix) & filters.me)
+ALIVE_TEXT = """
+<b>Hey I am Alive!</b>
+
+XUB is online!
+
+<b>Python:</b> <code>{}</code>
+<b>Pyrogram:</b> <code>{}</code>
+<b>XUB Version:</b> <code>master@0.0.1</code>
+<b>My Master:</b> {}
+"""
+
+
+@Client.on_message(filters.command(["ping"], prefix) & filters.me)
 async def ping(_, message: Message):
     start = time.time()
     reply = await message.edit("Pinging...")
     delta_ping = time.time() - start
     await reply.edit(f"**Pong!**\n`{delta_ping * 1000:.3f} ms`")
 
+@Client.on_message(filters.command(["alive"], prefix) & filters.me)
+async def ping(_, m: Message):
+    if config.alive.endswith(".jpg"):
+        return await _.send_photo(
+            m.chat.id,
+            photo=config.alive,
+            caption=ALIVE_TEXT
+                .format(python_version(), k, _.me.mention
+        )
+    elif config.alive.endswith(".mp4"):
+        return await _.send_video(
+            m.chat.id,
+            video=config.alive,
+            caption=ALIVE_TEXT
+                .format(python_version(), k, _.me.mention
+        )
+    else:
+        return m.edit(
+            ALIVE_TEXT
+                .format(python_version(), k, _.me.mention
+        )
+
+@Client.on_message(filters.command(["repo"], prefix) & filters.me)
+async def ping(_, m: Message):
+    await m.edit(
+        "I am using XUB"
+    )
+
 
 modules_help["ping"] = {
     "ping": "Check ping to Telegram servers",
+    "alive": "Get alive XUB",
+    "repo": "Show XUB repository link",
 }
