@@ -14,6 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import asyncio
 import sqlite3
 import subprocess
 import os
@@ -156,6 +157,7 @@ if __name__ == "__main__":
         )
 
     logging.info("Dragon-Userbot started!")
-    app.send_message(chat_id=k.id, text=f"Your XUB is alive\n\nTry {prefix}alive for checks")
-
+    k = app.send_message(chat_id=k.id, text=f"Your XUB is alive\n\nTry {prefix}alive for checks")
+    asyncio.sleep(60)
+    k.delete()
     idle()
