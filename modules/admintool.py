@@ -28,7 +28,7 @@ from pyrogram.errors import (
     RPCError,
 )
 from pyrogram.raw import functions, types
-from pyrogram.types import Message, ChatPermissions
+from pyrogram.types import Message, ChatPrivileges
 from pyrogram.utils import (
     get_channel_id,
     MAX_USER_ID,
@@ -670,7 +670,7 @@ async def mute_command(client: Client, message: Message):
                 await client.restrict_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
-                    ChatPermissions(),
+                    ChatPrivileges(),
                     int(time()) + mute_seconds,
                 )
                 from_user = message.reply_to_message.from_user
@@ -692,7 +692,7 @@ async def mute_command(client: Client, message: Message):
                 await client.restrict_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
-                    ChatPermissions(),
+                    ChatPrivileges(),
                 )
                 message_text = (
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code> was muted indefinitely</code>"
@@ -745,7 +745,7 @@ async def mute_command(client: Client, message: Message):
                         await client.restrict_chat_member(
                             message.chat.id,
                             user_to_unmute.id,
-                            ChatPermissions(),
+                            ChatPrivileges(),
                             int(time()) + mute_seconds,
                         )
                         mute_time: Dict[str, int] = {
@@ -764,7 +764,7 @@ async def mute_command(client: Client, message: Message):
                             message_text = message_text.replace("  ", " ")
                     else:
                         await client.restrict_chat_member(
-                            message.chat.id, user_to_unmute.id, ChatPermissions()
+                            message.chat.id, user_to_unmute.id, ChatPrivileges()
                         )
                         message_text = (
                             f"<b>{user_to_unmute.first_name}</b> <code> was muted indefinitely</code>"
@@ -1112,7 +1112,7 @@ async def ro(client: Client, message: Message):
         db.set("core.ats", f"ro{message.chat.id}", perms_list)
 
         try:
-            await client.set_chat_permissions(message.chat.id, ChatPermissions())
+            await client.set_chat_permissions(message.chat.id, ChatPrivileges())
         except (UserAdminInvalid, ChatAdminRequired):
             await message.edit("<b>No rights</b>")
         else:
@@ -1136,7 +1136,7 @@ async def unro(client: Client, message: Message):
             f"ro{message.chat.id}",
             [True, True, True, False, False, False, False, False],
         )
-        perms = ChatPermissions(
+        perms = ChatPrivileges(
             can_send_messages=perms_list[0],
             can_send_media_messages=perms_list[1],
             can_send_other_messages=perms_list[2],
