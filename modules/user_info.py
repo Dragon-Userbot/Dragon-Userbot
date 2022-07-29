@@ -29,7 +29,7 @@ async def get_user_inf(client: Client, message: Message):
     elif message.reply_to_message and message.reply_to_message.from_user:
         peer = message.reply_to_message.from_user.id
     else:
-        peer = "me")
+        peer = "me"
 
     user = await client.get_users(peer)
     full_user = await client.get_chat(peer)
