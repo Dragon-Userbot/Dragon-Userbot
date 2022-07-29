@@ -921,7 +921,7 @@ async def promote_command(client: Client, message: Message):
                         await client.set_administrator_title(
                             message.chat.id,
                             promote_user.id,
-                            f"\n{cause.split(' ', maxsplit=2)[2] if len(cause.split()) > 2 else cause = 'Admin'}",
+                            f"\n{cause.split(' ', maxsplit=2)[2] if len(cause.split()) > 2 else Admin}",
                         )
                     await message.edit(
                         f"<b>{promote_user.first_name}</b> <code>promoted!</code>"
