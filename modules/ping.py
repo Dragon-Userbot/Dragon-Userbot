@@ -21,6 +21,7 @@ from pyrogram.types import Message
 from platform import python_version
 from pyrogram import __version__ as k
 from utils.misc import modules_help, prefix
+from utils import config
 
 
 ALIVE_TEXT = """
