@@ -798,7 +798,7 @@ async def demote_command(client: Client, message: Message):
                 await client.promote_chat_member(
                     chat_id=message.chat.id,
                     user_id=message.reply_to_message.from_user.id,
-                    privilages=( 
+                    privilages=
                         can_manage_chat=False,
                         can_change_info=False,
                         can_post_messages=False,
@@ -809,7 +809,6 @@ async def demote_command(client: Client, message: Message):
                         can_pin_messages=False,
                         can_promote_members=False,
                         can_manage_video_chats=False,
-                    )
                 )
                 await message.edit(
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code>demoted!</code>"
@@ -832,7 +831,7 @@ async def demote_command(client: Client, message: Message):
                     await client.promote_chat_member(
                         chat_id=message.chat.id,
                         user_id=promote_user.id,
-                        privilages=( 
+                        privilages=
                             can_manage_chat=False,
                             can_change_info=False,
                             can_post_messages=False,
@@ -843,7 +842,6 @@ async def demote_command(client: Client, message: Message):
                             can_pin_messages=False,
                             can_promote_members=False,
                             can_manage_video_chats=False,
-                        )
                     )
                     await message.edit(
                         f"<b>{promote_user.first_name}</b> <code>demoted!</code>"
@@ -876,14 +874,13 @@ async def promote_command(client: Client, message: Message):
                 await client.promote_chat_member(
                     chat_id=message.chat.id,
                     user_id=message.reply_to_message.from_user.id,
-                    privilages=(
+                    privilages=
                         can_manage_chats=True,
                         can_delete_messages=True,
                         can_restrict_members=True,
                         can_invite_users=True,
                         can_pin_messages=True,
                         can_manage_video_chats=True,
-                    )
                 )
                 if len(cause.split()) > 1:
                     await client.set_administrator_title(
@@ -912,14 +909,13 @@ async def promote_command(client: Client, message: Message):
                     await client.promote_chat_member(
                         chat_id=message.chat.id,
                         user_id=promote_user.id,
-                        privilages=(
+                        privilages=
                             can_manage_chats=True,
                             can_delete_messages=True,
                             can_restrict_members=True,
                             can_invite_users=True,
                             can_pin_messages=True,
                             can_manage_video_chats=True,
-                        )
                     )
                     if len(cause.split()) > 1:
                         await client.set_administrator_title(
