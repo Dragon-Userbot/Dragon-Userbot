@@ -798,7 +798,6 @@ async def demote_command(client: Client, message: Message):
                 await client.promote_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
-                    is_anonymous=False,
                     can_manage_chat=False,
                     can_change_info=False,
                     can_post_messages=False,
@@ -831,7 +830,6 @@ async def demote_command(client: Client, message: Message):
                     await client.promote_chat_member(
                         message.chat.id,
                         promote_user.id,
-                        is_anonymous=False,
                         can_manage_chat=False,
                         can_change_info=False,
                         can_post_messages=False,
