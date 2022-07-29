@@ -56,7 +56,7 @@ async def zombies(client, message):
     ok = 0
     sip = 0
     chat = message.chat.id
-    async for klayen in app.get_chat_members(chat):
+    async for klayen in client.get_chat_members(chat):
         if klayen.user.is_deleted:
             ok += 1
     return await y.edit(f"☠️ Deleted account found `{ok}`, `{prefix}zombiesclean` to kick that all.")
@@ -68,7 +68,7 @@ async def terhapus(client, message):
     ok = 0
     sip = 0
     chat = message.chat.id
-    async for ah in app.get_chat_members(chat):
+    async for ah in client.get_chat_members(chat):
         if ah.user.is_deleted:
             try:
                 await client.ban_chat_member(chat, ah.user.id)
