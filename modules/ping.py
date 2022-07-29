@@ -77,32 +77,26 @@ async def ping(_, message: Message):
 async def alive(_, m: Message):
     start_time = time.time()
     uptime = get_readable_time((time.time() - StartTime))
-    kontol = await m.edit("<code>Checking...</code>")
     end_time = time.time()
     if config.alive.endswith(".jpg"):
-        return await kontol.delete()
         return await _.send_photo(
             m.chat.id,
             photo=config.alive,
             caption=ALIVE_TEXT
                 .format(uptime, yy(), k, _.me.mention),
-            parse_mode="HTML"
         )
     elif config.alive.endswith(".mp4"):
-        return await kontol.delete()
         return await _.send_video(
             m.chat.id,
             video=config.alive,
             caption=ALIVE_TEXT
                 .format(uptime, yy(), k, _.me.mention),
-            parse_mode="HTML"
         )
     else:
-        return await kontol.edit(
+        return await m.edit(
             m.chat.id,
             ALIVE_TEXT
                 .format(uptime, yy(), k, _.me.mention),
-            parse_mode="HTML"
         )
 
 
