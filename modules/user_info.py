@@ -78,12 +78,12 @@ async def get_full_user_inf(client: Client, message: Message):
 |-Prem: <code>{user.is_premium}</code>
 |-Name: <code>{user.first_name}</code>
 |-BIO: <code>{about}</code>
-|-Contact: <code>{user.contact}</code>
+|-Contact: <code>{user.is_contact}</code>
 |-Can pin message: <code>{full_user.can_pin_message}</code>
-|-Mutual contact: <code>{user.mutual_contact}</code>
+|-Mutual contact: <code>{user.is_mutual_contact}</code>
 |-Access hash: <code>{user.access_hash}</code>
-|-Restricted: <code>{user.restricted}</code>
-|-Verified: <code>{user.verified}</code>
+|-Restricted: <code>{user.is_restricted}</code>
+|-Verified: <code>{user.is_verified}</code>
 |-Phone calls available: <code>{full_user.phone_calls_available}</code>
 |-Phone calls private: <code>{full_user.phone_calls_private}</code>
 |-Blocked: <code>{full_user.blocked}</code></b>"""
