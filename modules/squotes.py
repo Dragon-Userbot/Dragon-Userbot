@@ -365,12 +365,6 @@ def get_reply_text(reply: types.Message) -> str:
         else "📍 pinned message"
         if reply.pinned_message
         else "🎤 started a new video chat"
-        if reply.voice_chat_started
-        else "🎤 ended the video chat"
-        if reply.voice_chat_ended
-        else "🎤 invited participants to the video chat"
-        if reply.voice_chat_members_invited
-        else "👥 created the group"
         if reply.group_chat_created or reply.supergroup_chat_created
         else "👥 created the channel"
         if reply.channel_chat_created
