@@ -1,4 +1,5 @@
 import asyncio
+from pyrogram.errors.exceptions.bad_request_400 import YouBlockedUser
 from pyrogram import Client, filters, enums
 from pyrogram.types import Message
 from utils.misc import modules_help, prefix
@@ -15,11 +16,15 @@ async def sosmed(client, message):
     ah = message.from_user.id
     bot = "thisvidbot"
     if tetek:
-        y = await client.send_message(bot, tetek)
-        k = await client.send_message(bot, "/start")
-        await asyncio.sleep(5)
-        await y.delete()
-        await k.delete()
+        try:
+            y = await client.send_message(bot, tetek)
+            await asyncio.sleep(5)
+            await y.delete()
+        except YouBlockedUser:
+            await client.unblok_user(bot)
+            y = await client.send_message(bot, tetek)
+            await asyncio.sleep(5)
+            await y.delete()
     async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=3):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
         await uh.delete()
