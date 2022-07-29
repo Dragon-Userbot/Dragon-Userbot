@@ -105,7 +105,7 @@ def format_module_help(module_name: str):
         cmd = command.split(maxsplit=1)
         args = " <code>" + cmd[1] + "</code>" if len(cmd) > 1 else ""
         help_text += f"<code>{prefix}{cmd[0]}</code>{args} — <i>{desc}</i>\n"
-    help_text += "\n\nCopyright ©️ 2020-present XUB"
+    help_text += "\nCopyright ©️ 2020-present XUB"
     return help_text
 
 
