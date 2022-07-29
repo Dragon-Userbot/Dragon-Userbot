@@ -798,8 +798,7 @@ async def demote_command(client: Client, message: Message):
                 await client.promote_chat_member(
                     chat_id=message.chat.id,
                     user_id=message.reply_to_message.from_user.id,
-                    privilages=
-                        can_manage_chat=False,
+                    privilages=can_manage_chat=False,
                         can_change_info=False,
                         can_post_messages=False,
                         can_edit_messages=False,
@@ -831,8 +830,7 @@ async def demote_command(client: Client, message: Message):
                     await client.promote_chat_member(
                         chat_id=message.chat.id,
                         user_id=promote_user.id,
-                        privilages=
-                            can_manage_chat=False,
+                        privilages=can_manage_chat=False,
                             can_change_info=False,
                             can_post_messages=False,
                             can_edit_messages=False,
@@ -874,8 +872,7 @@ async def promote_command(client: Client, message: Message):
                 await client.promote_chat_member(
                     chat_id=message.chat.id,
                     user_id=message.reply_to_message.from_user.id,
-                    privilages=
-                        can_manage_chats=True,
+                    privilages=can_manage_chats=True,
                         can_delete_messages=True,
                         can_restrict_members=True,
                         can_invite_users=True,
@@ -909,8 +906,7 @@ async def promote_command(client: Client, message: Message):
                     await client.promote_chat_member(
                         chat_id=message.chat.id,
                         user_id=promote_user.id,
-                        privilages=
-                            can_manage_chats=True,
+                        privilages=can_manage_chats=True,
                             can_delete_messages=True,
                             can_restrict_members=True,
                             can_invite_users=True,
