@@ -25,6 +25,31 @@ from utils.misc import modules_help, prefix, requirements_list
 from utils.scripts import format_exc
 
 
+async def execute(command, pass_error=True):
+    """ Executes command and returns output, with the option of enabling stderr. """
+    executor = await create_subprocess_shell(
+        command,
+        stdout=PIPE,
+        stderr=PIPE,
+        stdin=PIPE
+    )
+
+    stdout, stderr = await executor.communicate()
+    if pass_error:
+        try:
+            result = str(stdout.decode().strip()) \
+                     + str(stderr.decode().strip())
+        except UnicodeDecodeError:
+            result = str(stdout.decode('gbk').strip()) \
+                     + str(stderr.decode('gbk').strip())
+    else:
+        try:
+            result = str(stdout.decode().strip())
+        except UnicodeDecodeError:
+            result = str(stdout.decode('gbk').strip())
+    return result
+
+
 def restart(message: Message, restart_type):
     text = "1" if restart_type == "update" else "2"
     os.execvp(
@@ -47,24 +72,16 @@ async def restart_cmd(_, message: Message):
 
 @Client.on_message(filters.command("update", prefix) & filters.me)
 async def update(_, message: Message):
-    try:
-        await message.edit("<b>Updating: 1/3 (git pull)</b>")
-        subprocess.run(["git", "pull"])
-        await message.edit("<b>Updating: 2/3 (updating libs from requirements.txt)</b>")
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "-U", "-r", "requirements.txt"]
-        )
-        await message.edit(
-            "<b>Updating: 3/3 (updating libs from requirements_list)</b>"
-        )
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "-U", "-r", *requirements_list]
-        )
-        await message.edit("<b>Updating: done! Restarting...</b>")
-    except Exception as e:
-        await message.edit(format_exc(e))
-    else:
-        restart(message, "update")
+    await message.edit("Please wait...")
+    await execute("git fetch --all")
+    if len(message.parameter) > 0:
+        await execute("git reset --hard origin/master")
+    await execute("git pull --all")
+    await execute(f"{executable} -m pip install --upgrade -r requirements.txt")
+    await execute(f"{executable} -m pip install -r requirements.txt")
+    await message.edit("Update successful")
+    restart()
+    
 
 
 modules_help["updater"] = {
