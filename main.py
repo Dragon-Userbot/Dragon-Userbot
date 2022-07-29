@@ -24,7 +24,7 @@ from pathlib import Path
 from importlib import import_module
 import logging
 import platform
-from utils.log_chat import check_or_set_log_channel
+from utils.misc import prefix
 
 logging.basicConfig(level=logging.INFO)
 
@@ -132,7 +132,6 @@ if __name__ == "__main__":
         logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
         logging.warning(f"Failed to add {failed_handlers} to handlers")
-    log_channel_id = check_or_set_log_channel()
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
         if restart_type == "1":
@@ -141,10 +140,10 @@ if __name__ == "__main__":
             text = "<b>Restart completed!</b>"
         try:
             app.send_message(
-                chat_id=log_channel_id, text=text, reply_to_message_id=int(sys.argv[2])
+                chat_id=Client.me.id, text=text, reply_to_message_id=int(sys.argv[2])
             )
         except errors.RPCError:
-            app.send_message(chat_id=log_channel_id, text=text)
+            app.send_message(chat_id=Client.me.id, text=text)
 
     # required for sessionkiller module
     if db.get("core.sessionkiller", "enabled", False):
@@ -155,5 +154,6 @@ if __name__ == "__main__":
         )
 
     logging.info("Dragon-Userbot started!")
+    Client.send_message(Client.me.id, f"Your XUB is alive\n\nTry {prefix}alive for checks")
 
     idle()
