@@ -31,7 +31,7 @@ from pyrogram.types import Message
 
 
 @Client.on_message(filters.command("purge", prefix) & filters.me)
-async def purge_message(client: Client, message): Message:
+async def purge_message(client: Client, message: Message):
     try:
         if message.reply_to_message:
             start = datetime.now()
