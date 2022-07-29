@@ -50,20 +50,31 @@ async def alive(_, m: Message):
             m.chat.id,
             photo=config.alive,
             caption=ALIVE_TEXT
-                .format(python_version(), k, _.me.mention
+                .format(python_version(), k, _.me.mention)
         )
     elif config.alive.endswith(".mp4"):
         return await _.send_video(
             m.chat.id,
             video=config.alive,
             caption=ALIVE_TEXT
-                .format(python_version(), k, _.me.mention
+                .format(python_version(), k, _.me.mention)
         )
     else:
         return m.edit(
             ALIVE_TEXT
-                .format(python_version(), k, _.me.mention
+                .format(python_version(), k, _.me.mention)
         )
+
+
+@Client.on_message(filters.command(["repo"], prefix) & filters.me)
+async def repos(_, m: Message):
+    await m.edit(
+        "I am using XUB"
+        "XUB version: <code>master@0.0.1</code>
+        "Python version: <code>{}</code>"
+        "Pyrogram version: <code>{}</code>"
+            .format(python_version(), v)
+    )
 
 
 modules_help["ping"] = {
