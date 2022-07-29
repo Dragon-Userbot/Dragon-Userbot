@@ -48,8 +48,7 @@ async def purge_message(client: Client, message: Message):
                                 message.chat.id,
                                 msg_id
                         )
-            sec = (datetime.now() - start).seconds
-            await message.edit(f"Deleted `{len(msg_id)}` messages in `{sec}` seconds.")
+            await message.edit(f"Deleted `{len(msg_id)}` messages.")
             await asyncio.sleep(5)
             await message.delete()
         else:
