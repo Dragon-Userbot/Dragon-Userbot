@@ -146,9 +146,9 @@ x)
             )
             os.remove("output.txt")
             return
-        await message.edit(f"**Command:** {args}\n**Output:**\n```{output}```")
+        await message.edit(f"**Command:** `{teks}`\n\n**Output:**\n```{output}```")
     else:
-        await message.edit(f"Command:** `{args}`\n**Output:**\n`No Output`")
+        await message.edit(f"**Command:** `{teks}`\n\n**Output:**\n`No Output`")
 
 
 modules_help["devs"] = {
