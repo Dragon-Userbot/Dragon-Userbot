@@ -9,6 +9,30 @@ from utils.pyrohelpers import get_arg
 from utils.scripts import interact_with, interact_with_to_delete, format_exc
 
 
+@Client.on_message(filters.command("json", prefix) & filters.me)
+async def start(client, message):
+    try:
+        if message.reply_to_message:
+            msg = message.reply_to_message
+        else:
+            msg = message
+        msg_info = str(msg)
+        if len(msg_info) > int("4096"):
+            file = open("json.txt", "w+")
+            file.write(msg_info)
+            file.close()
+            await client.send_document(
+                message.chat.id,
+                "json.txt",
+                caption="Returned JSon",
+            )
+            remove("json.txt")
+        else:
+            await message.edit(msg_info)
+    except Exception as e:
+        await message.edit(f"```{e}```")
+
+
 @Client.on_message(filters.command(["sg", "sa"], prefix) & filters.me)
 async def sangmata(client, message):
     await message.edit_text("Processing")
@@ -80,4 +104,5 @@ async def sosmed(client, message):
 modules_help["extras"] = {
     "tt [link|reply]*": "Download video from tiktok",
     "sg [id|reply]*": "Check history name of user",
+    "json [reply]": "Show code of the text you replied",
 }
