@@ -130,37 +130,6 @@ async def stop(_, message: Message):
         )
         restart()
 
-@Client.on_message(filters.command(["startvc"], prefix) & filters.me)
-async def opengc(client: Client, message: Message):
-    flags = " ".join(message.command[1:])
-    k = await message.edit("`Processing...`")
-    if flags == "channel":
-        chat_id = message.chat.title
-    else:
-        chat_id = message.chat.id
-    try:
-        await client.CreateGroupCall(
-                peer=chat_id,
-                random_id=randint(10000, 999999999),
-        )
-        await k.edit(f"Started group call...")
-    except Exception as e:
-        await k.edit(f"<b>INFO:</b> <code>{e}</code>")
-
-
-@Client.on_message(filters.command(["stopvc"], prefix) & filters.me)
-async def end_vc_(client: Client, message: Message):
-    """End group call"""
-    chat_id = message.chat.id
-    if not (
-        group_call := (
-            await get_group_call(client, message, err_msg="group call already ended")
-        )
-    ):
-        return
-    await client.DiscardGroupCall(chat_id=chat_id, call=group_call)
-    await message.edit("Voice chat ended...")
-
 
 @Client.on_message(filters.command("stop", prefix) & filters.me)
 @init_client
