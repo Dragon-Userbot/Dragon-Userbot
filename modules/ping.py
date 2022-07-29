@@ -24,15 +24,14 @@ from utils.misc import modules_help, prefix
 from utils import config
 
 
-ALIVE_TEXT = """**Hey I am Alive!**
+ALIVE_TEXT = """<b>Hey I am Alive!</b>
 
 XUB is online!
 
-**Uptime:** `{}`
-**Python:** `{}`
-**Pyrogram:** `{}`
-**XUB Version:** `master@0.0.1`
-**My Master:** {}
+<b>Uptime:</b> <code>{}</code>
+<b>Python:</b> <code>{}</code>
+<b>Pyrogram:</b> <code>{}</code>
+<b>XUB Version:</b> <code>master@0.0.1</code>
 """
 
 StartTime = time.time()
@@ -86,7 +85,8 @@ async def alive(_, m: Message):
             m.chat.id,
             photo=config.alive,
             caption=ALIVE_TEXT
-                .format(uptime, yy(), k, _.me.mention)
+                .format(uptime, yy(), k, _.me.mention),
+            parse_mode="HTML"
         )
     elif config.alive.endswith(".mp4"):
         return await kontol.delete()
@@ -94,13 +94,15 @@ async def alive(_, m: Message):
             m.chat.id,
             video=config.alive,
             caption=ALIVE_TEXT
-                .format(uptime, yy(), k, _.me.mention)
+                .format(uptime, yy(), k, _.me.mention),
+            parse_mode="HTML"
         )
     else:
         return await kontol.edit(
             m.chat.id,
             ALIVE_TEXT
-                .format(uptime, yy(), k, _.me.mention)
+                .format(uptime, yy(), k, _.me.mention),
+            parse_mode="HTML"
         )
 
 
