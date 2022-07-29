@@ -42,7 +42,7 @@ async def sangmata(client, message):
             return
     elif cmd[1]:
         try:
-            kon = await client.send_message(bot, f"/search_id {cmd[1]}")            await sleep(1)
+            y = await client.send_message(bot, f"/search_id {cmd[1]}")            await sleep(1)
             await y.delete()
         except YouBlockedUser:
             await client.unblock_user(bot)
