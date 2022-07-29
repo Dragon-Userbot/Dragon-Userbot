@@ -14,6 +14,19 @@ from pytgcalls import GroupCallFactory
 group_call = None
 
 
+def get_text(message: Message) -> [None, str]:
+    text_to_return = message.text
+    if message.text is None:
+        return None
+    if " " in text_to_return:
+        try:
+            return message.text.split(None, 1)[1]
+        except IndexError:
+            return None
+    else:
+        return None
+
+
 def init_client(func):
     async def wrapper(client, message):
         global group_call
@@ -64,11 +77,10 @@ async def volume(_, message):
 @init_client
 async def start(_, message: Message):
     p = await message.edit("`Joining...`")
-    if len(message.command) > 1:
+    chat_id = get_text(message)
+    if chat_id == "":
         chat_id = message.chat.id
-        return
     else:
-        chat_id = message.command[1]
         return
     with suppress(ValueError):
         chat_id = int(chat_id)
