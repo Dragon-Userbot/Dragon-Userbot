@@ -35,6 +35,7 @@ async def purge(client: Client, message: Message):
     async for msg in client.get_chat_history(
         chat_id=message.chat.id,
         offset_id=message.reply_to_message.message_id,
+        reverse=True
     ):
         chunk.append(msg.message_id)
         if len(chunk) >= 100:
