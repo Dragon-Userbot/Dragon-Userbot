@@ -12,7 +12,7 @@ async def chat_broadcast(client, message):
     elif get_arg:
         msg = get_arg(message)
     else:
-        await message.edit_text("Give me a Text/Reply to a message to broadcast it")        return
+        return await message.edit_text("Give me a Text/Reply to a message to broadcast it")
     sent = 0
     failed = 0
     async for dialog in client.get_dialogs():
@@ -42,7 +42,7 @@ async def chat_broadcast(client, message):
     elif get_arg:
         msg = get_arg(message)
     else:
-        await message.edit_text("Give me a Text/Reply to a message to broadcast it")        return
+        return await message.edit_text("Give me a Text/Reply to a message to broadcast it")
     sent = 0
     failed = 0
     async for dialog in client.get_dialogs():
