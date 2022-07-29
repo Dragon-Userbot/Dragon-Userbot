@@ -32,6 +32,7 @@ XUB is online!
 <b>Python:</b> <code>{}</code>
 <b>Pyrogram:</b> <code>{}</code>
 <b>XUB Version:</b> <code>master@0.0.1</code>
+<b>XUB UserMode:</b> {}
 """
 
 StartTime = time.time()
