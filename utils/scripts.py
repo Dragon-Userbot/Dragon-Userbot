@@ -24,7 +24,7 @@ import subprocess
 
 from pyrogram import Client, errors, types
 import traceback
-from .config import app
+from main import app
 from .misc import modules_help, prefix, requirements_list
 
 
