@@ -44,7 +44,7 @@ async def purge_message(client: Client, message: Message):
             msg_id.clear()
             for msg in y:
                  msg_id.append(msg.id)
-            await app.delete_messages(
+            await client.delete_messages(
                                 message.chat.id,
                                 msg_id
                         )
@@ -63,7 +63,7 @@ async def delete_replied(client: Client, message: Message):
     msg_ids = [message.id]
     if message.reply_to_message:
         msg_ids.append(message.reply_to_message.id)
-    await app.delete_messages(message.chat.id, msg_ids)
+    await client.delete_messages(message.chat.id, msg_ids)
 
 
 @Client.on_message(filters.command("purgeme", prefix) & filters.me)
