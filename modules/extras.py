@@ -15,7 +15,7 @@ async def limit(client, message):
     chat = message.chat.id
     bot = "SpamBot"
     try:
-        ok = await app.send_message(bot, "/start")
+        ok = await client.send_message(bot, "/start")
         await ok.delete()
     except RPCError:
         await a.edit_text(f"Please unblock @{bot} first!")
