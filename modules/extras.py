@@ -29,27 +29,17 @@ async def sangmata(client, message):
         return
     bot = "SangMataInfo_bot"
     chat = message.chat.id
-    if user:
-        try:
-            y = await client.send_message(bot, f"/search_id {user.id}")
-            await sleep(1)
-            await y.delete()
-        except YouBlockedUser:
-            await client.unblock_user(bot)
-            y = await client.send_message(bot, f"/search_id {user.id}")
-            await sleep(1)
-            await y.delete()
-            return
-    elif cmd[1]:
-        try:
-            y = await client.send_message(bot, f"/search_id {cmd[1]}")            await sleep(1)
-            await y.delete()
-        except YouBlockedUser:
-            await client.unblock_user(bot)
-            y = await client.send_message(bot, f"/search_id {user.id}")
-            await sleep(1)
-            await y.delete()
-            return
+    try:
+        y = await client.send_message(bot, f"/search_id {user.id}")
+        await sleep(1)
+        await y.delete()
+    except YouBlockedUser:
+        await client.unblock_user(bot)
+        y = await client.send_message(bot, f"/search_id {user.id}")
+        await sleep(1)
+        await y.delete()
+        return
+
     async for jembut in client.search_messages(bot, query="Name", limit=1):
         if not jembut:
             await message.edit_text("Can't find histroy name of that user.")
