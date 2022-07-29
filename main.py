@@ -132,7 +132,7 @@ if __name__ == "__main__":
         logging.warning(f"Failed to import {failed_modules} modules")
     if failed_handlers:
         logging.warning(f"Failed to add {failed_handlers} to handlers")
-    log_channel_id = await check_or_set_log_channel()
+    log_channel_id = check_or_set_log_channel()
     if len(sys.argv) == 4:
         restart_type = sys.argv[3]
         if restart_type == "1":
