@@ -22,7 +22,7 @@ from utils.misc import modules_help, prefix
 from utils.scripts import format_exc, interact_with, interact_with_to_delete
 
 
-@Client.on_message(filters.command("inf", prefix) & filters.me)
+@Client.on_message(filters.command("info", prefix) & filters.me)
 async def get_user_inf(client: Client, message: Message):
     if len(message.command) >= 2:
         peer = await client.resolve_peer(message.command[1])
@@ -31,7 +31,7 @@ async def get_user_inf(client: Client, message: Message):
     else:
         peer = await client.resolve_peer("me")
 
-    response = await client.send(functions.users.GetFullUser(id=peer))
+    response = await client.get_user(functions.users.GetFullUser(id=peer))
 
     user = response.users[0]
     full_user = response.full_user
