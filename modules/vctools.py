@@ -20,13 +20,13 @@ group_call = None
 async def get_group_call(
     client: Client, message: Message, err_msg: str = ""
 ) -> Optional[InputGroupCall]:
-    chat_peer = await app.resolve_peer(message.chat.id)
+    chat_peer = await client.resolve_peer(message.chat.id)
     if isinstance(chat_peer, (InputPeerChannel, InputPeerChat)):
         if isinstance(chat_peer, InputPeerChannel):
-            full_chat = (await client.send(GetFullChannel(channel=chat_peer))).full_chat
+            full_chat = (await client.send_message(message.chat.id, GetFullChannel(channel=chat_peer))).full_chat
         elif isinstance(chat_peer, InputPeerChat):
             full_chat = (
-                await client.send(GetFullChat(chat_id=chat_peer.chat_id))
+                await client.send_message(message.chat.id, GetFullChat(chat_id=chat_peer.chat_id))
             ).full_chat
         if full_chat is not None:
             return full_chat.call
@@ -138,7 +138,8 @@ async def opengc(client: Client, message: Message):
     else:
         chat_id = message.chat.id
     try:
-        await client.send(
+        await client.send_message(
+            message.chat.id,
             CreateGroupCall(
                 peer=(await client.resolve_peer(chat_id)),
                 random_id=randint(10000, 999999999),
@@ -159,7 +160,7 @@ async def end_vc_(client: Client, message: Message):
         )
     ):
         return
-    await client.send(DiscardGroupCall(call=group_call))
+    await client.send_message(message.chat.id, DiscardGroupCall(call=group_call))
     await message.edit("Voice chat ended...")
 
 
