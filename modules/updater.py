@@ -77,7 +77,7 @@ async def restart_cmd(_, message: Message):
 async def update(_, message: Message):
     await message.edit("Please wait...")
     await execute("git fetch --all")
-    if len(message.parameter) > 0:
+    if len(message.command) > 0:
         await execute("git reset --hard origin/master")
     await execute("git pull --all")
     await execute(f"{executable} -m pip install --upgrade -r requirements.txt")
