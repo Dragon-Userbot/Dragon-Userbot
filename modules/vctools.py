@@ -1,6 +1,6 @@
 import os
 from contextlib import suppress
-
+from typing import Optional
 import ffmpeg
 from pyrogram import Client, filters
 from pyrogram.types import Message
