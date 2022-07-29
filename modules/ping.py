@@ -20,7 +20,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from platform import python_version as yy
 from pyrogram import __version__ as k
-from utils.misc import modules_help, prefix
+from utils.misc import modules_help, prefix, userbot_version as oh
 from utils import config
 
 
@@ -31,7 +31,7 @@ XUB is online!
 <b>Uptime:</b> <code>{}</code>
 <b>Python:</b> <code>{}</code>
 <b>Pyrogram:</b> <code>{}</code>
-<b>XUB Version:</b> <code>master@0.0.1</code>
+<b>XUB Version:</b> <code>{}</code>
 <b>XUB UserMode:</b> {}
 """
 
@@ -84,19 +84,19 @@ async def alive(_, m: Message):
             m.chat.id,
             photo=config.alive,
             caption=ALIVE_TEXT
-                .format(uptime, yy(), k, _.me.mention),
+                .format(uptime, yy(), k, oh, _.me.mention),
         )
     elif config.alive.endswith(".mp4"):
         return await _.send_video(
             m.chat.id,
             video=config.alive,
             caption=ALIVE_TEXT
-                .format(uptime, yy(), k, _.me.mention),
+                .format(uptime, yy(), k, oh, _.me.mention),
         )
     else:
         return await m.edit(
             ALIVE_TEXT
-                .format(uptime, yy(), k, _.me.mention),
+                .format(uptime, yy(), k, oh, _.me.mention),
         )
 
 
@@ -104,11 +104,11 @@ async def alive(_, m: Message):
 async def repos(_, m: Message):
     await m.edit(
         "I am using XUB"
-        "\n\nXUB version: <code>master@0.0.1</code>"
+        "\n\nXUB version: <code>{}</code>"
         "\nPython version: <code>{}</code>"
         "\nPyrogram version: <code>{}</code>"
         "\nRepository link: <a href='https://github.com/kennedy-ex/XUB'>XUB</a>"
-            .format(piton, k),
+            .format(oh, yy(), k),
         disable_web_page_preview=True
     )
 
