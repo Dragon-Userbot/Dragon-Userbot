@@ -1,5 +1,6 @@
 import asyncio
 from pyrogram.errors.exceptions.bad_request_400 import YouBlockedUser
+from pyrogram.errors import PeerIdInvalid
 from pyrogram import Client, filters, enums
 from pyrogram.types import Message
 from pyrogram.raw.functions.messages import DeleteChatUser
