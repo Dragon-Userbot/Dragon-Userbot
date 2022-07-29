@@ -1,34 +1,28 @@
-from pyrogram import Client, filters
+from pyrogram import Client, filters, enums
 from pyrogram.types import Message
 from utils.misc import modules_help, prefix
+from utils.pyrohelpers import get_arg
 from utils.scripts import interact_with, interact_with_to_delete, format_exc
 
 
 @Client.on_message(filters.command("tt", prefix) & filters.me)
-async def tiktok(client: Client, message: Message):
-    if len(message.command) > 1:
-        link = message.command[1]
-    elif message.reply_to_message:
-        link = message.reply_to_message.text
-    else:
-        await message.edit("<b>Link isn't provided</b>")
-        return
-
-    try:
-        await message.edit("<b>Downloading...</b>")
-        await client.unblock_user("@thisvidbot")
-        msg = await interact_with(
-            await client.send_message("@thisvidbot", link)
-        )
-        await client.send_video(
-            message.chat.id, msg.video.file_id, caption=f"<b>Link: {link}</b>"
-        )
-    except Exception as e:
-        await message.edit(format_exc(e))
-    else:
-        await message.delete()
-        await client.delete_messages("@thisvidbot", interact_with_to_delete)
-        interact_with_to_delete.clear()
+async def sosmed(client, message):
+    uh = await message.edit("Processing")
+    tetek = get_arg(message)
+    chat = message.chat.id
+    pop = message.from_user.first_name
+    ah = message.from_user.id
+    bot = "thisvidbot"
+    if tetek:
+        try:
+            await client.send_message(bot, tetek)
+            await asyncio.sleep(5)
+        except RPCError:
+            return await message.edit("Unblock @thisvidbot then try again.")
+    async for turok in app.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=1):
+        await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
+        await uh.delete()
+        await turok.delete()
 
 
 modules_help["tiktok"] = {
