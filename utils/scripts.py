@@ -99,12 +99,13 @@ interact_with_to_delete = []
 def format_module_help(module_name: str):
     commands = modules_help[module_name]
 
-    help_text = f"<b>Help for |{module_name}|\n\nUsage:</b>\n"
+    help_text = f"<b>Help for {module_name}\n\nUsage:</b>\n"
 
     for command, desc in commands.items():
         cmd = command.split(maxsplit=1)
         args = " <code>" + cmd[1] + "</code>" if len(cmd) > 1 else ""
         help_text += f"<code>{prefix}{cmd[0]}</code>{args} — <i>{desc}</i>\n"
+        help_text += "\n\nCopyright ©️ 2020-present XUB"
 
     return help_text
 
