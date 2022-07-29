@@ -25,7 +25,7 @@ from utils.scripts import format_exc, interact_with, interact_with_to_delete
 @Client.on_message(filters.command("info", prefix) & filters.me)
 async def get_user_inf(client: Client, message: Message):
     if len(message.command) >= 2:
-        peer = message.command[1])
+        peer = message.command[1]
     elif message.reply_to_message and message.reply_to_message.from_user:
         peer = message.reply_to_message.from_user.id
     else:
