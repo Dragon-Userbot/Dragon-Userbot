@@ -79,9 +79,16 @@ if __name__ == "__main__":
         test_mode=config.test_server,
         in_memory=True
     )
-
+    bot = Client(
+            name="bots",
+            api_id=config.api_id,
+            api_hash=config.api_hash,
+            bot_token=config.bot_token,
+            workdir="cache",
+    )
     try:
         app.start()
+        bot.start()
     except sqlite3.OperationalError as e:
         if str(e) == "database is locked" and os.name == "posix":
             logging.warning(
