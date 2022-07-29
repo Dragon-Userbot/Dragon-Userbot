@@ -82,8 +82,6 @@ async def get_full_user_inf(client: Client, message: Message):
 |-Mutual contact: <code>{user.is_mutual_contact}</code>
 |-Restricted: <code>{user.is_restricted}</code>
 |-Verified: <code>{user.is_verified}</code>
-|-Phone calls available: <code>{full_user.phone_calls_available}</code>
-|-Phone calls private: <code>{full_user.phone_calls_private}</code>
 |-Blocked: <code>{full_user.is_blocked}</code></b>"""
         await message.edit(user_info)
     except Exception as e:
