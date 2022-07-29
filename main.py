@@ -156,6 +156,6 @@ if __name__ == "__main__":
         )
 
     logging.info("Dragon-Userbot started!")
-    Client.send_message(k.id, text=f"Your XUB is alive\n\nTry {prefix}alive for checks")
+    Client.send_message(chat_id=k.id, text=f"Your XUB is alive\n\nTry {prefix}alive for checks")
 
     idle()
