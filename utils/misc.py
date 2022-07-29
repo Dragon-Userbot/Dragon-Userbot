@@ -38,5 +38,5 @@ requirements_list = []
 python_version = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
 
 prefix = db.get("core.main", "prefix", ".")
-
+gitrepo = Repo(search_parent_directories=True)
 userbot_version = f"master@3.1"
