@@ -52,7 +52,7 @@ async def save_note(client: Client, message: Message):
                 get_media_group = [
                     _.message_id
                     for _ in await client.get_media_group(
-                        message.chat.id, message.reply_to_message.message_id
+                        message.chat.id, message.reply_to_message.id
                     )
                 ]
                 try:
@@ -210,7 +210,7 @@ async def note_send(client: Client, message: Message):
                     await client.send_media_group(
                         message.chat.id,
                         media_grouped_list,
-                        reply_to_message_id=message.reply_to_message.message_id,
+                        reply_to_message_id=message.reply_to_message.id,
                     )
                 else:
                     await client.send_media_group(message.chat.id, media_grouped_list)
@@ -219,7 +219,7 @@ async def note_send(client: Client, message: Message):
                     message.chat.id,
                     int(find_note["CHAT_ID"]),
                     int(find_note["MESSAGE_ID"]),
-                    reply_to_message_id=message.reply_to_message.message_id,
+                    reply_to_message_id=message.reply_to_message.id,
                 )
             else:
                 await client.copy_message(
