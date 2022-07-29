@@ -12,7 +12,7 @@ async def send_comment(client: Client, message: Message):
     with suppress(MsgIdInvalid):
         if enabled:
             msg = await client.get_discussion_message(
-                message.chat.id, message.message_id
+                message.chat.id, message.id
             )
             await msg.reply(db.get("custom.auto_comment", "text"))
     raise ContinuePropagation
