@@ -30,7 +30,7 @@ async def sosmed(client, message):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
         await uh.delete()
         await turok.delete()
-        await client.delete_messages(bot)
+        await client.delete_messages(bot, 2)
 
 
 modules_help["extras"] = {
