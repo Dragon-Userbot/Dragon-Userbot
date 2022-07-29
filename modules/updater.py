@@ -15,8 +15,11 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
+from sys import executable
 import sys
-import subprocess
+import subprocess 
+import asyncio create_subprocess_shell, sleep
+from asyncio.subprocess import PIPE
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
