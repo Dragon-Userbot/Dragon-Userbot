@@ -103,13 +103,13 @@ async def joinvc(client: Client, message: Message):
         try:
             await group_call.start(chat_id)
         except Exception as e:
-            return await o.edit(f"<b>ERROR:</b> <code>{e}</code>")
+            pass
         await o.edit(f"× Joined VC in: <code>{chat_id}</code>")
     elif kontol:
         try:
             await group_call.start(kontol)
         except Exception as e:
-            return await o.edit(f"<b>ERROR:</b> <code>{e}</code>")
+            pass
         await o.edit(f"× Joined VC in: <code>{kontol}</code>")
     await sleep(5)
     await group_call.set_is_mute(True)
@@ -138,9 +138,7 @@ async def opengc(client: Client, message: Message):
     else:
         chat_id = message.chat.id
     try:
-        await client.send_message(
-            message.chat.id,
-            CreateGroupCall(
+        await client.CreateGroupCall(
                 peer=(await client.resolve_peer(chat_id)),
                 random_id=randint(10000, 999999999),
             )
@@ -156,11 +154,11 @@ async def end_vc_(client: Client, message: Message):
     chat_id = message.chat.id
     if not (
         group_call := (
-            await get_group_call(app, message, err_msg=", group callalready ended")
+            await get_group_call(client, message, err_msg="group call already ended")
         )
     ):
         return
-    await client.send_message(message.chat.id, DiscardGroupCall(call=group_call))
+    await client.DiscardGroupCall(chat_id=chat_id, call=group_call))
     await message.edit("Voice chat ended...")
 
 
