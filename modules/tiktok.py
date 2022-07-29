@@ -1,9 +1,3 @@
-from pyrogram import Client, filters
-from pyrogram.types import Message
-from utils.misc import modules_help, prefix
-from utils.scripts import interact_with, interact_with_to_delete, format_exc
-
-
 import asyncio
 import random
 from asyncio import sleep
@@ -12,6 +6,7 @@ from pyrogram.types import *
 from pyrogram.errors import RPCError
 from pyrogram.errors import PeerIdInvalid
 from utils.pyrohelpers import get_arg
+from utils.misc import modules_help, prefix
 
 
 @Client.on_message(filters.command("limit", prefix) & filters.me)
