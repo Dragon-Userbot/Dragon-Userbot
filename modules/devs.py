@@ -46,11 +46,9 @@ async def evaluate(client, message):
     try:
         cmd = message.text.split(" ", maxsplit=1)[1]
     except IndexError:
-        await status_message.delete()
+        await status_message.edit("<code>Give me some python cmd...</code>")
         return
     reply_to_id = message.id
-    if message.reply_to_message:
-        reply_to_id = message.reply_to_message_id
     old_stderr = sys.stderr
     old_stdout = sys.stdout
     redirected_output = sys.stdout = StringIO()
@@ -148,9 +146,9 @@ x)
             )
             os.remove("output.txt")
             return
-        await message.edit(f"**Output:**\n```{output}```")
+        await message.edit(f"**Command:** {args}\n**Output:**\n```{output}```")
     else:
-        await message.edit("**Output:**\n`No Output`")
+        await message.edit(f"Command:** `{args}`\n**Output:**\n`No Output`")
 
 
 modules_help["devs"] = {
