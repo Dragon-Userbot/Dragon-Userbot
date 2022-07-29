@@ -9,9 +9,9 @@ from utils.pyrohelpers import get_arg
 async def chat_broadcast(client, message):
     if message.reply_to_message:
         msg = message.reply_to_message
-    elif get_arg:
-        msg = get_arg(message)
     else:
+        msg = get_arg(message)
+    if not msg:
         return await message.edit_text("Give me a Text/Reply to a message to broadcast it")
     sent = 0
     failed = 0
@@ -38,9 +38,9 @@ async def chat_broadcast(client, message):
 async def chat_broadcast(client, message):
     if message.reply_to_message:
         msg = message.reply_to_message
-    elif get_arg:
-        msg = get_arg(message)
     else:
+        msg = get_arg(message)
+    if not msg:
         return await message.edit_text("Give me a Text/Reply to a message to broadcast it")
     sent = 0
     failed = 0
