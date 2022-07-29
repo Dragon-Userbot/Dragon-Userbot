@@ -153,8 +153,7 @@ x)
         await message.edit("**Output:**\n`No Output`")
 
 
-modules_help["devs"] = 
-    {
+modules_help["devs"] = {
         "sh [command]": "Execute command in shell",
         "eval [command]": "Execute python commands",
-    }
+}
