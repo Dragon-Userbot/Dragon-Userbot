@@ -26,20 +26,14 @@ async def help_cmd(_, message: Message):
     if len(message.command) == 1:
         msg_edited = False
         text = (
-            "<b>Help for <a href=https://t.me/Dragon_Userbot_chat>Dragon-Userbot</a>\n"
+            "<b>Help for <a href=https://t.me/gcaika>XUB</a>\n"
             f"For more help on how to use a command, type <code>{prefix}help [module]</code>\n\n"
             "Available Modules:\n"
         )
 
         for module_name, module_commands in modules_help.items():
-            text += "• {}: {}\n".format(
-                module_name.title(),
-                " ".join(
-                    [
-                        f"<code>{prefix + cmd_name.split()[0]}</code>"
-                        for cmd_name in module_commands.keys()
-                    ]
-                ),
+            text += " {} ".format(
+                module_name.title()
             )
             if len(text) >= 2048:
                 text += "</b>"
