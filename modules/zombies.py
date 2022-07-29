@@ -2,7 +2,7 @@ import asyncio
 from pyrogram import Client, filters, enums
 from pyrogram.types import Message
 from pyrogram.errors import ChatAdminRequired, RPCError, FloodWait
-from utils.misc import prefix
+from utils.misc import modules_help, prefix
 from utils.pyrohelpers import get_arg
 
 
@@ -76,3 +76,11 @@ async def terhapus(client, message):
             except ChatAdminRequired:
                 sip += 1
     return await message.edit(f"☠️ Cleaning group...\n**Succes:** `{ok}`\n**Failed:** `{sip}`")
+
+
+modules_help["mem_tools"] = {
+        "invite [username/user_id]": "To invite a user or bot to the chat.",
+        "inviteall [chat_username/chat_id]": "To inviting multiple member from chat you want.",
+        "zombies": "To checks chat have deleted account member or not.",
+        "zombiesclean":, "To delete the deleted account from your chat you want.",
+}
