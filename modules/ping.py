@@ -43,7 +43,7 @@ async def ping(_, message: Message):
     await reply.edit(f"**Pong!**\n`{delta_ping * 1000:.3f} ms`")
 
 @Client.on_message(filters.command(["alive"], prefix) & filters.me)
-async def ping(_, m: Message):
+async def alive(_, m: Message):
     if config.alive.endswith(".jpg"):
         return await _.send_photo(
             m.chat.id,
@@ -64,15 +64,8 @@ async def ping(_, m: Message):
                 .format(python_version(), k, _.me.mention
         )
 
-@Client.on_message(filters.command(["repo"], prefix) & filters.me)
-async def ping(_, m: Message):
-    await m.edit(
-        "I am using XUB"
-    )
-
 
 modules_help["ping"] = {
     "ping": "Check ping to Telegram servers",
     "alive": "Get alive XUB",
-    "repo": "Show XUB repository link",
 }
