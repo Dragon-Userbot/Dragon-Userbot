@@ -158,6 +158,4 @@ if __name__ == "__main__":
 
     logging.info("Dragon-Userbot started!")
     k = app.send_message(chat_id=k.id, text=f"Your XUB is alive\n\nTry {prefix}alive for checks")
-    await asyncio.sleep(60)
-    k.delete()
     idle()
