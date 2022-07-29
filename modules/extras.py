@@ -27,7 +27,7 @@ async def sosmed(client, message):
             await y.delete()
     async for turok in client.search_messages(bot, filter=enums.MessagesFilter.VIDEO, limit=1):
         await client.send_video(chat, video=turok.video.file_id, caption=f"**Upload by:** [{pop}](tg://user?id={ah})")
-        y = await client.search_messages(bot, query="Please", limit=1)
+        y = client.search_messages(bot, query="Please", limit=1)
         await y.delete()
         await uh.delete()
         await turok.delete()
