@@ -30,9 +30,9 @@ async def help_cmd(_, message: Message):
             f"\nℹ️ <b>Total modules:</b> <code>{len(modules_help)}</code>\n"
             f"\n💡 <b>Try Type</b> <code>{prefix}help [module]</code> to see description of the modules/command.\n\n"
         )
-
+        text += "»"
         for module_name, module_commands in modules_help.items():
-            text += "<code>{} </code>".format(
+            text += "<code> {} </code>".format(
                 module_name.title()
             )
             if len(text) >= 2048:
@@ -43,7 +43,7 @@ async def help_cmd(_, message: Message):
                     await message.edit(text, disable_web_page_preview=True)
                     msg_edited = True
                 text = ""
-
+        text += "«"
         text += f"\n\nCopyright ©️ 2020-present XUB"
 
         if msg_edited:
