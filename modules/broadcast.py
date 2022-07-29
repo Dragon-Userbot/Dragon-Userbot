@@ -22,15 +22,14 @@ async def chat_broadcast(client, message):
             enums.ChatType.SUPERGROUP,
         ]:
             chat = dialog.chat.id
-            if chat not in BL:
-                try:
-                    await msg.copy(chat)
-                    sent = sent + 1
-                    await asyncio.sleep(0.1)
-                except:
-                    failed = failed + 1
-                    await asyncio.sleep(0.1)
-    return await message.edit_text(
+            try:
+                await msg.copy(chat)
+                sent = sent + 1
+                await asyncio.sleep(0.1)
+            except:
+                failed = failed + 1
+                await asyncio.sleep(0.1)
+    await message.edit_text(
         f"**Broadcast done!\n\nSucces in:** `{sent}` **Chats\nFailed in:** `{failed}` **Chats**"
     )
 
@@ -58,7 +57,7 @@ async def chat_broadcast(client, message):
             except:
                 failed = failed + 1
                 await asyncio.sleep(0.1)
-    return await message.edit_text(
+    await message.edit_text(
         f"**Broadcast Users done!\n\nSucces to:** `{sent}` **Chats\nFailed to:** `{failed}` **Chats**"
     )
 
