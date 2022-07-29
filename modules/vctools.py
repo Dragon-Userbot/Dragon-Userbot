@@ -132,7 +132,7 @@ async def stop(_, message: Message):
 @Client.on_message(filters.command(["startvc"], prefix) & filters.me)
 async def opengc(client: Client, message: Message):
     flags = " ".join(message.command[1:])
-    k = await message edit("`Processing...`")
+    k = await message.edit("`Processing...`")
     if flags == "channel":
         chat_id = message.chat.title
     else:
