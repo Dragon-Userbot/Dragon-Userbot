@@ -64,15 +64,16 @@ async def volume(_, message):
 @init_client
 async def start(_, message: Message):
     chat_id = message.command[1]
+    p = await message.edit("`Joining...`")
     if len(message.command) > 1:
         chat_id = message.chat.id
     with suppress(ValueError):
         chat_id = int(chat_id)
     try:
         await group_call.start(chat_id)
-        await message.edit("<b>Joining successfully!</b>")
+        await p.edit("<b>Joining successfully!</b>")
     except Exception as e:
-        await message.edit(f"<b>An unexpected error has occurred: <code>{e}</code></b>")
+        await p.edit(f"<b>An unexpected error has occurred: <code>{e}</code></b>")
 
 
 @Client.on_message(filters.command("leavevc", prefix) & filters.me)
@@ -125,11 +126,11 @@ async def resume(_, message: Message):
     await message.edit("<b>Resumed!</b>")
 
 
-modules_help["voice_chat"] = {
+modules_help["vctool"] = {
     "play [reply]*": "Play audio in replied message",
     "volume [1 – 200]": "Set the volume level from 1 to 200",
-    "join [chat_id]": "Join the voice chat",
-    "leave_voice": "Leave voice chat",
+    "joinvc [chat_id]": "Join the voice chat",
+    "leavevc": "Leave voice chat",
     "stop": "Stop playback",
     "vmute": "Mute the userbot",
     "vunmute": "Unmute the userbot",
