@@ -141,7 +141,6 @@ async def opengc(client: Client, message: Message):
         await client.CreateGroupCall(
                 peer=(await client.resolve_peer(chat_id)),
                 random_id=randint(10000, 999999999),
-            )
         )
         await k.edit(f"Started group call...")
     except Exception as e:
