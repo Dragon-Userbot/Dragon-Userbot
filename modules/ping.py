@@ -29,11 +29,11 @@ ALIVE_TEXT = """
 
 XUB is online!
 
-<b>Uptime:</b> <code>{}</code>
-<b>Python:</b> <code>{}</code>
-<b>Pyrogram:</b> <code>{}</code>
+<b>Uptime:</b> <code>{uptime}</code>
+<b>Python:</b> <code>{piton}</code>
+<b>Pyrogram:</b> <code>{k}</code>
 <b>XUB Version:</b> <code>master@0.0.1</code>
-<b>My Master:</b> {}
+<b>My Master:</b> {_.me.mention}
 """
 
 piton = f"{version_info[0]}.{version_info[1]}.{version_info[2]}"
@@ -88,20 +88,17 @@ async def alive(_, m: Message):
             m.chat.id,
             photo=config.alive,
             caption=ALIVE_TEXT
-                .format(uptime, piton, k, _.me.mention)
         )
     elif config.alive.endswith(".mp4"):
         return await _.send_video(
             m.chat.id,
             video=config.alive,
             caption=ALIVE_TEXT
-                .format(uptime, piton, k, _.me.mention)
         )
     else:
         return await _.send_message(
             m.chat.id,
             ALIVE_TEXT
-                .format(uptime, piton, k, _.me.mention)
         )
 
 
