@@ -26,7 +26,8 @@ logging.getLogger("py-tgcalls").setLevel(logging.WARNING)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 logging.getLogger("pyrogram.client").setLevel(logging.WARNING)
 logging.getLogger("pyrogram.syncer").setLevel(logging.CRITICAL)
-logging.getLogger("pyrogram.session.auth").setLevel(logging.CRITICAL)logging.getLogger("pyrogram.session.session").setLevel(logging.CRITICAL)
+logging.getLogger("pyrogram.session.auth").setLevel(logging.CRITICAL)
+logging.getLogger("pyrogram.session.session").setLevel(logging.CRITICAL)
 logs = logging.getLogger(__name__)
 
 def LOGGER(name: str) -> logging.Logger:
