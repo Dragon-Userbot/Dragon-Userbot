@@ -12,3 +12,4 @@ dnspython
 requests
 environs
 GitPython
+py-tgcalls
