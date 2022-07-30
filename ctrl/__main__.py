@@ -26,6 +26,7 @@ from importlib import import_module
 import logging
 import platform
 from utils.misc import prefix
+from ctrl import app
 
 logging.basicConfig(level=logging.INFO)
 
