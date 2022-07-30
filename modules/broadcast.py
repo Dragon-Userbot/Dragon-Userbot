@@ -16,7 +16,7 @@ async def gcast(client: Client, message: Message):
         yanto = await message.edit("`Global Broadcasting!`")
         sent = 0
         failed = 0
-        async for dialog in client.iter_dialogs():
+        async for dialog in client.get_dialogs():
             chat_type = dialog.chat.type
             if chat_type in [
                 "supergroup",
@@ -43,7 +43,7 @@ async def gcast(client: Client, message: Message):
     panjul = message.text.split(None, 1)[1]
     sent = 0
     failed = 0
-    async for dialog in client.iter_dialogs():
+    async for dialog in client.get_dialogs():
         chat_type = dialog.chat.type
         if chat_type in [
              "supergroup",
@@ -71,7 +71,7 @@ async def gucast(client: Client, message: Message):
         yanto = await message.edit("`Global Broadcasting to users!`")
         sent = 0
         failed = 0
-        async for dialog in client.iter_dialogs():
+        async for dialog in client.get_dialogs():
             chat_type = dialog.chat.type
             if chat_type in [
                 "private",
@@ -97,7 +97,7 @@ async def gucast(client: Client, message: Message):
     panjul = message.text.split(None, 1)[1]
     sent = 0
     failed = 0
-    async for dialog in client.iter_dialogs():
+    async for dialog in client.get_dialogs():
         chat_type = dialog.chat.type
         if chat_type in [
              "private",
