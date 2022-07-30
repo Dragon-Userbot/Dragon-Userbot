@@ -47,7 +47,7 @@ try:
         system_version=platform.version() + " " + platform.machine(),
         sleep_threshold=30,
         test_mode=config.test_server,
-        plugins=dict(root="modules")
+        plugins=dict(root="modules"),
         in_memory=True
     )
     call = PyTgCalls(app)
