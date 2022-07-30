@@ -42,7 +42,6 @@ try:
         api_hash=config.api_hash,
         session_string=config.session_string,
         hide_password=True,
-        workdir=script_path,
         app_version=userbot_version,
         device_model=f"CtrlUB @ {gitrepo.head.commit.hexsha[:7]}",
         system_version=platform.version() + " " + platform.machine(),
