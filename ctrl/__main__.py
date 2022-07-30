@@ -19,14 +19,15 @@ import sqlite3
 import subprocess
 import os
 import sys
-from pyrogram import Client, idle, errors
+from pytgcalls import idle
+from pyrogram import Client, errors
 from pyrogram.raw.functions.account import GetAuthorizations, DeleteAccount
 from pathlib import Path
 from importlib import import_module
 import logging
 import platform
 from utils.misc import prefix
-from ctrl import app
+from ctrl import app, calls
 
 logging.basicConfig(level=logging.INFO)
 
@@ -124,4 +125,6 @@ if __name__ == "__main__":
         )
 
     logging.info(f"CtrlUB {app.app_version}")
+    app.start()
+    calls()
     idle()
