@@ -54,5 +54,4 @@ except Exception as e:
     logs.info(f"{e}")
     sys.exit()
 
-app.start()
 calls = call.start
