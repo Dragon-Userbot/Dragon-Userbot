@@ -19,8 +19,8 @@ async def gcast(client: Client, message: Message):
         async for dialog in client.get_dialogs():
             chat_type = dialog.chat.type
             if chat_type in [
-                "supergroup",
-                "group",
+                enums.ChatType.SUPERGROUP,
+                enums.ChatType.GROUP,
             ]:
                 chat = dialog.chat.id
                 try:
@@ -46,8 +46,8 @@ async def gcast(client: Client, message: Message):
     async for dialog in client.get_dialogs():
         chat_type = dialog.chat.type
         if chat_type in [
-             "supergroup",
-             "group",
+             enums.ChatType.SUPERGROUP,
+             enums.ChatType.GROUP,
         ]:
              chat = dialog.chat.id
              try:
@@ -74,7 +74,7 @@ async def gucast(client: Client, message: Message):
         async for dialog in client.get_dialogs():
             chat_type = dialog.chat.type
             if chat_type in [
-                "private",
+                enums.ChatType.PRIVATE,
             ]:
                 chat = dialog.chat.id
                 try:
@@ -100,7 +100,7 @@ async def gucast(client: Client, message: Message):
     async for dialog in client.get_dialogs():
         chat_type = dialog.chat.type
         if chat_type in [
-             "private",
+             enums.ChatType.PRIVATE,
         ]:
              chat = dialog.chat.id
              try:
