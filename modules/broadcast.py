@@ -13,7 +13,7 @@ async def gcast(client: Client, message: Message):
         pass
     else:
         msg = message.reply_to_message
-        yanto = await message.reply_text("`Global Broadcasting!`")
+        yanto = await message.edit("`Global Broadcasting!`")
         sent = 0
         failed = 0
         async for dialog in client.iter_dialogs():
@@ -23,24 +23,23 @@ async def gcast(client: Client, message: Message):
                 "group",
             ]:
                 chat = dialog.chat.id
-                if chat not in GCAST_BLACKLIST and chat not in BLACKLIST_GCAST:
-                    try:
-                        await msg.copy(chat)
-                        sent = sent + 1
-                        await asyncio.sleep(0.1)
-                    except:
-                        failed = failed + 1
-                        await asyncio.sleep(0.1)
-        return await yanto.edit_text(
-            f"Done in {sent} chats, error in {failed} chat(s)"
-        )
+                try:
+                    await msg.copy(chat)
+                    sent = sent + 1
+                    await asyncio.sleep(0.1)
+                except:
+                    failed = failed + 1
+                    await asyncio.sleep(0.1)
+            await yanto.edit_text(
+                f"Done in {sent} chats, error in {failed} chat(s)"
+            )
         return
     if len(message.command) < 2:
-        await message.reply_text(
-             "**usage**:\n.gcast <text> or reply to message"
+        await message.edit(
+             "`Reply or give text to broadcast.`"
         )
         return
-    yanto = await message.reply_text("`Global Broadcasting!`")
+    yanto = await message.edit("`Global Broadcasting!`")
     panjul = message.text.split(None, 1)[1]
     sent = 0
     failed = 0
@@ -51,14 +50,13 @@ async def gcast(client: Client, message: Message):
              "group",
         ]:
              chat = dialog.chat.id
-             if chat not in GCAST_BLACKLIST and chat not in BLACKLIST_GCAST:
-                 try:
-                     await client.send_message(chat, text=panjul)
-                     sent = sent + 1
-                     await asyncio.sleep(0.1)
-                 except:
-                     failed = failed + 1
-                     await asyncio.sleep(0.1)
+             try:
+                 await client.send_message(chat, text=panjul)
+                 sent = sent + 1
+                 await asyncio.sleep(0.1)
+             except:
+                 failed = failed + 1
+                 await asyncio.sleep(0.1)
     return await yanto.edit_text(
         f"Done in {sent} chats, error in {failed} chat(s)"
     )
@@ -70,7 +68,7 @@ async def gucast(client: Client, message: Message):
         pass
     else:
         msg = message.reply_to_message
-        yanto = await message.reply_text("`Global Broadcasting to users!`")
+        yanto = await message.edit("`Global Broadcasting to users!`")
         sent = 0
         failed = 0
         async for dialog in client.iter_dialogs():
@@ -91,8 +89,8 @@ async def gucast(client: Client, message: Message):
                 )
         return
     if len(message.command) < 2:
-        await message.reply_text(
-             "**usage**:\n.gucast <text> or reply to message"
+        await message.edit(
+             "`Give a text or reply to broadcast.`"
         )
         return
     yanto = await message.reply_text("`Global Broadcasting to users!`")
