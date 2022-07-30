@@ -54,4 +54,4 @@ except Exception as e:
     sys.exit()
 
 app.start()
-call.start()
+calls = call.start
