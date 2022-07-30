@@ -6,6 +6,7 @@ from pytgcalls import PyTgCalls
 from pyrogram import Client
 from utils import config
 from utils.misc import gitrepo, userbot_version
+from logging.handlers import RotatingFileHandler
 from logging import DEBUG, INFO, basicConfig, getLogger
 
 LOG_FILE_NAME = "logs.txt"
