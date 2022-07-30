@@ -65,39 +65,6 @@ if __name__ == "__main__":
     from utils.scripts import restart
     from utils import config
 
-    app = Client(
-        name="my_account",
-        api_id=config.api_id,
-        api_hash=config.api_hash,
-        session_string=config.session_string,
-        hide_password=True,
-        workdir=script_path,
-        app_version=userbot_version,
-        device_model=f"CtrlUB @ {gitrepo.head.commit.hexsha[:7]}",
-        system_version=platform.version() + " " + platform.machine(),
-        sleep_threshold=30,
-        test_mode=config.test_server,
-        in_memory=True
-    )
-
-    try:
-        app.start()
-    except sqlite3.OperationalError as e:
-        if str(e) == "database is locked" and os.name == "posix":
-            logging.warning(
-                "Session file is locked. Trying to kill blocking process..."
-            )
-            subprocess.run(["fuser", "-k", "my_account.session"])
-            restart()
-        raise
-    except (errors.NotAcceptable, errors.Unauthorized) as e:
-        logging.error(
-            f"{e.__class__.__name__}: {e}\n"
-            f"Moving session file to my_account.session-old..."
-        )
-        os.rename("./my_account.session", "./my_account.session-old")
-        restart()
-
     success_handlers = 0
     failed_handlers = 0
     success_modules = 0
