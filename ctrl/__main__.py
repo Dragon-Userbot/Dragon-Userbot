@@ -72,7 +72,7 @@ if __name__ == "__main__":
     success_modules = 0
     failed_modules = 0
 
-    for path in sorted((Path("modules")).rglob("*.py")):
+    for path in sorted((Path("ctrl/modules")).rglob("*.py")):
         module_path = ".".join(path.parent.parts + (path.stem,))
         try:
             module = import_module(module_path)
