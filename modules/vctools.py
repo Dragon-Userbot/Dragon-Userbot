@@ -31,7 +31,7 @@ async def get_group_call(
 @Client.on_message(filters.command(["startvc"], prefix) & filters.me)
 async def opengc(client: Client, message: Message):
     flags = " ".join(message.command[1:])
-    Cilik = await message.edit("`Processing...`")
+    yy = await message.edit("`Processing...`")
     if flags == "channel":
         chat_id = message.chat.title
     else:
@@ -43,9 +43,9 @@ async def opengc(client: Client, message: Message):
                 random_id=randint(10000, 999999999),
             )
         )
-        await Cilik.edit(f"Started group call in **Chat ID** : `{chat_id}`")
+        await yy.edit(f"Started group call in **Chat ID** : `{chat_id}`")
     except Exception as e:
-        await Cilik.edit(f"**INFO:** `{e}`")
+        await yy.edit(f"**INFO:** `{e}`")
 
 
 @Client.on_message(filters.command(["stopvc"], prefix) & filters.me)
