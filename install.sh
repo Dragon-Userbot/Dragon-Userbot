@@ -12,8 +12,8 @@ fi
 apt update -y
 apt install python3 python3-pip git ffmpeg wget gnupg -y || exit 2
 
-su -c "python3 -m pip install -U pip" $SUDO_USER
-su -c "python3 -m pip install -U wheel pillow" $SUDO_USER
+python3 -m pip install -U pip
+python3 -m pip install -U wheel pillow
 
 if [[ -d "Dragon-Userbot" ]]; then
   cd Dragon-Userbot
@@ -29,7 +29,7 @@ if [[ -f ".env" ]] && [[ -f "my_account.session" ]]; then
   exit
 fi
 
-su -c "python3 -m pip install -U -r requirements.txt" $SUDO_USER || exit 2
+python3 -m pip install -U -r requirements.txt || exit 2
 
 echo
 echo "Enter API_ID and API_HASH"
