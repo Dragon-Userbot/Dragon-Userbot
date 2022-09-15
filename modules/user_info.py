@@ -31,7 +31,7 @@ async def get_user_inf(client: Client, message: Message):
     else:
         peer = await client.resolve_peer("me")
 
-    response = await client.send(functions.users.GetFullUser(id=peer))
+    response = await client.invoke(functions.users.GetFullUser(id=peer))
 
     user = response.users[0]
     full_user = response.full_user
@@ -67,7 +67,7 @@ async def get_full_user_inf(client: Client, message: Message):
         else:
             peer = await client.resolve_peer("me")
 
-        response = await client.send(functions.users.GetFullUser(id=peer))
+        response = await client.invoke(functions.users.GetFullUser(id=peer))
 
         user = response.users[0]
         full_user = response.full_user

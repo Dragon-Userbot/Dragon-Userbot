@@ -34,7 +34,7 @@ async def restart_cmd(_, message: Message):
         {
             "type": "restart",
             "chat_id": message.chat.id,
-            "message_id": message.message_id,
+            "message_id": message.id,
         },
     )
 
@@ -55,7 +55,7 @@ async def update(_, message: Message):
         {
             "type": "update",
             "chat_id": message.chat.id,
-            "message_id": message.message_id,
+            "message_id": message.id,
         },
     )
 

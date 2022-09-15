@@ -62,7 +62,7 @@ async def version(client: Client, message: Message):
         "dRaGoN_uB_cHaNgElOg", query=ub_version + "."
     ):
         if ub_version in m.text:
-            changelog = m.message_id
+            changelog = m.id
 
     await message.delete()
 

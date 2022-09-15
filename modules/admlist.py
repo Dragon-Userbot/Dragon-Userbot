@@ -35,8 +35,8 @@ async def admcount(client: Client, message: Message):
 
     start = perf_counter()
     try:
-        response = await client.send(GetAllChats(except_ids=[]))
-        chats = response["chats"]
+        response = await client.invoke(GetAllChats(except_ids=[]))
+        chats = response.chats
 
         adminned_chats = 0
         owned_chats = 0
@@ -75,8 +75,8 @@ async def admlist(client: Client, message: Message):
 
     start = perf_counter()
     try:
-        response = await client.send(GetAllChats(except_ids=[]))
-        chats = response["chats"]
+        response = await client.invoke(GetAllChats(except_ids=[]))
+        chats = response.chats
 
         adminned_chats = []
         owned_chats = []

@@ -115,7 +115,7 @@ class Conversation:
         else:
             message = await self._wait_message(message_filter, timeout)
 
-        self._message_ids.append(message.message_id)
+        self._message_ids.append(message.id)
         return message
 
     async def _wait_message(
@@ -184,5 +184,5 @@ class Conversation:
             reply_to_message_id=reply_to_message_id,
             schedule_date=schedule_date,
         )
-        self._message_ids.append(sent.message_id)
+        self._message_ids.append(sent.id)
         return sent

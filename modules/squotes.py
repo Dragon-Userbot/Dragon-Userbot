@@ -43,14 +43,13 @@ async def quote_cmd(client: Client, message: types.Message):
 
     messages = []
 
-    async for msg in client.iter_history(
+    async for msg in client.get_chat_history(
         message.chat.id,
-        offset_id=message.reply_to_message.message_id,
-        reverse=True,
+        offset_id=message.reply_to_message.id,
     ):
         if msg.empty:
             continue
-        if msg.message_id >= message.message_id:
+        if msg.id >= message.id:
             break
         if no_reply:
             msg.reply_to_message = None
@@ -117,7 +116,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         return await message.edit("<b>Fake quote text is empty</b>")
 
     q_message = await client.get_messages(
-        message.chat.id, message.reply_to_message.message_id
+        message.chat.id, message.reply_to_message.id
     )
     q_message.text = fake_quote_text
     q_message.entities = None
@@ -166,11 +165,8 @@ async def render_message(app: Client, message: types.Message) -> dict:
         if file_id in files_cache:
             return files_cache[file_id]
 
-        file_name = await app.download_media(file_id)
-        with open(file_name, "rb") as f:
-            content = f.read()
-        os.remove(file_name)
-        data = base64.b64encode(content).decode()
+        content = await app.download_media(file_id, in_memory=True)
+        data = base64.b64encode(content.read()).decode()
         files_cache[file_id] = data
         return data
 
@@ -374,11 +370,11 @@ def get_reply_text(reply: types.Message) -> str:
         else "📍 pinned message"
         if reply.pinned_message
         else "🎤 started a new video chat"
-        if reply.voice_chat_started
+        if reply.video_chat_started
         else "🎤 ended the video chat"
-        if reply.voice_chat_ended
+        if reply.video_chat_ended
         else "🎤 invited participants to the video chat"
-        if reply.voice_chat_members_invited
+        if reply.video_chat_members_invited
         else "👥 created the group"
         if reply.group_chat_created or reply.supergroup_chat_created
         else "👥 created the channel"
