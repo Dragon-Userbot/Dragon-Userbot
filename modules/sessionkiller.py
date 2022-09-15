@@ -79,7 +79,9 @@ async def check_new_login(
         raise ContinuePropagation
     if not db.get("core.sessionkiller", "enabled", False):
         raise ContinuePropagation
-    authorizations = (await client.invoke(GetAuthorizations()))["authorizations"]
+    authorizations = (await client.invoke(GetAuthorizations()))[
+        "authorizations"
+    ]
     for auth in authorizations:
         if auth.current:
             continue
