@@ -51,7 +51,7 @@ def format_exc(e: Exception, suffix="") -> str:
     if isinstance(e, errors.RPCError):
         return (
             f"<b>Telegram API error!</b>\n"
-            f"<code>[{e.CODE} {e.ID or e.NAME}] — {e.MESSAGE}</code>\n\n<b>{suffix}</b>"
+            f"<code>[{e.CODE} {e.ID or e.NAME}] — {e.MESSAGE.format(value=value)}</code>\n\n<b>{suffix}</b>"
         )
     return (
         f"<b>Error!</b>\n"
@@ -170,7 +170,7 @@ def import_library(library_name: str, package_name: str = None):
         return importlib.import_module(library_name)
 
 
-def resize_image(input_img, output=None, img_type="PNG"):
+def resize_image(input_img, output=None, img_type="PNG", size: int = 512):
     if output is None:
         output = BytesIO()
         output.name = f"sticker.{img_type.lower()}"
@@ -179,11 +179,11 @@ def resize_image(input_img, output=None, img_type="PNG"):
         # We used to use thumbnail(size) here, but it returns with a *max* dimension of 512,512
         # rather than making one side exactly 512 so we have to calculate dimensions manually :(
         if img.width == img.height:
-            size = (512, 512)
+            size = (size, size)
         elif img.width < img.height:
-            size = (max(512 * img.width // img.height, 1), 512)
+            size = (max(size * img.width // img.height, 1), size)
         else:
-            size = (512, max(512 * img.height // img.width, 1))
+            size = (size, max(size * img.height // img.width, 1))
 
         img.resize(size).save(output, img_type)
 

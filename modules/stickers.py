@@ -129,5 +129,5 @@ async def resize_cmd(client: Client, message: types.Message):
 modules_help["stickers"] = {
     "kang [reply]* [pack]* [emoji]": "Add sticker to defined pack",
     "stp [reply]*": "Convert replied sticker to PNG",
-    "resize [reply]*": "Resize replied image to 512xN format",
+    "resize [reply]* [size]": "Resize replied image to 512xN (or SIZExN) format",
 }

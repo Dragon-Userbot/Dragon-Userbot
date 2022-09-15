@@ -21,7 +21,7 @@ async def global_mention_clear(client: Client, message: Message):
         result = await client.invoke(request)
     except FloodWait as e:
         await message.edit_text(
-            f"<b>FloodWait received. Wait {e.x} seconds before trying again</b>"
+            f"<b>FloodWait received. Wait {e.value} seconds before trying again</b>"
         )
         return
     await message.delete()
@@ -30,6 +30,8 @@ async def global_mention_clear(client: Client, message: Message):
             peer_id = -chat.id
         elif type(chat) is types.Channel:
             peer_id = int(f"-100{chat.id}")
+        else:
+            peer_id = chat.id
         peer = await client.resolve_peer(peer_id)
         request = functions.messages.ReadMentions(peer=peer)
         await client.invoke(request)
@@ -50,7 +52,7 @@ async def global_reaction_clear(client: Client, message: Message):
         result = await client.invoke(request)
     except FloodWait as e:
         await message.edit_text(
-            f"<b>FloodWait received. Wait {e.x} seconds before trying again</b>"
+            f"<b>FloodWait received. Wait {e.value} seconds before trying again</b>"
         )
         return
     await message.delete()
@@ -59,6 +61,8 @@ async def global_reaction_clear(client: Client, message: Message):
             peer_id = -chat.id
         elif type(chat) is types.Channel:
             peer_id = int(f"-100{chat.id}")
+        else:
+            peer_id = chat.id
         peer = await client.resolve_peer(peer_id)
         request = functions.messages.ReadReactions(peer=peer)
         await client.invoke(request)

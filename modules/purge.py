@@ -39,7 +39,7 @@ async def purge(client: Client, message: Message):
         chunk.append(msg.id)
         if len(chunk) >= 100:
             await client.delete_messages(message.chat.id, chunk)
-            chunk = []
+            chunk.clear()
             await asyncio.sleep(1)
 
     if len(chunk) > 0:

@@ -129,7 +129,8 @@ modules_help["example"] = {
 <li><a href='https://github.com/Taijefx34'>Taijefx34</a></li>
 <li><a href='https://github.com/LaciaMemeFrame'>LaciaMemeFrame</a></li>
 <li><a href='https://t.me/nalinor'>nalinor</a></li>
-<li>asphy <a href='https://t.me/LKRinternationalrunetcomphinc'>tg</a> and <a href='https://ru.namemc.com/profile/asphyxiamywife.1'>namemc</a></li>
+<li>asphy <a href='https://t.me/acnxua'>tg</a> and <a href='https://ru.namemc.com/profile/asphyxiamywife.1'>namemc</a></li>
 <li><a href='http://t.me/fuccsoc'>fuccsoc</a></li>
+<li><a href="https://github.com/KurimuzonAkuma">KurimuzonAkuma</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram❤️</a> and <a href='https://github.com/MarshalX/tgcalls/tree/main/pytgcalls'>pytgcalls❤️</a></h4>
