@@ -114,8 +114,10 @@ async def resize_cmd(client: Client, message: types.Message):
     try:
         await message.edit("<b>Downloading...</b>")
 
+        size = int(message.command[1]) if len(message.command) > 1 else 512
+
         path = await message.reply_to_message.download(in_memory=True)
-        resized = resize_image(path)
+        resized = resize_image(path, size=size)
 
         await client.send_document(
             message.chat.id, resized, force_document=True
