@@ -22,6 +22,7 @@ import subprocess
 from pathlib import Path
 
 from pyrogram import Client, idle, errors
+from pyrogram.enums.parse_mode import ParseMode
 from pyrogram.raw.functions.account import GetAuthorizations, DeleteAccount
 
 from utils import config
@@ -44,7 +45,7 @@ app = Client(
     system_version=platform.version() + " " + platform.machine(),
     sleep_threshold=30,
     test_mode=config.test_server,
-    parse_mode="html",
+    parse_mode=ParseMode.HTML,
 )
 
 

@@ -50,7 +50,7 @@ def update_cache():
     db_cache.update(db.get_collection("core.ats"))
 
 
-@Client.on_message(filters.group & ~filters.edited & ~filters.me)
+@Client.on_message(filters.group & ~filters.me)
 async def admintool_handler(_, message: Message):
     if message.sender_chat:
         if (
@@ -143,15 +143,15 @@ async def ban_command(client: Client, message: Message):
             channel = await client.resolve_peer(message.chat.id)
             user_id = await client.resolve_peer(user_for_ban)
             if "report_spam" in cause.lower().split():
-                await client.send(
+                await client.invoke(
                     functions.channels.ReportSpam(
                         channel=channel,
                         participant=user_id,
-                        id=[message.reply_to_message.message_id],
+                        id=[message.reply_to_message.id],
                     )
                 )
             if "delete_history" in cause.lower().split():
-                await client.send(
+                await client.invoke(
                     functions.channels.DeleteParticipantHistory(
                         channel=channel, participant=user_id
                     )
@@ -199,15 +199,15 @@ async def ban_command(client: Client, message: Message):
                         "report_spam" in cause.lower().split()
                         and message.reply_to_message
                     ):
-                        await client.send(
+                        await client.invoke(
                             functions.channels.ReportSpam(
                                 channel=channel,
                                 participant=user_id,
-                                id=[message.reply_to_message.message_id],
+                                id=[message.reply_to_message.id],
                             )
                         )
                     if "delete_history" in cause.lower().split():
-                        await client.send(
+                        await client.invoke(
                             functions.channels.DeleteParticipantHistory(
                                 channel=channel, participant=user_id
                             )
@@ -333,15 +333,15 @@ async def kick_command(client: Client, message: Message):
                     "report_spam" in cause.lower().split()
                     and message.reply_to_message
                 ):
-                    await client.send(
+                    await client.invoke(
                         functions.channels.ReportSpam(
                             channel=channel,
                             participant=user_id,
-                            id=[message.reply_to_message.message_id],
+                            id=[message.reply_to_message.id],
                         )
                     )
                 if "delete_history" in cause.lower().split():
-                    await client.send(
+                    await client.invoke(
                         functions.channels.DeleteParticipantHistory(
                             channel=channel, participant=user_id
                         )
@@ -378,15 +378,15 @@ async def kick_command(client: Client, message: Message):
                         "report_spam" in cause.lower().split()
                         and message.reply_to_message
                     ):
-                        await client.send(
+                        await client.invoke(
                             functions.channels.ReportSpam(
                                 channel=channel,
                                 participant=user_id,
-                                id=[message.reply_to_message.message_id],
+                                id=[message.reply_to_message.id],
                             )
                         )
                     if "delete_history" in cause.lower().split():
-                        await client.send(
+                        await client.invoke(
                             functions.channels.DeleteParticipantHistory(
                                 channel=channel, participant=user_id
                             )
@@ -595,7 +595,7 @@ async def tunmute_users_command(client: Client, message: Message):
                 _name_ = await client.get_chat(user)
                 count += 1
                 if await check_username_or_id(_name_.id) == "channel":
-                    channel = await client.send(
+                    channel = await client.invoke(
                         functions.channels.GetChannels(
                             id=[
                                 types.InputChannel(
@@ -1070,7 +1070,7 @@ async def delete_history(client: Client, message: Message):
                 user_for_delete, name = await get_user_and_name(message)
                 channel = await client.resolve_peer(message.chat.id)
                 user_id = await client.resolve_peer(user_for_delete)
-                await client.send(
+                await client.invoke(
                     functions.channels.DeleteParticipantHistory(
                         channel=channel, participant=user_id
                     )
@@ -1111,7 +1111,7 @@ async def delete_history(client: Client, message: Message):
                 try:
                     channel = await client.resolve_peer(message.chat.id)
                     user_id = await client.resolve_peer(user_to_delete.id)
-                    await client.send(
+                    await client.invoke(
                         functions.channels.DeleteParticipantHistory(
                             channel=channel, participant=user_id
                         )
@@ -1146,11 +1146,11 @@ async def report_spam(client: Client, message: Message):
 
         user_id, name = await get_user_and_name(message)
         peer = await client.resolve_peer(user_id)
-        await client.send(
+        await client.invoke(
             functions.channels.ReportSpam(
                 channel=channel,
                 participant=peer,
-                id=[message.reply_to_message.message_id],
+                id=[message.reply_to_message.id],
             )
         )
     except Exception as e:

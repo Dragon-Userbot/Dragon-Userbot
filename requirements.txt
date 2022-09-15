@@ -1,4 +1,4 @@
-pyrogram==1.4.16
+pyrogram
 tgcrypto
 
 pymongo[srv]

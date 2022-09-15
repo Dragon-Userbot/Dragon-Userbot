@@ -62,7 +62,7 @@ async def kang(client: Client, message: types.Message):
         return
 
     try:
-        path = await message.reply_to_message.download()
+        path = await message.reply_to_message.download(in_memory=True)
     except ValueError:
         await message.edit(
             "<b>Replied message doesn't contain any downloadable media</b>"
@@ -70,7 +70,6 @@ async def kang(client: Client, message: types.Message):
         return
 
     resized = resize_image(path)
-    os.remove(path)
 
     await interact_with(await client.send_document("@stickers", resized))
     response = await interact_with(
@@ -98,15 +97,9 @@ async def stick2png(client: Client, message: types.Message):
     try:
         await message.edit("<b>Downloading...</b>")
 
-        path = await message.reply_to_message.download()
-        with open(path, "rb") as f:
-            content = f.read()
-        os.remove(path)
+        file_io = await message.reply_to_message.download(in_memory=True)
 
-        file_io = BytesIO(content)
-        file_io.name = "sticker.png"
-
-        await client.send_document(message.chat.id, file_io)
+        await client.send_document(message.chat.id, file_io, force_document=True)
     except Exception as e:
         await message.edit(format_exc(e))
     else:
@@ -119,12 +112,10 @@ async def resize_cmd(client: Client, message: types.Message):
     try:
         await message.edit("<b>Downloading...</b>")
 
-        path = await message.reply_to_message.download()
+        path = await message.reply_to_message.download(in_memory=True)
         resized = resize_image(path)
-        resized.name = "image.png"
-        os.remove(path)
 
-        await client.send_document(message.chat.id, resized)
+        await client.send_document(message.chat.id, resized, force_document=True)
     except Exception as e:
         await message.edit(format_exc(e))
     else:

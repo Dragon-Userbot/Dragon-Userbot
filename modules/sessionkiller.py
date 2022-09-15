@@ -55,7 +55,7 @@ async def sessionkiller(client: Client, message: Message):
             "auths_hashes",
             [
                 auth["hash"]
-                for auth in (await client.send(GetAuthorizations()))[
+                for auth in (await client.invoke(GetAuthorizations()))[
                     "authorizations"
                 ]
             ],
@@ -79,14 +79,14 @@ async def check_new_login(
         raise ContinuePropagation
     if not db.get("core.sessionkiller", "enabled", False):
         raise ContinuePropagation
-    authorizations = (await client.send(GetAuthorizations()))["authorizations"]
+    authorizations = (await client.invoke(GetAuthorizations()))["authorizations"]
     for auth in authorizations:
         if auth.current:
             continue
         if auth["hash"] not in auth_hashes:
             # found new unexpected login
             try:
-                await client.send(ResetAuthorization(hash=auth.hash))
+                await client.invoke(ResetAuthorization(hash=auth.hash))
             except RPCError:
                 info_text = (
                     "Someone tried to log in to your account. You can see this report because you"

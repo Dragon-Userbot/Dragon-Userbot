@@ -109,14 +109,14 @@ async def filters_main_handler(client: Client, message: Message):
         await client.send_media_group(
             message.chat.id,
             media_grouped_list,
-            reply_to_message_id=message.message_id,
+            reply_to_message_id=message.id,
         )
     else:
         await client.copy_message(
             message.chat.id,
             int(value["CHAT_ID"]),
             int(value["MESSAGE_ID"]),
-            reply_to_message_id=message.message_id,
+            reply_to_message_id=message.id,
         )
     raise ContinuePropagation
 
@@ -150,9 +150,9 @@ async def filter_handler(client: Client, message: Message):
 
         if message.reply_to_message.media_group_id:
             get_media_group = [
-                _.message_id
+                _.id
                 for _ in await client.get_media_group(
-                    message.chat.id, message.reply_to_message.message_id
+                    message.chat.id, message.reply_to_message.id
                 )
             ]
             try:
@@ -165,7 +165,7 @@ async def filter_handler(client: Client, message: Message):
                 )
                 return
             filter_ = {
-                "MESSAGE_ID": str(message_id[1].message_id),
+                "MESSAGE_ID": str(message_id[1].id),
                 "MEDIA_GROUP": True,
                 "CHAT_ID": str(chat_id),
             }
@@ -176,7 +176,7 @@ async def filter_handler(client: Client, message: Message):
                 message_id = await message.copy(chat_id)
             filter_ = {
                 "MEDIA_GROUP": False,
-                "MESSAGE_ID": str(message_id.message_id),
+                "MESSAGE_ID": str(message_id.id),
                 "CHAT_ID": str(chat_id),
             }
 
