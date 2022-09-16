@@ -15,6 +15,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import re
+from datetime import timedelta, datetime
 from time import time
 from typing import Dict, Union
 from contextlib import suppress
@@ -323,7 +324,7 @@ async def kick_command(client: Client, message: Message):
                 await client.ban_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
-                    int(time() + 60),
+                    datetime.now() + timedelta(minutes=1),
                 )
                 channel = await client.resolve_peer(message.chat.id)
                 user_id = await client.resolve_peer(
@@ -399,7 +400,9 @@ async def kick_command(client: Client, message: Message):
                     )
 
                     await client.ban_chat_member(
-                        message.chat.id, user_to_ban.id, int(time() + 60)
+                        message.chat.id,
+                        user_to_ban.id,
+                        datetime.now() + timedelta(minutes=1),
                     )
                     await message.edit(
                         f"<b>{user_to_ban.first_name}</b> <code>kicked!</code>"
@@ -428,8 +431,10 @@ async def kickdel_cmd(client: Client, message: Message):
     await message.edit("<b>Kicking deleted accounts...</b>")
     try:
         values = [
-            await message.chat.ban_member(member.user.id, int(time()) + 31)
-            async for member in client.iter_chat_members(message.chat.id)
+            await message.chat.ban_member(
+                member.user.id, datetime.now() + timedelta(seconds=31)
+            )
+            async for member in client.get_chat_members(message.chat.id)
             if member.user.is_deleted
         ]
     except Exception as e:
@@ -730,7 +735,7 @@ async def mute_command(client: Client, message: Message):
                     message.chat.id,
                     message.reply_to_message.from_user.id,
                     ChatPermissions(),
-                    int(time()) + mute_seconds,
+                    datetime.now() + timedelta(seconds=mute_seconds),
                 )
                 from_user = message.reply_to_message.from_user
                 mute_time: Dict[str, int] = {
@@ -823,7 +828,7 @@ async def mute_command(client: Client, message: Message):
                             message.chat.id,
                             user_to_unmute.id,
                             ChatPermissions(),
-                            int(time()) + mute_seconds,
+                            datetime.now() + timedelta(seconds=mute_seconds),
                         )
                         mute_time: Dict[str, int] = {
                             "days": mute_seconds // 86400,
@@ -887,12 +892,12 @@ async def demote_command(client: Client, message: Message):
                         can_post_messages=False,
                         can_edit_messages=False,
                         can_delete_messages=False,
+                        can_manage_video_chats=False,
                         can_restrict_members=False,
                         can_invite_users=False,
                         can_pin_messages=False,
                         can_promote_members=False,
-                        can_manage_voice_chats=False,
-                    )
+                    ),
                 )
                 await message.edit(
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code>demoted!</code>"
@@ -922,12 +927,12 @@ async def demote_command(client: Client, message: Message):
                             can_post_messages=False,
                             can_edit_messages=False,
                             can_delete_messages=False,
+                            can_manage_video_chats=False,
                             can_restrict_members=False,
                             can_invite_users=False,
                             can_pin_messages=False,
                             can_promote_members=False,
-                            can_manage_voice_chats=False,
-                        )
+                        ),
                     )
                     await message.edit(
                         f"<b>{promote_user.first_name}</b> <code>demoted!</code>"
@@ -968,7 +973,7 @@ async def promote_command(client: Client, message: Message):
                         can_restrict_members=True,
                         can_invite_users=True,
                         can_pin_messages=True,
-                    )
+                    ),
                 )
                 if len(cause.split()) > 1:
                     await client.set_administrator_title(
@@ -1002,7 +1007,7 @@ async def promote_command(client: Client, message: Message):
                             can_restrict_members=True,
                             can_invite_users=True,
                             can_pin_messages=True,
-                        )
+                        ),
                     )
                     if len(cause.split()) > 1:
                         await client.set_administrator_title(
