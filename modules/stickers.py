@@ -14,9 +14,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
-from io import BytesIO
-
 from pyrogram import Client, filters, types
 
 from utils.misc import modules_help, prefix
@@ -115,9 +112,10 @@ async def resize_cmd(client: Client, message: types.Message):
         await message.edit("<b>Downloading...</b>")
 
         size = int(message.command[1]) if len(message.command) > 1 else 512
+        size2 = int(message.command[2]) if len(message.command) > 2 else None
 
         path = await message.reply_to_message.download(in_memory=True)
-        resized = resize_image(path, size=size)
+        resized = resize_image(path, size=size, size2=size2)
 
         await client.send_document(
             message.chat.id, resized, force_document=True
@@ -131,5 +129,5 @@ async def resize_cmd(client: Client, message: types.Message):
 modules_help["stickers"] = {
     "kang [reply]* [pack]* [emoji]": "Add sticker to defined pack",
     "stp [reply]*": "Convert replied sticker to PNG",
-    "resize [reply]* [size]": "Resize replied image to 512xN (or SIZExN) format",
+    "resize [reply]* [size] [size2]": "Resize replied image to 512xN (or SIZExSIZE2) format",
 }
