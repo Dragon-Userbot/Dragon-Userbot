@@ -31,10 +31,10 @@ async def del_msg(_, message: Message):
 @Client.on_message(filters.command("purge", prefix) & filters.me)
 @with_reply
 async def purge(client: Client, message: Message):
-    chunk = []
+    chunk = [message.id]
     async for msg in client.get_chat_history(
         chat_id=message.chat.id,
-        offset_id=message.reply_to_message.id,
+        limit=message.id - message.reply_to_message.id + 1,
     ):
         chunk.append(msg.id)
         if len(chunk) >= 100:
