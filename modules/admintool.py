@@ -643,7 +643,7 @@ async def unmute_command(client, message):
                     message.chat.id,
                     message.reply_to_message.from_user.id,
                     u_p,
-                    int(time() + 30),
+                    datetime.now() + timedelta(seconds=30),
                 )
                 await message.edit(
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code>unmuted</code>"
@@ -670,7 +670,7 @@ async def unmute_command(client, message):
                         message.chat.id,
                         user_to_unmute.id,
                         u_p,
-                        int(time() + 30),
+                        datetime.now() + timedelta(seconds=30),
                     )
                     await message.edit(
                         f"<b>{user_to_unmute.first_name}</b> <code>unmuted!</code>"
