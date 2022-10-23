@@ -45,7 +45,8 @@ async def quote_cmd(client: Client, message: types.Message):
 
     async for msg in client.get_chat_history(
         message.chat.id,
-        offset_id=message.reply_to_message.id,
+        offset_id=message.reply_to_message.id + count,
+        limit=count,
     ):
         if msg.empty:
             continue
@@ -58,6 +59,8 @@ async def quote_cmd(client: Client, message: types.Message):
 
         if len(messages) >= count:
             break
+
+    messages.reverse()
 
     if send_for_me:
         await message.delete()

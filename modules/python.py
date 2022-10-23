@@ -49,7 +49,7 @@ def user_exec(client: Client, message: Message):
             exec(code)
         text = (
             "<b>Code:</b>\n"
-            f"<code>{code}</code>\n\n"
+            f"<pre language=python>{code}</pre>\n\n"
             "<b>Result</b>:\n"
             f"<code>{stdout.getvalue()}</code>"
         )
@@ -76,7 +76,7 @@ def user_eval(client: Client, message: Message):
         result = eval(code)
         message.edit(
             "<b>Expression:</b>\n"
-            f"<code>{code}</code>\n\n"
+            f"<pre language=python>{code}</pre>\n\n"
             "<b>Result</b>:\n"
             f"<code>{result}</code>"
         )
