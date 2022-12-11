@@ -13,7 +13,7 @@ from utils.misc import modules_help, prefix
 async def qiwi(client: Client, message: types.Message):
     if len(message.text.split()) != 3:
         await message.edit(
-            f"<b>Invalid command usage!</b>\n\nUse <code>{config.userbot.prefix}qiwi [amount] [expire]</code> instead.\n\nOld message: <code>{t(message.text)}</code>")
+            f"<b>Invalid command usage!</b>\n\nUse <code>{prefix}qiwi [amount] [expire]</code> instead.\n\nOld message: <code>{t(message.text)}</code>")
         return
     if db.get(
             'core.qiwi',
