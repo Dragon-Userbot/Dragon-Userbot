@@ -34,7 +34,7 @@ su -c "python3 -m pip install -U -r requirements.txt" $SUDO_USER || exit 2
 echo
 echo "Enter API_ID and API_HASH"
 echo "You can get it here -> https://my.telegram.org/apps"
-echo "Leave empty to use defaults"
+echo "Leave empty to use defaults (please note that default keys significantly increases your ban chances)"
 read -r -p "API_ID > " api_id
 
 if [[ $api_id = "" ]]; then
