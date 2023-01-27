@@ -23,7 +23,7 @@ from utils.misc import modules_help, prefix, userbot_version, python_version, gi
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
 async def support(_, message: Message):
-    devs = ["@john_phonk", "@fuccsoc", "@nalinor"]
+    devs = ["@john_phonk", "@fuccsoc"]
     random.shuffle(devs)
 
     commands_count = 0.0
@@ -37,9 +37,9 @@ async def support(_, message: Message):
         "Custom modules repository: <a href=https://github.com/Dragon-Userbot/custom_modules>"
         "Dragon-Userbot/custom_modules</a>\n"
         "License: <a href=https://github.com/Dragon-Userbot/Dragon-Userbot/blob/master/LICENSE>GNU GPL v3</a>\n\n"
-        "Channel: @Dragon_Userbot\n"
-        "Custom modules: @Dragon_Userbot_modules\n"
-        "Chat [RU]: @Dragon_Userbot_chat\n"
+        "Channel: @Dragon_Userb0t\n"
+        "Custom modules: @Dragon_Userb0t_modules\n"
+        "Chat [RU]: @Dragon_Userb0t_chat\n"
         f"Main developers: {', '.join(devs)}\n\n"
         f"Python version: {python_version}\n"
         f"Modules count: {len(modules_help) / 1}\n"
