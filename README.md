@@ -114,15 +114,15 @@ modules_help["example"] = {
 ```
 
 <h2>Groups and support</h2>
-<p><a href='https://t.me/Dragon_Userbot'>Channel</a> with latest news on the official telegram [ru/en]</p>
+<p><a href='https://t.me/Dragon_Userb0t'>Channel</a> with latest news on the official telegram [ru/en]</p>
 
-<p><a href='https://t.me/Dragon_Userbot_modules'>Channel</a> with custom modules [ru/en] </p>
+<p><a href='https://t.me/Dragon_Userb0t_modules'>Channel</a> with custom modules [ru/en] </p>
 
 <p><a href='https://t.me/dRaGoN_uB_cHaNgElOg'>Channel</a> with ChAnGeLoGs!) [♿AsPhY♿] </p>
 
-<p><a href='https://t.me/Dragon_Userbot_chat'>Discussion</a> in the official telegram chat [ru]</p>
+<p><a href='https://t.me/Dragon_Userb0t_chat'>Discussion</a> in the official telegram chat [ru]</p>
 
-<p><a href='https://t.me/Dragon_Userbot_chat_en'>Discussion</a> in the official telegram chat [en]</p>
+<p><a href='https://t.me/Dragon_Userbot_ch0t_en'>Discussion</a> in the official telegram chat [en]</p>
 
 <h2>Credits</h2>
 <nav>
