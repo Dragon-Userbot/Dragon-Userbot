@@ -55,10 +55,9 @@ if __name__ == "__main__":
         app.send_message(
             "me",
             f"<b>[{datetime.datetime.now()}] Dragon-Userbot launched! \n"
-            "Channel: @Dragon_Userbot\n"
-            "Custom modules: @Dragon_Userbot_modules\n"
-            "Chat [RU]: @Dragon_Userbot_chat\n"
-            "Chat [EN]: @Dragon_Userbot_chat_en\n\n"
+            "Channel: @Dragon_Userb0t\n"
+            "Custom modules: @Dragon_Userb0t_modules\n"
+            "Chat [RU]: @Dragon_Userb0t_chat\n"
             f"For restart, enter:</b>\n"
             f"<code>{restart}</code>",
         )
