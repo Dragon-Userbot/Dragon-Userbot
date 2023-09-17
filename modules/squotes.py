@@ -199,7 +199,7 @@ async def render_message(app: Client, message: types.Message) -> dict:
                 {
                     "offset": entity.offset,
                     "length": entity.length,
-                    "type": entity.type,
+                    "type": str(entity.type).split(".")[-1].lower(),
                 }
             )
 
