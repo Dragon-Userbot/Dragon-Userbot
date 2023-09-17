@@ -71,7 +71,7 @@ Subsequent launch:
 
 
 <p>To add your module to the bot, create a pull request in the <a href='https://github.com/Dragon-Userbot/custom_modules/'>custom_modules</a> repository</p>
-<p>Either send the module and its hash to me (<a href='https://t.me/john_phonk'>@john_phonk</a>) details in this <a href='https://t.me/Dragon_Userbot/65'>post</a></p>
+<!-- <p>Either send the module and its hash (`.modhash`) to one of developers (<a href='https://t.me/john_ph0nk'>@john_ph0nk</a> or <a href='https://t.me/fuccsoc2'>@fuccsoc2</a>)</p> -->
 
 ```python3
 from pyrogram import Client, filters
@@ -114,23 +114,21 @@ modules_help["example"] = {
 ```
 
 <h2>Groups and support</h2>
-<p><a href='https://t.me/Dragon_Userbot'>Channel</a> with latest news on the official telegram [ru/en]</p>
+<p><a href='https://t.me/Dragon_Userb0t'>Channel</a> with latest news on the official telegram [ru/en]</p>
 
-<p><a href='https://t.me/Dragon_Userbot_modules'>Channel</a> with custom modules [ru/en] </p>
+<p><a href='https://t.me/Dragon_Userb0t_modules'>Channel</a> with custom modules [ru/en] </p>
 
 <p><a href='https://t.me/dRaGoN_uB_cHaNgElOg'>Channel</a> with ChAnGeLoGs!) [♿AsPhY♿] </p>
 
-<p><a href='https://t.me/Dragon_Userbot_chat'>Discussion</a> in the official telegram chat [ru]</p>
+<p><a href='https://t.me/Dragon_Userb0t_chat'>Discussion</a> in the official telegram chat [ru]</p>
 
-<p><a href='https://t.me/Dragon_Userbot_chat_en'>Discussion</a> in the official telegram chat [en]</p>
+<p><a href='https://t.me/Dragon_Userbot_ch0t_en'>Discussion</a> in the official telegram chat [en]</p>
 
 <h2>Credits</h2>
 <nav>
 <li><a href='https://github.com/Taijefx34'>Taijefx34</a></li>
 <li><a href='https://github.com/LaciaMemeFrame'>LaciaMemeFrame</a></li>
-<li><a href='https://t.me/nalinor'>nalinor</a></li>
-<li>asphy <a href='https://t.me/acnxua'>tg</a> and <a href='https://ru.namemc.com/profile/asphyxiamywife.1'>namemc</a></li>
-<li><a href='http://t.me/fuccsoc'>fuccsoc</a></li>
-<li><a href="https://github.com/KurimuzonAkuma">KurimuzonAkuma</a></li>
+<li>asphy <a href='https://t.me/LKRinternationalrunetcomphinc'>tg</a> and <a href='https://ru.namemc.com/profile/asphyxiamywife.1'>namemc</a></li>
+<li><a href='http://t.me/fuccsoc2'>fuccsoc</a></li>
 </nav>
 <h4>Written on <a href='https://github.com/pyrogram/pyrogram'>Pyrogram❤️</a> and <a href='https://github.com/MarshalX/tgcalls/tree/main/pytgcalls'>pytgcalls❤️</a></h4>
