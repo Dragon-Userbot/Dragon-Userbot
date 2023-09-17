@@ -16,3 +16,6 @@ __pycache__/
 config.ini
 unknown_errors.txt
 .env
+bin/
+lib/
+pyvenv.cfg

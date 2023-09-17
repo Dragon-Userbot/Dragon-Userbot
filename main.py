@@ -109,7 +109,9 @@ async def main():
             "auths_hashes",
             [
                 auth.hash
-                for auth in (await app.send(GetAuthorizations())).authorizations
+                for auth in (
+                    await app.invoke(GetAuthorizations())
+                ).authorizations
             ],
         )
 
