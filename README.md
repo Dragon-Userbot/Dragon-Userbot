@@ -71,7 +71,6 @@ Subsequent launch:
 
 
 <p>To add your module to the bot, create a pull request in the <a href='https://github.com/Dragon-Userbot/custom_modules/'>custom_modules</a> repository</p>
-<!-- <p>Either send the module and its hash (`.modhash`) to one of developers (<a href='https://t.me/john_ph0nk'>@john_ph0nk</a> or <a href='https://t.me/fuccsoc2'>@fuccsoc2</a>)</p> -->
 
 ```python3
 from pyrogram import Client, filters
@@ -117,8 +116,6 @@ modules_help["example"] = {
 <p><a href='https://t.me/Dragon_Userb0t'>Channel</a> with latest news on the official telegram [ru/en]</p>
 
 <p><a href='https://t.me/Dragon_Userb0t_modules'>Channel</a> with custom modules [ru/en] </p>
-
-<p><a href='https://t.me/dRaGoN_uB_cHaNgElOg'>Channel</a> with ChAnGeLoGs!) [♿AsPhY♿] </p>
 
 <p><a href='https://t.me/Dragon_Userb0t_chat'>Discussion</a> in the official telegram chat [ru]</p>
 
