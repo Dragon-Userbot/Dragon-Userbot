@@ -379,9 +379,7 @@ async def admcount(client: Client, message: types.Message):
                 adminned_chats += 1
 
         stop = perf_counter()
-        total_count = (
-            adminned_chats + owned_chats + owned_usernamed_chats
-        )
+        total_count = adminned_chats + owned_chats + owned_usernamed_chats
         await message.edit(
             f"<b><u>Total:</u></b> {adminned_chats + owned_chats + owned_usernamed_chats}"
             f"\n<b><u>Adminned chats:</u></b> {adminned_chats}\n"
