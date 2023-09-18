@@ -49,9 +49,9 @@ async def shell(_, message: Message):
     else:
         stop_time = perf_counter()
         if stdout:
-            text += "<b>Output:</b>\n" f"<code>{stdout}</code>\n\n"
+            text += f"<b>Output:</b>\n<code>{stdout}</code>\n\n"
         if stderr:
-            text += "<b>Error:</b>\n" f"<code>{stderr}</code>\n\n"
+            text += f"<b>Error:</b>\n<code>{stderr}</code>\n\n"
         text += f"<b>Completed in {round(stop_time - start_time, 5)} seconds with code {cmd_obj.returncode}</b>"
     await message.edit(text)
     cmd_obj.kill()

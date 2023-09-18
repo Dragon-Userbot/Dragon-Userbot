@@ -14,9 +14,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
-from io import BytesIO
-
 from pyrogram import Client, filters, types
 
 from utils.misc import modules_help, prefix
@@ -62,7 +59,7 @@ async def kang(client: Client, message: types.Message):
         return
 
     try:
-        path = await message.reply_to_message.download()
+        path = await message.reply_to_message.download(in_memory=True)
     except ValueError:
         await message.edit(
             "<b>Replied message doesn't contain any downloadable media</b>"
@@ -70,10 +67,11 @@ async def kang(client: Client, message: types.Message):
         return
 
     resized = resize_image(path)
-    os.remove(path)
 
     await interact_with(await client.send_document("@stickers", resized))
-    response = await interact_with(await client.send_message("@stickers", emoji))
+    response = await interact_with(
+        await client.send_message("@stickers", emoji)
+    )
     if "/done" in response.text:
         # ok
         await interact_with(await client.send_message("@stickers", "/done"))
@@ -82,25 +80,25 @@ async def kang(client: Client, message: types.Message):
             f"<b>Sticker added to <a href=https://t.me/addstickers/{pack}>pack</a></b>"
         )
     else:
-        await message.edit("<b>Something went wrong. Check history with @stickers</b>")
+        await message.edit(
+            "<b>Something went wrong. Check history with @stickers</b>"
+        )
     interact_with_to_delete.clear()
 
 
-@Client.on_message(filters.command(["stp", "s2p", "stick2png"], prefix) & filters.me)
+@Client.on_message(
+    filters.command(["stp", "s2p", "stick2png"], prefix) & filters.me
+)
 @with_reply
 async def stick2png(client: Client, message: types.Message):
     try:
         await message.edit("<b>Downloading...</b>")
 
-        path = await message.reply_to_message.download()
-        with open(path, "rb") as f:
-            content = f.read()
-        os.remove(path)
+        file_io = await message.reply_to_message.download(in_memory=True)
 
-        file_io = BytesIO(content)
-        file_io.name = "sticker.png"
-
-        await client.send_document(message.chat.id, file_io)
+        await client.send_document(
+            message.chat.id, file_io, force_document=True
+        )
     except Exception as e:
         await message.edit(format_exc(e))
     else:
@@ -113,12 +111,15 @@ async def resize_cmd(client: Client, message: types.Message):
     try:
         await message.edit("<b>Downloading...</b>")
 
-        path = await message.reply_to_message.download()
-        resized = resize_image(path)
-        resized.name = "image.png"
-        os.remove(path)
+        size = int(message.command[1]) if len(message.command) > 1 else 512
+        size2 = int(message.command[2]) if len(message.command) > 2 else None
 
-        await client.send_document(message.chat.id, resized)
+        path = await message.reply_to_message.download(in_memory=True)
+        resized = resize_image(path, size=size, size2=size2)
+
+        await client.send_document(
+            message.chat.id, resized, force_document=True
+        )
     except Exception as e:
         await message.edit(format_exc(e))
     else:
@@ -128,5 +129,5 @@ async def resize_cmd(client: Client, message: types.Message):
 modules_help["stickers"] = {
     "kang [reply]* [pack]* [emoji]": "Add sticker to defined pack",
     "stp [reply]*": "Convert replied sticker to PNG",
-    "resize [reply]*": "Resize replied image to 512xN format",
+    "resize [reply]* [size] [size2]": "Resize replied image to 512xN (or SIZExSIZE2) format",
 }

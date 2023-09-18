@@ -50,9 +50,9 @@ async def save_note(client: Client, message: Message):
             checking_note = db.get("core.notes", f"note{note_name}", False)
             if not checking_note:
                 get_media_group = [
-                    _.message_id
+                    _.id
                     for _ in await client.get_media_group(
-                        message.chat.id, message.reply_to_message.message_id
+                        message.chat.id, message.reply_to_message.id
                     )
                 ]
                 try:
@@ -65,7 +65,7 @@ async def save_note(client: Client, message: Message):
                     )
                     return
                 note = {
-                    "MESSAGE_ID": str(message_id[1].message_id),
+                    "MESSAGE_ID": str(message_id[1].id),
                     "MEDIA_GROUP": True,
                     "CHAT_ID": str(chat_id),
                 }
@@ -79,19 +79,10 @@ async def save_note(client: Client, message: Message):
                 try:
                     message_id = await message.reply_to_message.forward(chat_id)
                 except errors.ChatForwardsRestricted:
-                    if message.reply_to_message.text:
-                        # manual copy
-                        message_id = await client.send_message(
-                            chat_id, message.reply_to_message.text
-                        )
-                    else:
-                        await message.edit(
-                            "<b>Forwarding messages is restricted by chat admins</b>"
-                        )
-                        return
+                    message_id = await message.copy(chat_id)
                 note = {
                     "MEDIA_GROUP": False,
-                    "MESSAGE_ID": str(message_id.message_id),
+                    "MESSAGE_ID": str(message_id.id),
                     "CHAT_ID": str(chat_id),
                 }
                 db.set("core.notes", f"note{note_name}", note)
@@ -107,7 +98,7 @@ async def save_note(client: Client, message: Message):
             )
             note = {
                 "MEDIA_GROUP": False,
-                "MESSAGE_ID": str(message_id.message_id),
+                "MESSAGE_ID": str(message_id.id),
                 "CHAT_ID": str(chat_id),
             }
             db.set("core.notes", f"note{note_name}", note)
@@ -115,7 +106,9 @@ async def save_note(client: Client, message: Message):
         else:
             await message.edit("<b>This note already exists</b>")
     else:
-        await message.edit(f"<b>Example: <code>{prefix}save note_name</code></b>")
+        await message.edit(
+            f"<b>Example: <code>{prefix}save note_name</code></b>"
+        )
 
 
 @Client.on_message(filters.command(["note"], prefix) & filters.me)
@@ -147,10 +140,14 @@ async def note_send(client: Client, message: Message):
                     if _.photo:
                         if _.caption:
                             media_grouped_list.append(
-                                InputMediaPhoto(_.photo.file_id, _.caption.markdown)
+                                InputMediaPhoto(
+                                    _.photo.file_id, _.caption.markdown
+                                )
                             )
                         else:
-                            media_grouped_list.append(InputMediaPhoto(_.photo.file_id))
+                            media_grouped_list.append(
+                                InputMediaPhoto(_.photo.file_id)
+                            )
                     elif _.video:
                         if _.caption:
                             if _.video.thumbs:
@@ -163,7 +160,9 @@ async def note_send(client: Client, message: Message):
                                 )
                             else:
                                 media_grouped_list.append(
-                                    InputMediaVideo(_.video.file_id, _.caption.markdown)
+                                    InputMediaVideo(
+                                        _.video.file_id, _.caption.markdown
+                                    )
                                 )
                         elif _.video.thumbs:
                             media_grouped_list.append(
@@ -172,14 +171,20 @@ async def note_send(client: Client, message: Message):
                                 )
                             )
                         else:
-                            media_grouped_list.append(InputMediaVideo(_.video.file_id))
+                            media_grouped_list.append(
+                                InputMediaVideo(_.video.file_id)
+                            )
                     elif _.audio:
                         if _.caption:
                             media_grouped_list.append(
-                                InputMediaAudio(_.audio.file_id, _.caption.markdown)
+                                InputMediaAudio(
+                                    _.audio.file_id, _.caption.markdown
+                                )
                             )
                         else:
-                            media_grouped_list.append(InputMediaAudio(_.audio.file_id))
+                            media_grouped_list.append(
+                                InputMediaAudio(_.audio.file_id)
+                            )
                     elif _.document:
                         if _.caption:
                             if _.document.thumbs:
@@ -199,7 +204,8 @@ async def note_send(client: Client, message: Message):
                         elif _.document.thumbs:
                             media_grouped_list.append(
                                 InputMediaDocument(
-                                    _.document.file_id, _.document.thumbs[0].file_id
+                                    _.document.file_id,
+                                    _.document.thumbs[0].file_id,
                                 )
                             )
                         else:
@@ -210,16 +216,18 @@ async def note_send(client: Client, message: Message):
                     await client.send_media_group(
                         message.chat.id,
                         media_grouped_list,
-                        reply_to_message_id=message.reply_to_message.message_id,
+                        reply_to_message_id=message.reply_to_message.id,
                     )
                 else:
-                    await client.send_media_group(message.chat.id, media_grouped_list)
+                    await client.send_media_group(
+                        message.chat.id, media_grouped_list
+                    )
             elif message.reply_to_message:
                 await client.copy_message(
                     message.chat.id,
                     int(find_note["CHAT_ID"]),
                     int(find_note["MESSAGE_ID"]),
-                    reply_to_message_id=message.reply_to_message.message_id,
+                    reply_to_message_id=message.reply_to_message.id,
                 )
             else:
                 await client.copy_message(
@@ -231,7 +239,9 @@ async def note_send(client: Client, message: Message):
         else:
             await message.edit("<b>There is no such note</b>")
     else:
-        await message.edit(f"<b>Example: <code>{prefix}note note_name</code></b>")
+        await message.edit(
+            f"<b>Example: <code>{prefix}note note_name</code></b>"
+        )
 
 
 @Client.on_message(filters.command(["notes"], prefix) & filters.me)
@@ -256,7 +266,9 @@ async def clear_note(_, message: Message):
         else:
             await message.edit("<b>There is no such note</b>")
     else:
-        await message.edit(f"<b>Example: <code>{prefix}clear note_name</code></b>")
+        await message.edit(
+            f"<b>Example: <code>{prefix}clear note_name</code></b>"
+        )
 
 
 modules_help["notes"] = {

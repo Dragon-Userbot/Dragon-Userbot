@@ -21,15 +21,14 @@ from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
 
-commands = ["spam", "statspam", "slowspam", "fastspam"]
 
-
-@Client.on_message(filters.command(commands, prefix) & filters.me)
+@Client.on_message(
+    filters.command(["spam", "statspam", "slowspam"], prefix) & filters.me
+)
 async def spam(client: Client, message: Message):
     amount = int(message.command[1])
     text = " ".join(message.command[2:])
-
-    cooldown = {"spam": 0.15, "statspam": 0.1, "slowspam": 0.9, "fastspam": 0}
+    spam_type = message.command[0]
 
     await message.delete()
 
@@ -39,11 +38,29 @@ async def spam(client: Client, message: Message):
         else:
             sent = await client.send_message(message.chat.id, text)
 
-        if message.command[0] == "statspam":
+        if spam_type == "statspam":
             await asyncio.sleep(0.1)
             await sent.delete()
+        elif spam_type == "spam":
+            await asyncio.sleep(0.1)
+        elif spam_type == "slowspam":
+            await asyncio.sleep(0.9)
 
-        await asyncio.sleep(cooldown[message.command[0]])
+
+@Client.on_message(filters.command("fastspam", prefix) & filters.me)
+async def fastspam(client: Client, message: Message):
+    amount = int(message.command[1])
+    text = " ".join(message.command[2:])
+
+    await message.delete()
+
+    coros = []
+    for msg in range(amount):
+        if message.reply_to_message:
+            coros.append(message.reply_to_message.reply(text))
+        else:
+            coros.append(client.send_message(message.chat.id, text))
+    await asyncio.wait(coros)
 
 
 modules_help["spam"] = {

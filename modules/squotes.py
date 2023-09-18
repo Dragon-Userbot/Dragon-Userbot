@@ -43,12 +43,14 @@ async def quote_cmd(client: Client, message: types.Message):
 
     messages = []
 
-    async for msg in client.iter_history(
-        message.chat.id, offset_id=message.reply_to_message.message_id, reverse=True
+    async for msg in client.get_chat_history(
+        message.chat.id,
+        offset_id=message.reply_to_message.id + count,
+        limit=count,
     ):
         if msg.empty:
             continue
-        if msg.message_id >= message.message_id:
+        if msg.id >= message.id:
             break
         if no_reply:
             msg.reply_to_message = None
@@ -57,6 +59,8 @@ async def quote_cmd(client: Client, message: types.Message):
 
         if len(messages) >= count:
             break
+
+    messages.reverse()
 
     if send_for_me:
         await message.delete()
@@ -67,7 +71,9 @@ async def quote_cmd(client: Client, message: types.Message):
     url = "https://quotes.fl1yd.su/generate"
     params = {
         "messages": [
-            await render_message(client, msg) for msg in messages if not msg.empty
+            await render_message(client, msg)
+            for msg in messages
+            if not msg.empty
         ],
         "quote_color": "#162330",
         "text_color": "#fff",
@@ -113,7 +119,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         return await message.edit("<b>Fake quote text is empty</b>")
 
     q_message = await client.get_messages(
-        message.chat.id, message.reply_to_message.message_id
+        message.chat.id, message.reply_to_message.id
     )
     q_message.text = fake_quote_text
     q_message.entities = None
@@ -136,7 +142,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
     response = requests.post(url, json=params)
     if not response.ok:
         return await message.edit(
-            f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>"
+            f"<b>Quotes API error!</b>\n<code>{response.text}</code>"
         )
 
     resized = resize_image(
@@ -162,11 +168,8 @@ async def render_message(app: Client, message: types.Message) -> dict:
         if file_id in files_cache:
             return files_cache[file_id]
 
-        file_name = await app.download_media(file_id)
-        with open(file_name, "rb") as f:
-            content = f.read()
-        os.remove(file_name)
-        data = base64.b64encode(content).decode()
+        content = await app.download_media(file_id, in_memory=True)
+        data = base64.b64encode(bytes(content.getbuffer())).decode()
         files_cache[file_id] = data
         return data
 
@@ -196,7 +199,7 @@ async def render_message(app: Client, message: types.Message) -> dict:
                 {
                     "offset": entity.offset,
                     "length": entity.length,
-                    "type": entity.type,
+                    "type": str(entity.type).split(".")[-1].lower(),
                 }
             )
 
@@ -270,10 +273,14 @@ async def render_message(app: Client, message: types.Message) -> dict:
     else:
         author["id"] = message.sender_chat.id
         author["name"] = message.sender_chat.title
-        author["rank"] = "channel" if message.sender_chat.type == "channel" else ""
+        author["rank"] = (
+            "channel" if message.sender_chat.type == "channel" else ""
+        )
 
         if message.sender_chat.photo:
-            author["avatar"] = await get_file(message.sender_chat.photo.big_file_id)
+            author["avatar"] = await get_file(
+                message.sender_chat.photo.big_file_id
+            )
         else:
             author["avatar"] = ""
     author["via_bot"] = message.via_bot.username if message.via_bot else ""
@@ -333,7 +340,8 @@ def get_reply_text(reply: types.Message) -> str:
         if reply.video_note
         else "🎵 Voice"
         if reply.voice
-        else (reply.sticker.emoji + " " if reply.sticker.emoji else "") + "Sticker"
+        else (reply.sticker.emoji + " " if reply.sticker.emoji else "")
+        + "Sticker"
         if reply.sticker
         else "💾 File " + reply.document.file_name
         if reply.document
@@ -365,11 +373,11 @@ def get_reply_text(reply: types.Message) -> str:
         else "📍 pinned message"
         if reply.pinned_message
         else "🎤 started a new video chat"
-        if reply.voice_chat_started
+        if reply.video_chat_started
         else "🎤 ended the video chat"
-        if reply.voice_chat_ended
+        if reply.video_chat_ended
         else "🎤 invited participants to the video chat"
-        if reply.voice_chat_members_invited
+        if reply.video_chat_members_invited
         else "👥 created the group"
         if reply.group_chat_created or reply.supergroup_chat_created
         else "👥 created the channel"
@@ -395,7 +403,9 @@ def get_poll_text(poll: types.Poll) -> str:
 
 def get_reply_poll_text(poll: types.Poll) -> str:
     if poll.is_anonymous:
-        text = "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
+        text = (
+            "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
+        )
     else:
         text = "📊 Poll" if poll.type == "regular" else "📊 Quiz"
     if poll.is_closed:

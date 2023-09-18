@@ -18,18 +18,23 @@ from pyrogram.types import Message
 import random
 import datetime
 
-from utils.misc import modules_help, prefix, userbot_version, python_version, gitrepo
+from utils.misc import (
+    modules_help,
+    prefix,
+    userbot_version,
+    python_version,
+    gitrepo,
+)
 
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
 async def support(_, message: Message):
-    devs = ["@john_phonk", "@fuccsoc"]
+    devs = ["@john_ph0nk", "@fuccsoc2"]
     random.shuffle(devs)
 
-    commands_count = 0.0
-    for module in modules_help:
-        for cmd in module:
-            commands_count += 1
+    commands_count = float(
+        len([cmd for module in modules_help for cmd in module])
+    )
 
     await message.edit(
         f"<b>Dragon-Userbot\n\n"
@@ -56,7 +61,7 @@ async def version(client: Client, message: Message):
         "dRaGoN_uB_cHaNgElOg", query=ub_version + "."
     ):
         if ub_version in m.text:
-            changelog = m.message_id
+            changelog = m.id
 
     await message.delete()
 
@@ -73,7 +78,7 @@ async def version(client: Client, message: Message):
         f"Changelogs are written by </b><i>"
         f"<a href=tg://user?id=318865588>\u2060</a>"
         f"<a href=tg://user?id=293490416>♿️</a>"
-        f"<a href=https://t.me/LKRinternationalrunetcomphinc>asphuy</a>"
+        f"<a href=https://t.me/acnxua>asphuy</a>"
         f"<a href=https://t.me/artemjj2>♿️</a></i>\n\n"
         + (
             f"<b>Branch: <a href={remote_url}/tree/{gitrepo.active_branch}>{gitrepo.active_branch}</a>\n"

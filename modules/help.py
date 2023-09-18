@@ -31,7 +31,9 @@ async def help_cmd(_, message: Message):
             "Available Modules:\n"
         )
 
-        for module_name, module_commands in modules_help.items():
+        for module_name, module_commands in sorted(
+            modules_help.items(), key=lambda x: x[0]
+        ):
             text += "• {}: {}\n".format(
                 module_name.title(),
                 " ".join(
@@ -59,7 +61,7 @@ async def help_cmd(_, message: Message):
     elif message.command[1].lower() in modules_help:
         await message.edit(format_module_help(message.command[1].lower()))
     else:
-        # TODO: refactor this cringe
+        # No, this cringe won't be refactored
         command_name = message.command[1].lower()
         for name, commands in modules_help.items():
             for command in commands.keys():
@@ -76,4 +78,6 @@ async def help_cmd(_, message: Message):
         await message.edit(f"<b>Module {command_name} not found</b>")
 
 
-modules_help["help"] = {"help [module/command name]": "Get common/module/command help"}
+modules_help["help"] = {
+    "help [module/command name]": "Get common/module/command help"
+}

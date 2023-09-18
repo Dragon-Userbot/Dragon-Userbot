@@ -29,12 +29,14 @@ from utils.scripts import format_exc
 
 @Client.on_message(filters.command("admcount", prefix) & filters.me)
 async def admcount(client: Client, message: Message):
-    await message.edit("<b>Retrieving information... (it'll take some time)</b>")
+    await message.edit(
+        "<b>Retrieving information... (it'll take some time)</b>"
+    )
 
     start = perf_counter()
     try:
-        response = await client.send(GetAllChats(except_ids=[]))
-        chats = response["chats"]
+        response = await client.invoke(GetAllChats(except_ids=[]))
+        chats = response.chats
 
         adminned_chats = 0
         owned_chats = 0
@@ -67,12 +69,14 @@ async def admcount(client: Client, message: Message):
 
 @Client.on_message(filters.command("admlist", prefix) & filters.me)
 async def admlist(client: Client, message: Message):
-    await message.edit("<b>Retrieving information... (it'll take some time)</b>")
+    await message.edit(
+        "<b>Retrieving information... (it'll take some time)</b>"
+    )
 
     start = perf_counter()
     try:
-        response = await client.send(GetAllChats(except_ids=[]))
-        chats = response["chats"]
+        response = await client.invoke(GetAllChats(except_ids=[]))
+        chats = response.chats
 
         adminned_chats = []
         owned_chats = []
@@ -90,21 +94,15 @@ async def admlist(client: Client, message: Message):
 
         text = "<b>Adminned chats:</b>\n"
         for index, chat in enumerate(adminned_chats):
-            text += (
-                f"{index + 1}. <a href=https://t.me/c/{chat.id}/1>{chat.title}</a>\n"
-            )
+            text += f"{index + 1}. <a href=https://t.me/c/{chat.id}/1>{chat.title}</a>\n"
 
         text += "\n<b>Owned chats:</b>\n"
         for index, chat in enumerate(owned_chats):
-            text += (
-                f"{index + 1}. <a href=https://t.me/c/{chat.id}/1>{chat.title}</a>\n"
-            )
+            text += f"{index + 1}. <a href=https://t.me/c/{chat.id}/1>{chat.title}</a>\n"
 
         text += "\n<b>Owned chats with username:</b>\n"
         for index, chat in enumerate(owned_usernamed_chats):
-            text += (
-                f"{index + 1}. <a href=https://t.me/{chat.username}>{chat.title}</a>\n"
-            )
+            text += f"{index + 1}. <a href=https://t.me/{chat.username}>{chat.title}</a>\n"
 
         stop = perf_counter()
         total_count = (

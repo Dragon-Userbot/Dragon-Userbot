@@ -31,7 +31,7 @@ async def get_user_inf(client: Client, message: Message):
     else:
         peer = await client.resolve_peer("me")
 
-    response = await client.send(functions.users.GetFullUser(id=peer))
+    response = await client.invoke(functions.users.GetFullUser(id=peer))
 
     user = response.users[0]
     full_user = response.full_user
@@ -61,11 +61,13 @@ async def get_full_user_inf(client: Client, message: Message):
         if len(message.command) >= 2:
             peer = await client.resolve_peer(message.command[1])
         elif message.reply_to_message and message.reply_to_message.from_user:
-            peer = await client.resolve_peer(message.reply_to_message.from_user.id)
+            peer = await client.resolve_peer(
+                message.reply_to_message.from_user.id
+            )
         else:
             peer = await client.resolve_peer("me")
 
-        response = await client.send(functions.users.GetFullUser(id=peer))
+        response = await client.invoke(functions.users.GetFullUser(id=peer))
 
         user = response.users[0]
         full_user = response.full_user
@@ -79,7 +81,9 @@ async def get_full_user_inf(client: Client, message: Message):
             creation_date = "None"
         else:
             creation_date = response.text
-        # await client.delete_messages("@creationdatebot", interact_with_to_delete)
+        await client.delete_messages(
+            "@creationdatebot", interact_with_to_delete
+        )
         interact_with_to_delete.clear()
 
         if user.username is None:
