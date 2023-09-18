@@ -255,8 +255,9 @@ async def load_module(
         module = importlib.import_module(path)
 
     for name, obj in vars(module).items():
-        for handler, group in getattr(obj, "handlers", []):
-            client.add_handler(handler, group)
+        if type(getattr(obj, "handlers", [])) == list:
+            for handler, group in getattr(obj, "handlers", []):
+                client.add_handler(handler, group)
 
     module.__meta__ = meta
 
