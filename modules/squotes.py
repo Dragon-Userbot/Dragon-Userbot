@@ -169,7 +169,7 @@ async def render_message(app: Client, message: types.Message) -> dict:
             return files_cache[file_id]
 
         content = await app.download_media(file_id, in_memory=True)
-        data = base64.b64encode(content.read()).decode()
+        data = base64.b64encode(bytes(content.getbuffer())).decode()
         files_cache[file_id] = data
         return data
 
