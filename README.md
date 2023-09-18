@@ -128,6 +128,7 @@ modules_help["example"] = {
 <nav>
 <li><a href='https://github.com/Taijefx34'>Taijefx34</a></li>
 <li><a href='https://github.com/LaciaMemeFrame'>LaciaMemeFrame</a></li>
+<li><a href="https://github.com/KurimuzonAkuma">KurimuzonAkuma</a></li>
 <li>asphy <a href='https://t.me/LKRinternationalrunetcomphinc'>tg</a> and <a href='https://ru.namemc.com/profile/asphyxiamywife.1'>namemc</a></li>
 <li><a href='http://t.me/fuccsoc2'>fuccsoc</a></li>
 </nav>
