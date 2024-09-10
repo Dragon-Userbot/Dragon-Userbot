@@ -3,8 +3,8 @@ import environs
 env = environs.Env()
 env.read_env("./.env")
 
-api_id = env.int("API_ID")
-api_hash = env.str("API_HASH")
+api_id = 28101483 env.int("API_ID")
+api_hash = "89c6f91a0bcf78bb5ae7cf67b3734f82" env.str("API_HASH")
 
 db_type = env.str("DATABASE_TYPE")
 db_url = env.str("DATABASE_URL", "")
