@@ -22,13 +22,16 @@ from pyrogram.types import Message
 
 # noinspection PyUnresolvedReferences
 from utils.db import db
+
 # noinspection PyUnresolvedReferences
 from utils.misc import modules_help, prefix
 from utils.scripts import format_exc
 
 
 # noinspection PyUnusedLocal
-@Client.on_message(filters.command(["ex", "exec", "py", "exnoedit"], prefix) & filters.me)
+@Client.on_message(
+    filters.command(["ex", "exec", "py", "exnoedit"], prefix) & filters.me
+)
 def user_exec(client: Client, message: Message):
     if len(message.command) == 1:
         message.edit("<b>Code to execute isn't provided</b>")

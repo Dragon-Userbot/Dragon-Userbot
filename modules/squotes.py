@@ -70,16 +70,24 @@ async def quote_cmd(client: Client, message: types.Message):
 
     url = "https://quotes.fl1yd.su/generate"
     params = {
-        "messages": [await render_message(client, msg) for msg in messages if not msg.empty],
+        "messages": [
+            await render_message(client, msg)
+            for msg in messages
+            if not msg.empty
+        ],
         "quote_color": "#162330",
         "text_color": "#fff",
     }
 
     response = requests.post(url, json=params)
     if not response.ok:
-        return await message.edit(f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>")
+        return await message.edit(
+            f"<b>Quotes API error!</b>\n" f"<code>{response.text}</code>"
+        )
 
-    resized = resize_image(BytesIO(response.content), img_type="PNG" if is_png else "WEBP")
+    resized = resize_image(
+        BytesIO(response.content), img_type="PNG" if is_png else "WEBP"
+    )
     await message.edit("<b>Sending...</b>")
 
     try:
@@ -110,7 +118,9 @@ async def fake_quote_cmd(client: Client, message: types.Message):
     if not fake_quote_text:
         return await message.edit("<b>Fake quote text is empty</b>")
 
-    q_message = await client.get_messages(message.chat.id, message.reply_to_message.id)
+    q_message = await client.get_messages(
+        message.chat.id, message.reply_to_message.id
+    )
     q_message.text = fake_quote_text
     q_message.entities = None
     if no_reply:
@@ -131,9 +141,13 @@ async def fake_quote_cmd(client: Client, message: types.Message):
 
     response = requests.post(url, json=params)
     if not response.ok:
-        return await message.edit(f"<b>Quotes API error!</b>\n<code>{response.text}</code>")
+        return await message.edit(
+            f"<b>Quotes API error!</b>\n<code>{response.text}</code>"
+        )
 
-    resized = resize_image(BytesIO(response.content), img_type="PNG" if is_png else "WEBP")
+    resized = resize_image(
+        BytesIO(response.content), img_type="PNG" if is_png else "WEBP"
+    )
     await message.edit("<b>Sending...</b>")
 
     try:
@@ -238,7 +252,11 @@ async def render_message(app: Client, message: types.Message) -> dict:
             index = t_me_page.find(sub)
             if index != -1:
                 link = t_me_page[index + 35 :].split('"')
-                if len(link) > 0 and link[0] and link[0] != "https://telegram.org/img/t_logo.png":
+                if (
+                    len(link) > 0
+                    and link[0]
+                    and link[0] != "https://telegram.org/img/t_logo.png"
+                ):
                     # found valid link
                     avatar = requests.get(link[0]).content
                     author["avatar"] = base64.b64encode(avatar).decode()
@@ -255,10 +273,14 @@ async def render_message(app: Client, message: types.Message) -> dict:
     else:
         author["id"] = message.sender_chat.id
         author["name"] = message.sender_chat.title
-        author["rank"] = "channel" if message.sender_chat.type == "channel" else ""
+        author["rank"] = (
+            "channel" if message.sender_chat.type == "channel" else ""
+        )
 
         if message.sender_chat.photo:
-            author["avatar"] = await get_file(message.sender_chat.photo.big_file_id)
+            author["avatar"] = await get_file(
+                message.sender_chat.photo.big_file_id
+            )
         else:
             author["avatar"] = ""
     author["via_bot"] = message.via_bot.username if message.via_bot else ""
@@ -318,7 +340,8 @@ def get_reply_text(reply: types.Message) -> str:
         if reply.video_note
         else "🎵 Voice"
         if reply.voice
-        else (reply.sticker.emoji + " " if reply.sticker.emoji else "") + "Sticker"
+        else (reply.sticker.emoji + " " if reply.sticker.emoji else "")
+        + "Sticker"
         if reply.sticker
         else "💾 File " + reply.document.file_name
         if reply.document
@@ -331,7 +354,8 @@ def get_reply_text(reply: types.Message) -> str:
         else (
             "👤 joined the group"
             if reply.new_chat_members[0].id == reply.from_user.id
-            else "👤 invited %s to the group" % (get_full_name(reply.new_chat_members[0]))
+            else "👤 invited %s to the group"
+            % (get_full_name(reply.new_chat_members[0]))
         )
         if reply.new_chat_members
         else (
@@ -379,7 +403,9 @@ def get_poll_text(poll: types.Poll) -> str:
 
 def get_reply_poll_text(poll: types.Poll) -> str:
     if poll.is_anonymous:
-        text = "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
+        text = (
+            "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
+        )
     else:
         text = "📊 Poll" if poll.type == "regular" else "📊 Quiz"
     if poll.is_closed:

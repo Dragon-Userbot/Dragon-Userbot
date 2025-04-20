@@ -12,6 +12,7 @@
 #  GNU General Public License for more details.
 
 import asyncio
+
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from collections import OrderedDict
@@ -62,7 +63,9 @@ class Conversation:
         if self.exclusive:
             await self._chat_unique_lock.acquire()
 
-        self._handler_object = MessageHandler(self._handler, filters.chat(self._chat_id))
+        self._handler_object = MessageHandler(
+            self._handler, filters.chat(self._chat_id)
+        )
 
         if -999 not in self.client.dispatcher.groups:
             self.client.dispatcher.groups[-999] = []

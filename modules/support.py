@@ -19,8 +19,13 @@ import random
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from utils.misc import (gitrepo, modules_help, prefix, python_version,
-                        userbot_version)
+from utils.misc import (
+    gitrepo,
+    modules_help,
+    prefix,
+    python_version,
+    userbot_version,
+)
 
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
@@ -28,7 +33,9 @@ async def support(_, message: Message):
     devs = ["@john_ph0nk", "@fuccsoc2"]
     random.shuffle(devs)
 
-    commands_count = float(len([cmd for module in modules_help for cmd in module]))
+    commands_count = float(
+        len([cmd for module in modules_help for cmd in module])
+    )
 
     await message.edit(
         f"<b>Dragon-Userbot\n\n"
@@ -51,7 +58,9 @@ async def support(_, message: Message):
 async def version(client: Client, message: Message):
     changelog = ""
     ub_version = ".".join(userbot_version.split(".")[:2])
-    async for m in client.search_messages("dRaGoN_uB_cHaNgElOg", query=ub_version + "."):
+    async for m in client.search_messages(
+        "dRaGoN_uB_cHaNgElOg", query=ub_version + "."
+    ):
         if ub_version in m.text:
             changelog = m.id
 

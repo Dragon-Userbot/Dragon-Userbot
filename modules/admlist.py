@@ -111,8 +111,12 @@ class Chat(Object):
             username=user.username,
             first_name=user.first_name,
             last_name=user.last_name,
-            photo=types.ChatPhoto._parse(client, user.photo, peer_id, user.access_hash),
-            restrictions=types.List([types.Restriction._parse(r) for r in user.restriction_reason])
+            photo=types.ChatPhoto._parse(
+                client, user.photo, peer_id, user.access_hash
+            ),
+            restrictions=types.List(
+                [types.Restriction._parse(r) for r in user.restriction_reason]
+            )
             or None,
             dc_id=getattr(getattr(user, "photo", None), "dc_id", None),
             client=client,
@@ -126,8 +130,12 @@ class Chat(Object):
             type=enums.ChatType.GROUP,
             title=chat.title,
             is_creator=getattr(chat, "creator", None),
-            photo=types.ChatPhoto._parse(client, getattr(chat, "photo", None), peer_id, 0),
-            permissions=types.ChatPermissions._parse(getattr(chat, "default_banned_rights", None)),
+            photo=types.ChatPhoto._parse(
+                client, getattr(chat, "photo", None), peer_id, 0
+            ),
+            permissions=types.ChatPermissions._parse(
+                getattr(chat, "default_banned_rights", None)
+            ),
             members_count=getattr(chat, "participants_count", None),
             dc_id=getattr(getattr(chat, "photo", None), "dc_id", None),
             has_protected_content=getattr(chat, "noforwards", None),
@@ -159,7 +167,9 @@ class Chat(Object):
                 peer_id,
                 getattr(channel, "access_hash", 0),
             ),
-            restrictions=types.List([types.Restriction._parse(r) for r in restriction_reason])
+            restrictions=types.List(
+                [types.Restriction._parse(r) for r in restriction_reason]
+            )
             or None,
             permissions=types.ChatPermissions._parse(
                 getattr(channel, "default_banned_rights", None)
@@ -223,7 +233,9 @@ class Dialog(Object):
         self.is_pinned = is_pinned
 
     @staticmethod
-    def _parse(client, dialog: "raw.types.Dialog", messages, users, chats) -> "Dialog":
+    def _parse(
+        client, dialog: "raw.types.Dialog", messages, users, chats
+    ) -> "Dialog":
         return Dialog(
             chat=Chat._parse_dialog(client, dialog.peer, users, chats),
             top_message=messages.get(utils.get_peer_id(dialog.peer)),
@@ -262,7 +274,9 @@ async def get_dialogs(
             if isinstance(message, raw.types.MessageEmpty):
                 continue
             chat_id = utils.get_peer_id(message.peer_id)
-            messages[chat_id] = await types.Message._parse(self, message, users, chats)
+            messages[chat_id] = await types.Message._parse(
+                self, message, users, chats
+            )
         dialogs = []
         for dialog in r.dialogs:
             if not isinstance(dialog, raw.types.Dialog):
@@ -283,7 +297,9 @@ async def get_dialogs(
 
 @Client.on_message(filters.command("admlist", prefix) & filters.me)
 async def admlist(client: Client, message: types.Message):
-    await message.edit("<b>Retrieving information... (it'll take some time)</b>")
+    await message.edit(
+        "<b>Retrieving information... (it'll take some time)</b>"
+    )
 
     start = perf_counter()
     try:
@@ -294,7 +310,9 @@ async def admlist(client: Client, message: types.Message):
             chat = dialog.chat
             if getattr(chat, "deactivated", False):
                 continue
-            if getattr(chat, "is_creator", False) and getattr(chat, "username", None):
+            if getattr(chat, "is_creator", False) and getattr(
+                chat, "username", None
+            ):
                 owned_usernamed_chats.append(chat)
             elif getattr(chat, "is_creator", False):
                 owned_chats.append(chat)
@@ -314,10 +332,14 @@ async def admlist(client: Client, message: types.Message):
         text += "\n<b>Owned chats with username:</b>\n"
         for index, chat in enumerate(owned_usernamed_chats):
             cid = str(chat.id).replace("-100", "")
-            text += f"{index + 1}. <a href=https://t.me/{cid}>{chat.title}</a>\n"
+            text += (
+                f"{index + 1}. <a href=https://t.me/{cid}>{chat.title}</a>\n"
+            )
 
         stop = perf_counter()
-        total_count = len(adminned_chats) + len(owned_chats) + len(owned_usernamed_chats)
+        total_count = (
+            len(adminned_chats) + len(owned_chats) + len(owned_usernamed_chats)
+        )
         await message.edit(
             text + "\n"
             f"<b><u>Total:</u></b> {total_count}"
@@ -333,7 +355,9 @@ async def admlist(client: Client, message: types.Message):
 
 @Client.on_message(filters.command("admcount", prefix) & filters.me)
 async def admcount(client: Client, message: types.Message):
-    await message.edit("<b>Retrieving information... (it'll take some time)</b>")
+    await message.edit(
+        "<b>Retrieving information... (it'll take some time)</b>"
+    )
 
     start = perf_counter()
     try:
@@ -344,7 +368,9 @@ async def admcount(client: Client, message: types.Message):
             chat = dialog.chat
             if getattr(chat, "deactivated", False):
                 continue
-            if getattr(chat, "is_creator", False) and getattr(chat, "username", None):
+            if getattr(chat, "is_creator", False) and getattr(
+                chat, "username", None
+            ):
                 owned_usernamed_chats += 1
             elif getattr(chat, "is_creator", False):
                 owned_chats += 1

@@ -31,7 +31,9 @@ async def help_cmd(_, message: Message):
             "Available Modules:\n"
         )
 
-        for module_name, module_commands in sorted(modules_help.items(), key=lambda x: x[0]):
+        for module_name, module_commands in sorted(
+            modules_help.items(), key=lambda x: x[0]
+        ):
             text += "• {}: {}\n".format(
                 module_name.title(),
                 " ".join(
@@ -76,4 +78,6 @@ async def help_cmd(_, message: Message):
         await message.edit(f"<b>Module {command_name} not found</b>")
 
 
-modules_help["help"] = {"help [module/command name]": "Get common/module/command help"}
+modules_help["help"] = {
+    "help [module/command name]": "Get common/module/command help"
+}

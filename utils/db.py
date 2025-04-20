@@ -64,7 +64,9 @@ class MongoDatabase(Database):
         return expected_value if doc is None else doc["val"]
 
     def get_collection(self, module: str):
-        return {item["var"]: item["val"] for item in self._database[module].find()}
+        return {
+            item["var"]: item["val"] for item in self._database[module].find()
+        }
 
     def remove(self, module: str, variable: str):
         self._database[module].delete_one({"var": variable})

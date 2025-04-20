@@ -17,8 +17,13 @@
 from pyrogram import Client, filters, types
 
 from utils.misc import modules_help, prefix
-from utils.scripts import (format_exc, interact_with, interact_with_to_delete,
-                           resize_image, with_reply)
+from utils.scripts import (
+    format_exc,
+    interact_with,
+    interact_with_to_delete,
+    resize_image,
+    with_reply,
+)
 
 
 @Client.on_message(filters.command("kang", prefix) & filters.me)
@@ -28,7 +33,8 @@ async def kang(client: Client, message: types.Message):
 
     if len(message.command) < 2:
         await message.edit(
-            "<b>No arguments provided\n" f"Usage: <code>{prefix}kang [pack]* [emoji]</code></b>"
+            "<b>No arguments provided\n"
+            f"Usage: <code>{prefix}kang [pack]* [emoji]</code></b>"
         )
         return
 
@@ -55,13 +61,17 @@ async def kang(client: Client, message: types.Message):
     try:
         path = await message.reply_to_message.download(in_memory=True)
     except ValueError:
-        await message.edit("<b>Replied message doesn't contain any downloadable media</b>")
+        await message.edit(
+            "<b>Replied message doesn't contain any downloadable media</b>"
+        )
         return
 
     resized = resize_image(path)
 
     await interact_with(await client.send_document("@stickers", resized))
-    response = await interact_with(await client.send_message("@stickers", emoji))
+    response = await interact_with(
+        await client.send_message("@stickers", emoji)
+    )
     if "/done" in response.text:
         # ok
         await interact_with(await client.send_message("@stickers", "/done"))
@@ -70,11 +80,15 @@ async def kang(client: Client, message: types.Message):
             f"<b>Sticker added to <a href=https://t.me/addstickers/{pack}>pack</a></b>"
         )
     else:
-        await message.edit("<b>Something went wrong. Check history with @stickers</b>")
+        await message.edit(
+            "<b>Something went wrong. Check history with @stickers</b>"
+        )
     interact_with_to_delete.clear()
 
 
-@Client.on_message(filters.command(["stp", "s2p", "stick2png"], prefix) & filters.me)
+@Client.on_message(
+    filters.command(["stp", "s2p", "stick2png"], prefix) & filters.me
+)
 @with_reply
 async def stick2png(client: Client, message: types.Message):
     try:
@@ -82,7 +96,9 @@ async def stick2png(client: Client, message: types.Message):
 
         file_io = await message.reply_to_message.download(in_memory=True)
 
-        await client.send_document(message.chat.id, file_io, force_document=True)
+        await client.send_document(
+            message.chat.id, file_io, force_document=True
+        )
     except Exception as e:
         await message.edit(format_exc(e))
     else:
@@ -101,7 +117,9 @@ async def resize_cmd(client: Client, message: types.Message):
         path = await message.reply_to_message.download(in_memory=True)
         resized = resize_image(path, size=size, size2=size2)
 
-        await client.send_document(message.chat.id, resized, force_document=True)
+        await client.send_document(
+            message.chat.id, resized, force_document=True
+        )
     except Exception as e:
         await message.edit(format_exc(e))
     else:
