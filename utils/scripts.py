@@ -14,13 +14,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import asyncio
+import importlib
 import os
 import re
-import sys
-import asyncio
-import traceback
-import importlib
 import subprocess
+import sys
+import traceback
 from io import BytesIO
 from types import ModuleType
 from typing import Dict
@@ -53,10 +53,7 @@ def format_exc(e: Exception, suffix="") -> str:
             f"<b>Telegram API error!</b>\n"
             f"<code>[{e.CODE} {e.ID or e.NAME}] — {e.MESSAGE.format(value=e.value)}</code>\n\n<b>{suffix}</b>"
         )
-    return (
-        f"<b>Error!</b>\n"
-        f"<code>{e.__class__.__name__}: {e}</code>\n\n<b>{suffix}</b>"
-    )
+    return f"<b>Error!</b>\n" f"<code>{e.__class__.__name__}: {e}</code>\n\n<b>{suffix}</b>"
 
 
 def with_reply(func):
@@ -82,12 +79,7 @@ async def interact_with(message: types.Message) -> types.Message:
 
     await asyncio.sleep(1)
     # noinspection PyProtectedMember
-    response = [
-        msg
-        async for msg in message._client.get_chat_history(
-            message.chat.id, limit=1
-        )
-    ]
+    response = [msg async for msg in message._client.get_chat_history(message.chat.id, limit=1)]
     seconds_waiting = 0
 
     while response[0].from_user.is_self:
@@ -98,10 +90,7 @@ async def interact_with(message: types.Message) -> types.Message:
         await asyncio.sleep(1)
         # noinspection PyProtectedMember
         response = [
-            msg
-            async for msg in message._client.get_chat_history(
-                message.chat.id, limit=1
-            )
+            msg async for msg in message._client.get_chat_history(message.chat.id, limit=1)
         ]
 
     interact_with_to_delete.append(message.id)
@@ -113,11 +102,7 @@ async def interact_with(message: types.Message) -> types.Message:
 def format_module_help(module_name: str, full=True):
     commands = modules_help[module_name]
 
-    help_text = (
-        f"<b>Help for |{module_name}|\n\nUsage:</b>\n"
-        if full
-        else "<b>Usage:</b>\n"
-    )
+    help_text = f"<b>Help for |{module_name}|\n\nUsage:</b>\n" if full else "<b>Usage:</b>\n"
 
     for command, desc in commands.items():
         cmd = command.split(maxsplit=1)
@@ -131,17 +116,13 @@ def format_small_module_help(module_name: str, full=True):
     commands = modules_help[module_name]
 
     help_text = (
-        f"<b>Help for |{module_name}|\n\nCommands list:\n"
-        if full
-        else "<b>Commands list:\n"
+        f"<b>Help for |{module_name}|\n\nCommands list:\n" if full else "<b>Commands list:\n"
     )
     for command, desc in commands.items():
         cmd = command.split(maxsplit=1)
         args = " <code>" + cmd[1] + "</code>" if len(cmd) > 1 else ""
         help_text += f"<code>{prefix}{cmd[0]}</code>{args}\n"
-    help_text += (
-        f"\nGet full usage: <code>{prefix}help {module_name}</code></b>"
-    )
+    help_text += f"\nGet full usage: <code>{prefix}help {module_name}</code></b>"
 
     return help_text
 
@@ -160,9 +141,7 @@ def import_library(library_name: str, package_name: str = None):
     try:
         return importlib.import_module(library_name)
     except ImportError:
-        completed = subprocess.run(
-            [sys.executable, "-m", "pip", "install", package_name]
-        )
+        completed = subprocess.run([sys.executable, "-m", "pip", "install", package_name])
         if completed.returncode != 0:
             raise AssertionError(
                 f"Failed to install library {package_name} (pip exited with code {completed.returncode})"
@@ -170,9 +149,7 @@ def import_library(library_name: str, package_name: str = None):
         return importlib.import_module(library_name)
 
 
-def resize_image(
-    input_img, output=None, img_type="PNG", size: int = 512, size2: int = None
-):
+def resize_image(input_img, output=None, img_type="PNG", size: int = 512, size2: int = None):
     if output is None:
         output = BytesIO()
         output.name = f"sticker.{img_type.lower()}"
@@ -223,9 +200,7 @@ async def load_module(
             raise
 
         if message:
-            await message.edit(
-                f"<b>Installing requirements: {' '.join(packages)}</b>"
-            )
+            await message.edit(f"<b>Installing requirements: {' '.join(packages)}</b>")
 
         proc = await asyncio.create_subprocess_exec(
             sys.executable,

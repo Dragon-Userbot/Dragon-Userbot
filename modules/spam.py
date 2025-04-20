@@ -22,9 +22,7 @@ from pyrogram.types import Message
 from utils.misc import modules_help, prefix
 
 
-@Client.on_message(
-    filters.command(["spam", "statspam", "slowspam"], prefix) & filters.me
-)
+@Client.on_message(filters.command(["spam", "statspam", "slowspam"], prefix) & filters.me)
 async def spam(client: Client, message: Message):
     amount = int(message.command[1])
     text = " ".join(message.command[2:])

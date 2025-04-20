@@ -11,20 +11,16 @@
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 
+import datetime
+import random
+
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from pyrogram import Client, filters
 from pyrogram.types import Message
-import random
-import datetime
 
-from utils.misc import (
-    modules_help,
-    prefix,
-    userbot_version,
-    python_version,
-    gitrepo,
-)
+from utils.misc import (gitrepo, modules_help, prefix, python_version,
+                        userbot_version)
 
 
 @Client.on_message(filters.command(["support", "repo"], prefix) & filters.me)
@@ -32,9 +28,7 @@ async def support(_, message: Message):
     devs = ["@john_ph0nk", "@fuccsoc2"]
     random.shuffle(devs)
 
-    commands_count = float(
-        len([cmd for module in modules_help for cmd in module])
-    )
+    commands_count = float(len([cmd for module in modules_help for cmd in module]))
 
     await message.edit(
         f"<b>Dragon-Userbot\n\n"
@@ -57,9 +51,7 @@ async def support(_, message: Message):
 async def version(client: Client, message: Message):
     changelog = ""
     ub_version = ".".join(userbot_version.split(".")[:2])
-    async for m in client.search_messages(
-        "dRaGoN_uB_cHaNgElOg", query=ub_version + "."
-    ):
+    async for m in client.search_messages("dRaGoN_uB_cHaNgElOg", query=ub_version + "."):
         if ub_version in m.text:
             changelog = m.id
 

@@ -19,7 +19,6 @@ from pyrogram.types import Message
 
 from utils.misc import modules_help, prefix
 
-
 # if your module has packages from PyPi
 
 # from utils.scripts import import_library
@@ -37,9 +36,7 @@ async def example_edit(client: Client, message: Message):
 
 @Client.on_message(filters.command("example_send", prefix) & filters.me)
 async def example_send(client: Client, message: Message):
-    await client.send_message(
-        message.chat.id, "<b>This is an example module</b>"
-    )
+    await client.send_message(message.chat.id, "<b>This is an example module</b>")
 
 
 # This adds instructions for your module

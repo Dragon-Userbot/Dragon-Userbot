@@ -21,24 +21,15 @@ from pyrogram.types import Message
 from utils.db import db
 from utils.misc import modules_help, prefix
 
-anti_pm_enabled = filters.create(
-    lambda _, __, ___: db.get("core.antipm", "status", False)
-)
+anti_pm_enabled = filters.create(lambda _, __, ___: db.get("core.antipm", "status", False))
 
-in_contact_list = filters.create(
-    lambda _, __, message: message.from_user.is_contact
-)
+in_contact_list = filters.create(lambda _, __, message: message.from_user.is_contact)
 
 is_support = filters.create(lambda _, __, message: message.chat.is_support)
 
 
 @Client.on_message(
-    filters.private
-    & ~filters.me
-    & ~filters.bot
-    & ~in_contact_list
-    & ~is_support
-    & anti_pm_enabled
+    filters.private & ~filters.me & ~filters.bot & ~in_contact_list & ~is_support & anti_pm_enabled
 )
 async def anti_pm_handler(client: Client, message: Message):
     user_info = await client.resolve_peer(message.chat.id)
@@ -46,9 +37,7 @@ async def anti_pm_handler(client: Client, message: Message):
         await client.invoke(functions.messages.ReportSpam(peer=user_info))
     if db.get("core.antipm", "block", False):
         await client.invoke(functions.contacts.Block(id=user_info))
-    await client.invoke(
-        functions.messages.DeleteHistory(peer=user_info, max_id=0, revoke=True)
-    )
+    await client.invoke(functions.messages.DeleteHistory(peer=user_info, max_id=0, revoke=True))
 
 
 @Client.on_message(filters.command(["antipm", "anti_pm"], prefix) & filters.me)
@@ -94,9 +83,7 @@ async def antipm_report(_, message: Message):
         db.set("core.antipm", "spamrep", False)
         await message.edit("<b>Spam-reporting disabled!</b>")
     else:
-        await message.edit(
-            f"<b>Usage: {prefix}antipm_report [enable|disable]</b>"
-        )
+        await message.edit(f"<b>Usage: {prefix}antipm_report [enable|disable]</b>")
 
 
 @Client.on_message(filters.command(["antipm_block"], prefix) & filters.me)
@@ -119,9 +106,7 @@ async def antipm_block(_, message: Message):
         db.set("core.antipm", "block", False)
         await message.edit("<b>Blocking users disabled!</b>")
     else:
-        await message.edit(
-            f"<b>Usage: {prefix}antipm_block [enable|disable]</b>"
-        )
+        await message.edit(f"<b>Usage: {prefix}antipm_block [enable|disable]</b>")
 
 
 modules_help["antipm"] = {

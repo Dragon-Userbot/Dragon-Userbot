@@ -14,24 +14,21 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from io import StringIO
 from contextlib import redirect_stdout
+from io import StringIO
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
 # noinspection PyUnresolvedReferences
+from utils.db import db
+# noinspection PyUnresolvedReferences
 from utils.misc import modules_help, prefix
 from utils.scripts import format_exc
 
-# noinspection PyUnresolvedReferences
-from utils.db import db
-
 
 # noinspection PyUnusedLocal
-@Client.on_message(
-    filters.command(["ex", "exec", "py", "exnoedit"], prefix) & filters.me
-)
+@Client.on_message(filters.command(["ex", "exec", "py", "exnoedit"], prefix) & filters.me)
 def user_exec(client: Client, message: Message):
     if len(message.command) == 1:
         message.edit("<b>Code to execute isn't provided</b>")

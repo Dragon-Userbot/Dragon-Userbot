@@ -18,9 +18,8 @@ import datetime
 
 from pyrogram import Client, filters, types
 
-from utils.misc import modules_help, prefix
 from utils.db import db
-
+from utils.misc import modules_help, prefix
 
 # avoid using global variables
 afk_info = db.get(
@@ -49,9 +48,7 @@ async def afk_handler(_, message: types.Message):
     start = datetime.datetime.fromtimestamp(afk_info["start"])
     end = datetime.datetime.now().replace(microsecond=0)
     afk_time = end - start
-    await message.reply(
-        f"<b>I'm AFK {afk_time}\nReason:</b> <i>{afk_info['reason']}</i>"
-    )
+    await message.reply(f"<b>I'm AFK {afk_time}\nReason:</b> <i>{afk_info['reason']}</i>")
 
 
 @Client.on_message(filters.command("afk", prefix) & filters.me)
@@ -76,9 +73,7 @@ async def unafk(_, message):
         start = datetime.datetime.fromtimestamp(afk_info["start"])
         end = datetime.datetime.now().replace(microsecond=0)
         afk_time = end - start
-        await message.edit(
-            f"<b>I'm not AFK anymore.\n" f"I was afk {afk_time}</b>"
-        )
+        await message.edit(f"<b>I'm not AFK anymore.\n" f"I was afk {afk_time}</b>")
         afk_info["is_afk"] = False
     else:
         await message.edit("<b>You weren't afk</b>")

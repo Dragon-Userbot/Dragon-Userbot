@@ -15,8 +15,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from sys import version_info
-from .db import db
+
 import git
+
+from .db import db
 
 __all__ = [
     "modules_help",
@@ -39,9 +41,7 @@ try:
     gitrepo = git.Repo(".")
 except git.exc.InvalidGitRepositoryError:
     repo = git.Repo.init()
-    origin = repo.create_remote(
-        "origin", "https://github.com/Dragon-Userbot/Dragon-Userbot"
-    )
+    origin = repo.create_remote("origin", "https://github.com/Dragon-Userbot/Dragon-Userbot")
     origin.fetch()
     repo.create_head("master", origin.refs.master)
     repo.heads.master.set_tracking_branch(origin.refs.master)
