@@ -17,11 +17,10 @@
 import json
 from html import escape as t
 from time import perf_counter
-from typing import AsyncGenerator, Optional, List, Union
+from typing import AsyncGenerator, List, Optional, Union
 
-from pyrogram import Client, filters
+from pyrogram import Client, enums, filters, raw, types, utils
 from pyrogram.errors.exceptions.flood_420 import FloodWait
-from pyrogram import types, raw, utils, enums
 from pyrogram.types.object import Object
 
 from utils.misc import modules_help, prefix
@@ -152,9 +151,11 @@ class Chat(Object):
 
         return Chat(
             id=peer_id,
-            type=enums.ChatType.SUPERGROUP
-            if getattr(channel, "megagroup", None)
-            else enums.ChatType.CHANNEL,
+            type=(
+                enums.ChatType.SUPERGROUP
+                if getattr(channel, "megagroup", None)
+                else enums.ChatType.CHANNEL
+            ),
             is_verified=getattr(channel, "verified", None),
             is_restricted=getattr(channel, "restricted", None),
             is_creator=getattr(channel, "creator", None),

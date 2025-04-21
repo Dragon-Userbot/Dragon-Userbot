@@ -14,18 +14,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from io import StringIO
 from contextlib import redirect_stdout
+from io import StringIO
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
 # noinspection PyUnresolvedReferences
-from utils.misc import modules_help, prefix
-from utils.scripts import format_exc
+from utils.db import db
 
 # noinspection PyUnresolvedReferences
-from utils.db import db
+from utils.misc import modules_help, prefix
+from utils.scripts import format_exc
 
 
 # noinspection PyUnusedLocal

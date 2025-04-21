@@ -15,8 +15,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from sys import version_info
-from .db import db
+
 import git
+
+from .db import db
 
 __all__ = [
     "modules_help",

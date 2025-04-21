@@ -19,9 +19,9 @@
 import time
 from datetime import datetime
 from html import escape
+from textwrap import dedent
 
-from pyrogram import Client, filters
-from pyrogram import ContinuePropagation
+from pyrogram import Client, ContinuePropagation, filters
 from pyrogram.errors import RPCError
 from pyrogram.raw.functions.account import GetAuthorizations, ResetAuthorization
 from pyrogram.raw.types import UpdateServiceNotification
@@ -29,8 +29,6 @@ from pyrogram.types import Message
 
 from utils.db import db
 from utils.misc import modules_help, prefix
-from textwrap import dedent
-from datetime import datetime
 
 auth_hashes = db.get("core.sessionkiller", "auths_hashes", [])
 
@@ -76,9 +74,9 @@ async def sessions_list(client: Client, message: Message):
                 official="✅" if session.official_app else "❌️",
                 password_pending="❌️️" if session.password_pending else "✅",
                 calls="❌️️" if session.call_requests_disabled else "✅",
-                secret_chats="❌️️"
-                if session.encrypted_requests_disabled
-                else "✅",
+                secret_chats=(
+                    "❌️️" if session.encrypted_requests_disabled else "✅"
+                ),
             )
         )
     answer = "<b>Active sessions at your account:</b>\n\n"

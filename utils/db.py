@@ -15,10 +15,12 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import json
+import sqlite3
 import threading
+
 import dns.resolver
 import pymongo
-import sqlite3
+
 from utils import config
 
 dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)

@@ -20,15 +20,15 @@ import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
+from utils.config import modules_repo_branch
+from utils.misc import modules_help, prefix
 from utils.scripts import (
-    restart,
     format_exc,
     format_module_help,
     load_module,
+    restart,
     unload_module,
 )
-from utils.misc import modules_help, prefix
-from utils.config import modules_repo_branch
 
 BASE_PATH = os.path.abspath(os.getcwd())
 

@@ -18,9 +18,8 @@ import datetime
 
 from pyrogram import Client, filters, types
 
-from utils.misc import modules_help, prefix
 from utils.db import db
-
+from utils.misc import modules_help, prefix
 
 # avoid using global variables
 afk_info = db.get(

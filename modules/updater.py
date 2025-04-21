@@ -15,14 +15,14 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
-import sys
 import subprocess
+import sys
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from utils.misc import modules_help, prefix, requirements_list
 from utils.db import db
+from utils.misc import modules_help, prefix, requirements_list
 from utils.scripts import format_exc, restart
 
 
